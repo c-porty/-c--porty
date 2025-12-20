@@ -11,7 +11,7 @@ import java.time.Duration;
 public class MockScannerCLITest {
     public static void main(String[] args) {
         ScanConfig config = new ScanConfig(new Host("localhost"), new PortRange(1, 50), Duration.ofMillis(100));
-        Scanner scanner = new Scanner(ScannerFactory.create(PortStatus.ScanStrategy.MOCK));
+        Scanner scanner = new Scanner(ScannerFactory.create(ScanStrategy.MOCK));
 
         ScanHandle handle = scanner.scan(config, new PortScanCLIListener());
 

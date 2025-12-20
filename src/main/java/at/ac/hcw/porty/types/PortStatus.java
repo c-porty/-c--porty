@@ -5,9 +5,4 @@ public enum PortStatus {
     CLOSED,
     FILTERED,
     ERROR;
-
-    public enum ScanStrategy {
-        MOCK,
-        NMAP
-    }
 }
