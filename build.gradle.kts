@@ -42,6 +42,8 @@ dependencies {
     implementation("eu.hansolo:tilesfx:21.0.9") {
         exclude(group = "org.openjfx")
     }
+    implementation("org.slf4j:slf4j-api:2.0.9")
+    implementation("ch.qos.logback:logback-classic:1.5.13")
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
 }

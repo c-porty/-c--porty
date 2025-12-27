@@ -4,15 +4,20 @@ import at.ac.hcw.porty.types.PortScanResult;
 import at.ac.hcw.porty.types.ScanConfig;
 import at.ac.hcw.porty.types.ScanSummary;
 import at.ac.hcw.porty.types.interfaces.PortScanListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This is an extremely simple listener to the events that the scanner emits
  * by using this listener we see in the console what is happening
  */
 public class PortScanCLIListener implements PortScanListener {
-    @Override public void onStarted(ScanConfig config) { System.out.println("Started: " + config.host().address()); }
-    @Override public void onResult(PortScanResult result) { System.out.printf("Result: %s:%d -> %s%n", result.host().address(), result.port(), result.status()); }
-    @Override public void onComplete(ScanSummary summary) { System.out.println("Completed: " + summary.results().size() + " ports"); }
-    @Override public void onError(Throwable t) { System.out.println("Error: " + t); }
-    // @Override public void onProgress(String msg) { System.out.println("Progress: " + msg); }
+    private static final Logger logger =
+            LoggerFactory.getLogger(PortScanCLIListener.class);
+
+    @Override public void onStarted(ScanConfig config) { logger.info("Started: {}", config.host().address()); }
+    @Override public void onResult(PortScanResult result) { logger.info("Result: {}:{} -> {}", result.host().address(), result.port(), result.status()); }
+    @Override public void onComplete(ScanSummary summary) { logger.info("Completed: {} ports", summary.results().size()); }
+    @Override public void onError(Throwable t) { logger.info("Error: {}", String.valueOf(t)); }
+    @Override public void onProgress(String msg) { logger.info("Progress: {}", msg); }
 }
