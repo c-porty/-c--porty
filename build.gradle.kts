@@ -27,7 +27,7 @@ tasks.withType<JavaCompile> {
 
 application {
     mainModule.set("at.ac.hcw.porty")
-    mainClass.set("at.ac.hcw.porty.HelloApplication")
+    mainClass.set("at.ac.hcw.porty.PortScanApplication")
 }
 
 javafx {
