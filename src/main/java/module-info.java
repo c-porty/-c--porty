@@ -9,6 +9,7 @@ module at.ac.hcw.porty {
     requires eu.hansolo.tilesfx;
     requires java.desktop;
     requires org.slf4j;
+    requires javafx.base;
 
     opens at.ac.hcw.porty to javafx.fxml;
     exports at.ac.hcw.porty;
