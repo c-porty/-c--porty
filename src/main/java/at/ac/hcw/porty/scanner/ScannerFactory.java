@@ -10,7 +10,8 @@ public final class ScannerFactory {
     public static PortScanner create(ScanStrategy strategy) {
         return switch (strategy) {
             case MOCK -> new MockPortScanner(Map.of(22, PortStatus.OPEN, 80, PortStatus.CLOSED));
-            case NMAP -> throw new IllegalArgumentException("Not yet implemented");
+            case NMAP -> new NmapPortScanner("/usr/bin/nmap");
+            default -> throw new IllegalArgumentException("Unknown Scan Strategy");
         };
     }
 }

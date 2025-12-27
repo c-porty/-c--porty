@@ -5,7 +5,9 @@ import java.util.stream.IntStream;
 public record PortRange(int start, int end) {
     public PortRange {
         if (start < 1 || end > 65535) {
-            throw new IllegalArgumentException("Port range is illegal.");
+            if (start != -1 || end != -1) { // -1 is for "Port range not needed"
+                throw new IllegalArgumentException("Port range is illegal.");
+            }
         }
     }
 

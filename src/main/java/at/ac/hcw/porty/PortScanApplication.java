@@ -11,8 +11,8 @@ public class PortScanApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(PortScanApplication.class.getResource("dashboard.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        stage.setTitle("porty");
+        Scene scene = new Scene(fxmlLoader.load(), 800, 640);
+        stage.setTitle("Porty - Portscanner");
         stage.setScene(scene);
         stage.show();
     }
