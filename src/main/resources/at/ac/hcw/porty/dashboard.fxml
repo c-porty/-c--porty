@@ -31,7 +31,7 @@
                   <children>
                      <Label text="Scan Status" />
                      <ProgressIndicator fx:id="scanProgressIndicator" prefHeight="40.0" prefWidth="115.0" progress="0.0" />
-                     <TextArea fx:id="scanProgressConsole" prefHeight="200.0" prefWidth="200.0" />
+                     <ListView fx:id="scanProgressConsole" prefHeight="200.0" prefWidth="200.0" />
                      <TextArea fx:id="scanProgressInfo" prefHeight="200.0" prefWidth="200.0" />
                   </children>
                </VBox>

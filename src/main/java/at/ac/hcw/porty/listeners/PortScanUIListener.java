@@ -4,23 +4,45 @@ import at.ac.hcw.porty.types.PortScanResult;
 import at.ac.hcw.porty.types.ScanConfig;
 import at.ac.hcw.porty.types.ScanSummary;
 import at.ac.hcw.porty.types.interfaces.PortScanListener;
+import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.scene.control.TextArea;
 
 public class PortScanUIListener implements PortScanListener {
-    private final TextArea outputTextArea;
+    private final ObservableList<String> outputTextList;
 
-    public PortScanUIListener(TextArea output){
-        this.outputTextArea = output;
+    public PortScanUIListener(ObservableList<String> list){
+        this.outputTextList = list;
     }
 
     @Override public void onStarted(ScanConfig config) {
-        outputTextArea.clear();
-        outputTextArea.appendText("Started: " + config.host().address()+ "\n");
+        Platform.runLater(() -> {
+            outputTextList.clear();
+            outputTextList.add("Started: " + config.host().address());
+        });
     }
-    @Override public void onResult(PortScanResult result) { outputTextArea.appendText("Result: " +result.host().address() +":"+ result.port()+ " -> " +  result.status()+ "\n"); }
+
+    @Override public void onResult(PortScanResult result) {
+        Platform.runLater(() -> {
+            outputTextList.add("Result: " + result.host().address() + ":" + result.port() + " -> " + result.status());
+        });
+    }
+
     @Override public void onComplete(ScanSummary summary) {
-        outputTextArea.appendText("Completed: "+summary.results().size()+" ports\n");
+        Platform.runLater(() -> {
+            outputTextList.add("Completed: " + summary.results().size() + " ports");
+        });
     }
-    @Override public void onError(Throwable t) { outputTextArea.appendText("Error: "+ t + "\n"); }
-    @Override public void onProgress(String msg) { outputTextArea.appendText("Progress: "+ msg + "\n"); }
+
+    @Override public void onError(Throwable t) {
+        Platform.runLater(() -> {
+            outputTextList.add("Error: " + t);
+        });
+    }
+
+    @Override public void onProgress(String msg) {
+        Platform.runLater(() -> {
+            outputTextList.add("Progress: " + msg);
+        });
+    }
 }
