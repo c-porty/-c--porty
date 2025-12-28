@@ -28,8 +28,10 @@ public final class MockPortScanner implements PortScanner {
     }
 
     @Override
-    public ScanHandle scan(ScanConfig config, PortScanListener listener) {
-        listener.onStarted(config);
+    public ScanHandle scan(ScanConfig config, PortScanListener[] listeners) {
+        for (PortScanListener listener : listeners) {
+            listener.onStarted(config);
+        }
         Instant started = Instant.now();
         List<PortScanResult> results = Collections.synchronizedList(new ArrayList<>());
         CompletableFuture<ScanSummary> cf = new CompletableFuture<>();
@@ -56,15 +58,21 @@ public final class MockPortScanner implements PortScanner {
                     PortScanResult result = new PortScanResult(config.host(), port, status, Duration.ofMillis(delay), note);
 
                     results.add(result);
-                    listener.onResult(result);
-                    listener.onProgress("Scanned port: " + port);
+                    for (PortScanListener listener : listeners) {
+                        listener.onResult(result);
+                        listener.onProgress("Scanned port: " + port);
+                    }
                 }
                 results.sort(Comparator.comparingInt(PortScanResult::port));
                 ScanSummary summary = new ScanSummary(config.host(), List.copyOf(results), started, Instant.now());
-                listener.onComplete(summary);
+                for (PortScanListener listener : listeners) {
+                    listener.onComplete(summary);
+                }
                 cf.complete(summary);
             } catch (Exception e) {
-                listener.onError(e);
+                for (PortScanListener listener : listeners) {
+                    listener.onError(e);
+                }
                 cf.completeExceptionally(e);
             }
         }, "mock-port-scanner");

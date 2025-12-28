@@ -32,8 +32,10 @@ public class NmapPortScanner implements PortScanner {
     }
 
     @Override
-    public ScanHandle scan(ScanConfig config, PortScanListener listener) {
-        listener.onStarted(config);     // tells all listeners that the scan now starts
+    public ScanHandle scan(ScanConfig config, PortScanListener[] listeners) {
+        for (PortScanListener listener : listeners) {
+            listener.onStarted(config);     // tells all listeners that the scan now starts
+        }
         Instant started = Instant.now();
         List<PortScanResult> results = Collections.synchronizedList(new ArrayList<>());
         CompletableFuture<ScanSummary> cf = new CompletableFuture<>();
@@ -44,7 +46,9 @@ public class NmapPortScanner implements PortScanner {
         try {
             process = builder.start();
         } catch (Exception e) {
-            listener.onError(e);
+            for (PortScanListener listener : listeners) {
+                listener.onError(e);
+            }
             cf.completeExceptionally(e);
             return new ScanHandle() {
                 @Override public void cancel() { }
@@ -52,7 +56,7 @@ public class NmapPortScanner implements PortScanner {
             };
         }
         // the stderr thread to parse the verbose output of nmap without blocking the actual scanning
-        Thread progressReader = getListenerThread(listener, process);
+        Thread progressReader = getListenerThread(listeners, process);
         progressReader.start();
 
         // this is the actual scanner thread
@@ -63,24 +67,34 @@ public class NmapPortScanner implements PortScanner {
                 int exit = process.waitFor();
                 if (exit != 0) {
                     Exception ex = new RuntimeException("nmap exited with code " + exit);
-                    listener.onError(ex);
+                    for (PortScanListener listener : listeners) {
+                        listener.onError(ex);
+                    }
                     cf.completeExceptionally(ex);
                     return;
                 }
 
                 for (PortScanResult r : parsedResults) {
                     results.add(r);
-                    listener.onResult(r);
+                    for (PortScanListener listener : listeners) {
+                        listener.onResult(r);
+                    }
                 }
 
                 ScanSummary summary = new ScanSummary(config.host(), List.copyOf(results), started, Instant.now());
-                listener.onComplete(summary);
+                for (PortScanListener listener : listeners) {
+                    listener.onComplete(summary);
+                }
                 cf.complete(summary);
             } catch (CancellationException ce) {
-                listener.onError(ce);
+                for (PortScanListener listener : listeners) {
+                    listener.onError(ce);
+                }
                 cf.completeExceptionally(ce);
             } catch (Exception e) {
-                listener.onError(e);
+                for (PortScanListener listener : listeners) {
+                    listener.onError(e);
+                }
                 cf.completeExceptionally(e);
             }
         }, "nmap-scanner");
@@ -100,12 +114,16 @@ public class NmapPortScanner implements PortScanner {
         };
     }
 
-    private static Thread getListenerThread(PortScanListener listener, Process process) {
+    private static Thread getListenerThread(PortScanListener[] listeners, Process process) {
         Thread progressReader = new Thread(() -> {
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getErrorStream()))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    if (!line.isBlank()) listener.onProgress(line);
+                    if (!line.isBlank()) {
+                        for (PortScanListener listener : listeners) {
+                            listener.onProgress(line);
+                        }
+                    }
                 }
             } catch (Exception ignored) {}
         }, "nmap-progress-listener");

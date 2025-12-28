@@ -26,9 +26,9 @@ public final class Scanner {
         return this.scanner;
     }
 
-    public ScanHandle scan(ScanConfig config, PortScanListener listener) {
+    public ScanHandle scan(ScanConfig config, PortScanListener[] listeners) {
         if (scanner == null) throw new IllegalStateException("No scanner is set, aborting!");
         logger.debug("Executing scan with: {}", scanner.name());
-        return scanner.scan(config, listener);
+        return scanner.scan(config, listeners);
     }
 }
