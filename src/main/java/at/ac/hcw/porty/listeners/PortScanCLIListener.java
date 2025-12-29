@@ -1,8 +1,8 @@
 package at.ac.hcw.porty.listeners;
 
-import at.ac.hcw.porty.types.PortScanResult;
-import at.ac.hcw.porty.types.ScanConfig;
-import at.ac.hcw.porty.types.ScanSummary;
+import at.ac.hcw.porty.types.records.PortScanResult;
+import at.ac.hcw.porty.types.records.ScanConfig;
+import at.ac.hcw.porty.types.records.ScanSummary;
 import at.ac.hcw.porty.types.interfaces.PortScanListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,4 +20,5 @@ public class PortScanCLIListener implements PortScanListener {
     @Override public void onComplete(ScanSummary summary) { logger.info("Completed: {} ports", summary.results().size()); }
     @Override public void onError(Throwable t) { logger.info("Error: {}", String.valueOf(t)); }
     @Override public void onProgress(String msg) { logger.info("Progress: {}", msg); }
+    @Override public void onCancel() { logger.info("Task cancelled."); }
 }

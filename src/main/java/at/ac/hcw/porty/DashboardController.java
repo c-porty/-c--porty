@@ -1,13 +1,15 @@
 package at.ac.hcw.porty;
 
 import at.ac.hcw.porty.dto.ScanConfigDTO;
+import at.ac.hcw.porty.listeners.PortScanCLIListener;
 import at.ac.hcw.porty.listeners.PortScanUIListener;
 import at.ac.hcw.porty.scanner.Scanner;
 import at.ac.hcw.porty.scanner.ScannerFactory;
-import at.ac.hcw.porty.types.Host;
-import at.ac.hcw.porty.types.PortRange;
-import at.ac.hcw.porty.types.ScanConfig;
-import at.ac.hcw.porty.types.ScanStrategy;
+import at.ac.hcw.porty.types.records.Host;
+import at.ac.hcw.porty.types.records.PortRange;
+import at.ac.hcw.porty.types.records.ScanConfig;
+import at.ac.hcw.porty.types.enums.ScanStrategy;
+import at.ac.hcw.porty.types.interfaces.PortScanListener;
 import at.ac.hcw.porty.types.interfaces.ScanHandle;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -15,12 +17,10 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.collections.ListChangeListener;
 
 import java.time.Duration;
-import java.util.Objects;
 
 public class DashboardController {
     @FXML
@@ -59,7 +59,8 @@ public class DashboardController {
                 startScanButton.setText("Stop");
                 onScan = true;
                 new Thread(() -> {
-                    handle = scan(new Host(scanConfigDTO.getHost()), new PortRange(1, 50));
+                    // as long as we do not have input for the port range simply use all available ports
+                    handle = scan(new Host(scanConfigDTO.getHost()), new PortRange(-1, -1));
                     handle.summary().join();
                     Platform.runLater(() -> {
                         startScanButton.setText("Start Scan");
@@ -77,11 +78,11 @@ public class DashboardController {
     }
 
     protected ScanHandle scan(Host host, PortRange range){
-        ScanConfig config = new ScanConfig(host, range, Duration.ofMillis(10000));
-        Scanner scanner = new Scanner(ScannerFactory.create(ScanStrategy.MOCK));
+        ScanConfig config = new ScanConfig(host, range, Duration.ofMillis(10000), 2);
+        Scanner scanner = new Scanner(ScannerFactory.create(ScanStrategy.NMAP));
+        // both the CLI listener and the UI listener, UI listener is for actual frontend, CLI only for debugging
+        PortScanListener[] listeners = { new PortScanUIListener(consoleLines), new PortScanCLIListener() };
 
-        ScanHandle handle = scanner.scan(config, new PortScanUIListener(consoleLines));
-
-        return handle;
+        return scanner.scan(config, listeners);
     }
 }

@@ -1,12 +1,12 @@
-package at.ac.hcw.porty.scanner;
+package at.ac.hcw.porty.scanner.implementations;
 
-import at.ac.hcw.porty.types.PortScanResult;
-import at.ac.hcw.porty.types.PortStatus;
-import at.ac.hcw.porty.types.ScanConfig;
-import at.ac.hcw.porty.types.ScanSummary;
+import at.ac.hcw.porty.types.*;
+import at.ac.hcw.porty.types.enums.PortStatus;
 import at.ac.hcw.porty.types.interfaces.PortScanListener;
-import at.ac.hcw.porty.types.interfaces.PortScanner;
 import at.ac.hcw.porty.types.interfaces.ScanHandle;
+import at.ac.hcw.porty.types.records.PortScanResult;
+import at.ac.hcw.porty.types.records.ScanConfig;
+import at.ac.hcw.porty.types.records.ScanSummary;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -15,10 +15,11 @@ import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;
 
-public final class MockPortScanner implements PortScanner {
+public final class MockPortScanner extends PortScanner {
     private final Map<Integer, PortStatus> predefined;
 
     public MockPortScanner(Map<Integer, PortStatus> predefined) {
+        super();
         this.predefined = predefined;
     }
 
@@ -28,11 +29,8 @@ public final class MockPortScanner implements PortScanner {
     }
 
     @Override
-    public ScanHandle scan(ScanConfig config, PortScanListener listener) {
-        listener.onStarted(config);
-        Instant started = Instant.now();
-        List<PortScanResult> results = Collections.synchronizedList(new ArrayList<>());
-        CompletableFuture<ScanSummary> cf = new CompletableFuture<>();
+    public ScanHandle scan(ScanConfig config, PortScanListener[] listeners) {
+        super.setupScan(config, listeners);
 
         // einfach simuliert asynchron damit die UI korrekt implementiert werden kann
         Thread worker = new Thread(() -> {
@@ -56,15 +54,21 @@ public final class MockPortScanner implements PortScanner {
                     PortScanResult result = new PortScanResult(config.host(), port, status, Duration.ofMillis(delay), note);
 
                     results.add(result);
-                    listener.onResult(result);
-                    listener.onProgress("Scanned port: " + port);
+                    for (PortScanListener listener : listeners) {
+                        listener.onResult(result);
+                        listener.onProgress("Scanned port: " + port);
+                    }
                 }
                 results.sort(Comparator.comparingInt(PortScanResult::port));
                 ScanSummary summary = new ScanSummary(config.host(), List.copyOf(results), started, Instant.now());
-                listener.onComplete(summary);
+                for (PortScanListener listener : listeners) {
+                    listener.onComplete(summary);
+                }
                 cf.complete(summary);
             } catch (Exception e) {
-                listener.onError(e);
+                for (PortScanListener listener : listeners) {
+                    listener.onError(e);
+                }
                 cf.completeExceptionally(e);
             }
         }, "mock-port-scanner");

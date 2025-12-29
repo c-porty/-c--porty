@@ -12,9 +12,9 @@
       <children>
          <HBox prefHeight="50.0" prefWidth="1184.0">
             <children>
-               <ToggleButton fx:id="simplicityModeSwitch" mnemonicParsing="false" text="ToggleButton" />
-               <ToggleButton fx:id="lightModeSwitch" mnemonicParsing="false" text="ToggleButton" />
-               <Button fx:id="languageButton" mnemonicParsing="false" text="Button" />
+               <ToggleButton fx:id="simplicityModeSwitch" mnemonicParsing="false" text="Simple/Advanced" />
+               <ToggleButton fx:id="lightModeSwitch" mnemonicParsing="false" text="Theme" />
+               <Button fx:id="languageButton" mnemonicParsing="false" text="en" />
             </children></HBox>
          <Label text="Dashboard" />
          <HBox prefHeight="892.0" prefWidth="1184.0">
@@ -24,7 +24,7 @@
                      <Label text="Scan" />
                      <TextField fx:id="ipTextField" />
                      <Button fx:id="startScanButton" mnemonicParsing="false" text="Start Scan" onAction="#onScanStartButtonClick"/>
-                     <CheckBox fx:id="saveScanCheckbox" mnemonicParsing="false" text="CheckBox" />
+                     <CheckBox fx:id="saveScanCheckbox" mnemonicParsing="false" text="Save Result" />
                   </children>
                </VBox>
                <VBox prefHeight="200.0" prefWidth="500.0">

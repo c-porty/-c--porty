@@ -1,4 +1,4 @@
-package at.ac.hcw.porty.types;
+package at.ac.hcw.porty.types.records;
 
 public record Host(String address) {
     public Host {
