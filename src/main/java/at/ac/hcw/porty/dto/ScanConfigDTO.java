@@ -4,14 +4,12 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class ScanConfigDTO {
-    private StringProperty host;
+    private final StringProperty host = new SimpleStringProperty();
 
-    public ScanConfigDTO() {
-
-    }
+    public ScanConfigDTO() {}
 
     public ScanConfigDTO(String host) {
-        this.host = new SimpleStringProperty(host);
+        this.host.set(host);
     }
 
     public String getHost() {
