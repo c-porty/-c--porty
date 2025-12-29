@@ -1,4 +1,4 @@
-package at.ac.hcw.porty;
+package at.ac.hcw.porty.controller;
 
 import at.ac.hcw.porty.dto.ScanConfigDTO;
 import at.ac.hcw.porty.listeners.PortScanCLIListener;

@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<HBox prefHeight="960.0" prefWidth="1440.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.hcw.porty.DashboardController">
+<HBox prefHeight="960.0" prefWidth="1440.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.hcw.porty.controller.DashboardController">
    <VBox prefHeight="960.0" prefWidth="256.0">
       <children>
          <Label prefHeight="17.0" prefWidth="109.0" text="Porty" />
