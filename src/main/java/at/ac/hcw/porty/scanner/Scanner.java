@@ -1,9 +1,8 @@
 package at.ac.hcw.porty.scanner;
 
-import at.ac.hcw.porty.listeners.PortScanCLIListener;
-import at.ac.hcw.porty.types.ScanConfig;
+import at.ac.hcw.porty.types.records.ScanConfig;
 import at.ac.hcw.porty.types.interfaces.PortScanListener;
-import at.ac.hcw.porty.types.interfaces.PortScanner;
+import at.ac.hcw.porty.types.interfaces.IPortScanner;
 import at.ac.hcw.porty.types.interfaces.ScanHandle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,17 +11,17 @@ public final class Scanner {
     private static final Logger logger =
             LoggerFactory.getLogger(Scanner.class);
 
-    private PortScanner scanner;
+    private IPortScanner scanner;
 
-    public Scanner(PortScanner scanner) {
+    public Scanner(IPortScanner scanner) {
         this.scanner = scanner;
     }
 
-    public void setScanner(PortScanner scanner) {
+    public void setScanner(IPortScanner scanner) {
         this.scanner = scanner;
     }
 
-    public PortScanner getScanner() {
+    public IPortScanner getScanner() {
         return this.scanner;
     }
 

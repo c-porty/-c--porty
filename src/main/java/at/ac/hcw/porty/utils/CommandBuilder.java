@@ -1,12 +1,13 @@
 package at.ac.hcw.porty.utils;
 
-import at.ac.hcw.porty.types.ScanConfig;
+import at.ac.hcw.porty.types.records.ScanConfig;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CommandBuilder {
-    public static ProcessBuilder buildNmapCommand(ScanConfig config, String path) {
+    public static ProcessBuilder buildNmapCommand(ScanConfig config, String path, File tempOutputFile) {
         String host = config.host().address();
         int startPort = config.range().start();
         int endPort = config.range().end();
@@ -26,11 +27,9 @@ public class CommandBuilder {
         }
 
         nmapCommand.add("-oX"); // output as XML
-        nmapCommand.add("-");   // XML to stdout (to not create files every time)
+        nmapCommand.add(tempOutputFile.getPath());
         nmapCommand.add(host);
 
-        ProcessBuilder pb = new ProcessBuilder(nmapCommand);
-
-        return pb;
+        return new ProcessBuilder(nmapCommand);
     }
 }

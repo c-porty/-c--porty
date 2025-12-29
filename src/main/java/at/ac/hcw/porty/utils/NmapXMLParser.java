@@ -1,6 +1,8 @@
 package at.ac.hcw.porty.utils;
 
-import at.ac.hcw.porty.types.*;
+import at.ac.hcw.porty.types.enums.PortStatus;
+import at.ac.hcw.porty.types.records.PortScanResult;
+import at.ac.hcw.porty.types.records.ScanConfig;
 import org.w3c.dom.*;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;

@@ -1,12 +1,12 @@
-package at.ac.hcw.porty.scanner;
+package at.ac.hcw.porty.scanner.implementations;
 
-import at.ac.hcw.porty.types.PortScanResult;
-import at.ac.hcw.porty.types.PortStatus;
-import at.ac.hcw.porty.types.ScanConfig;
-import at.ac.hcw.porty.types.ScanSummary;
+import at.ac.hcw.porty.types.*;
+import at.ac.hcw.porty.types.enums.PortStatus;
 import at.ac.hcw.porty.types.interfaces.PortScanListener;
-import at.ac.hcw.porty.types.interfaces.PortScanner;
 import at.ac.hcw.porty.types.interfaces.ScanHandle;
+import at.ac.hcw.porty.types.records.PortScanResult;
+import at.ac.hcw.porty.types.records.ScanConfig;
+import at.ac.hcw.porty.types.records.ScanSummary;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -15,10 +15,11 @@ import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;
 
-public final class MockPortScanner implements PortScanner {
+public final class MockPortScanner extends PortScanner {
     private final Map<Integer, PortStatus> predefined;
 
     public MockPortScanner(Map<Integer, PortStatus> predefined) {
+        super();
         this.predefined = predefined;
     }
 
@@ -29,12 +30,7 @@ public final class MockPortScanner implements PortScanner {
 
     @Override
     public ScanHandle scan(ScanConfig config, PortScanListener[] listeners) {
-        for (PortScanListener listener : listeners) {
-            listener.onStarted(config);
-        }
-        Instant started = Instant.now();
-        List<PortScanResult> results = Collections.synchronizedList(new ArrayList<>());
-        CompletableFuture<ScanSummary> cf = new CompletableFuture<>();
+        super.setupScan(config, listeners);
 
         // einfach simuliert asynchron damit die UI korrekt implementiert werden kann
         Thread worker = new Thread(() -> {

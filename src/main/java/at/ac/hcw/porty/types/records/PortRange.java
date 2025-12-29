@@ -1,4 +1,4 @@
-package at.ac.hcw.porty.types;
+package at.ac.hcw.porty.types.records;
 
 import java.util.stream.IntStream;
 

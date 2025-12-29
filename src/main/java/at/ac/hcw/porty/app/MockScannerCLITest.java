@@ -3,9 +3,12 @@ package at.ac.hcw.porty.app;
 import at.ac.hcw.porty.listeners.PortScanCLIListener;
 import at.ac.hcw.porty.scanner.Scanner;
 import at.ac.hcw.porty.scanner.ScannerFactory;
-import at.ac.hcw.porty.types.*;
+import at.ac.hcw.porty.types.enums.ScanStrategy;
 import at.ac.hcw.porty.types.interfaces.PortScanListener;
 import at.ac.hcw.porty.types.interfaces.ScanHandle;
+import at.ac.hcw.porty.types.records.Host;
+import at.ac.hcw.porty.types.records.PortRange;
+import at.ac.hcw.porty.types.records.ScanConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

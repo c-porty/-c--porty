@@ -1,4 +1,6 @@
-package at.ac.hcw.porty.types;
+package at.ac.hcw.porty.types.records;
+
+import at.ac.hcw.porty.types.enums.PortStatus;
 
 import java.time.Duration;
 
