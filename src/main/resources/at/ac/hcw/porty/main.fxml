@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane fx:id="mainBorderPane" prefHeight="960.0" prefWidth="1440.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.hcw.porty.controller.MainController">
+    <left>
+        <VBox prefHeight="960.0" prefWidth="256.0">
+            <children>
+                <Label prefHeight="17.0" prefWidth="109.0" text="Porty" />
+                <Button mnemonicParsing="false" text="Home" onAction="#navigateToDashboard"/>
+                <Button mnemonicParsing="false" text="History" onAction="#navigateToHistory"/>
+                <Button mnemonicParsing="false" text="About us" onAction="#navigateToCredits"/>
+                <Label text="Your IP Address:" />
+                <Label text="192.168.0.3" />
+            </children>
+        </VBox>
+    </left>
+    <center>
+        <fx:include source="dashboard.fxml" />
+    </center>
+</BorderPane>

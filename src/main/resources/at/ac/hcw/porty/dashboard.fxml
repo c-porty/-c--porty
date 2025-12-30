@@ -3,9 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<HBox prefHeight="960.0" prefWidth="1440.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.hcw.porty.controller.DashboardController">
-    <fx:include source="nav.fxml"/>
-   <VBox prefHeight="960.0" prefWidth="1184.0">
+<VBox prefHeight="960.0" prefWidth="1184.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.hcw.porty.controller.DashboardController">
       <children>
          <HBox prefHeight="50.0" prefWidth="1184.0">
             <children>
@@ -34,5 +32,6 @@
                </VBox>
             </children>
          </HBox>
-      </children></VBox>
-</HBox>
+      </children>
+</VBox>
+
