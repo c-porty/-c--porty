@@ -15,17 +15,17 @@ public class MainController {
 
     @FXML
     private void navigateToDashboard(ActionEvent event) {
-        handleNavigation("/at/ac/hcw/porty/dashboard.fxml");
+        handleNavigation("/at/ac/hcw/porty/scenes/dashboard.fxml");
     }
 
     @FXML
     private void navigateToHistory(ActionEvent event) {
-        handleNavigation("/at/ac/hcw/porty/history.fxml");
+        handleNavigation("/at/ac/hcw/porty/scenes/history.fxml");
     }
 
     @FXML
     private void navigateToCredits(ActionEvent event) {
-        handleNavigation("/at/ac/hcw/porty/credits.fxml");
+        handleNavigation("/at/ac/hcw/porty/scenes/credits.fxml");
     }
 
     private void handleNavigation(String route) {

@@ -1,0 +1,11 @@
+.root {
+    -porty-background: #141218;
+    -porty-background-active: #1D1B20;
+    -porty-border: #454545;
+    -porty-on-background: #FFFFFF;
+    -porty-primary: #4F378B;
+    -porty-on-primary: #FFFFFF;
+    -porty-secondary: #365EDD;
+    -porty-on-secondary: #FFFFFF;
+    -porty-secondary-border: #FFFFFF;
+}

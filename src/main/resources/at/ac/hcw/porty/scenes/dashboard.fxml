@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox prefHeight="960.0" prefWidth="1184.0" styleClass="porty-content-pane" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.hcw.porty.controller.DashboardController">
+      <children>
+         <HBox prefHeight="50.0" prefWidth="1184.0">
+            <children>
+               <ToggleButton fx:id="simplicityModeSwitch" mnemonicParsing="false" text="Simple/Advanced" />
+                <Region styleClass="porty-top-bar-spacer" HBox.hgrow="ALWAYS" />
+               <ToggleButton fx:id="lightModeSwitch" mnemonicParsing="false" text="Theme" />
+               <Button fx:id="languageButton" mnemonicParsing="false" styleClass="porty-top-bar-button" text="EN" />
+            </children></HBox>
+         <Label styleClass="porty-title" text="Dashboard" />
+         <HBox prefHeight="892.0" prefWidth="1184.0" styleClass="porty-dashboard">
+            <children>
+               <VBox prefHeight="200.0" prefWidth="500.0" styleClass="porty-dashboard-simple-control">
+                  <children>
+                      <VBox>
+                          <Label styleClass="porty-dashboard-header" text="Scan" />
+                          <Label styleClass="porty-dashboard-label" text="Quick Device Scan" />
+                      </VBox>
+                      <TextField fx:id="ipTextField" promptText="IP Address" />
+                      <Button fx:id="startScanButton" mnemonicParsing="false" onAction="#onScanStartButtonClick" styleClass="porty-dashboard-button" text="Start Scan" />
+                      <CheckBox fx:id="saveScanCheckbox" mnemonicParsing="false" text="Save Result" styleClass="porty-dashboard-checkbox"/>
+                  </children>
+               </VBox>
+               <VBox prefHeight="200.0" prefWidth="500.0">
+                  <children>
+                     <Label styleClass="porty-dashboard-header" text="Scan Status" />
+                     <ProgressIndicator fx:id="scanProgressIndicator" prefHeight="40.0" prefWidth="115.0" progress="0.0" />
+                  <TitledPane fx:id="scanProgressConsoleTitledPane" animated="false" text="Console">
+                      <content>
+                        <ListView fx:id="scanProgressConsole" layoutX="1.0" prefHeight="179.0" prefWidth="500.0" />
+                      </content>
+                  </TitledPane>
+                      <TextArea fx:id="scanProgressInfo" layoutY="-1.0" prefHeight="181.0" prefWidth="500.0" />
+                  </children>
+               </VBox>
+            </children>
+         </HBox>
+      </children>
+</VBox>
