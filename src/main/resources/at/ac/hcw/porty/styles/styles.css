@@ -53,6 +53,13 @@
     -fx-font-family: "Inter";
 }
 
+.porty-title-large{
+    -fx-font-size: 45px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -porty-on-background;
+    -fx-font-family: "Inter";
+}
+
 .porty-top-bar-button{
     -fx-font-size: 16px;
     -fx-background-color: -porty-primary;

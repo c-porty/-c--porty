@@ -3,19 +3,18 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox prefHeight="960.0" prefWidth="1184.0" styleClass="porty-content-pane" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.hcw.porty.controller.DashboardController">
+<VBox xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.hcw.porty.controller.DashboardController" prefHeight="960.0" prefWidth="1184.0" styleClass="porty-content-pane">
       <children>
          <HBox prefHeight="50.0" prefWidth="1184.0">
-            <children>
-               <ToggleButton fx:id="simplicityModeSwitch" mnemonicParsing="false" text="Simple/Advanced" />
-                <Region styleClass="porty-top-bar-spacer" HBox.hgrow="ALWAYS" />
-               <ToggleButton fx:id="lightModeSwitch" mnemonicParsing="false" text="Theme" />
-               <Button fx:id="languageButton" mnemonicParsing="false" styleClass="porty-top-bar-button" text="EN" />
-            </children></HBox>
+               <ToggleButton fx:id="simplicityModeSwitch" mnemonicParsing="false" text="Simple/Advanced" styleClass="porty-switch-text" />
+                <Region HBox.hgrow="ALWAYS" styleClass="porty-top-bar-spacer" />
+               <ToggleButton fx:id="lightModeSwitch" mnemonicParsing="false" text="Theme" styleClass="porty-switch-icon"/>
+               <Button fx:id="languageButton" mnemonicParsing="false" text="EN" styleClass="porty-top-bar-button"/>
+         </HBox>
          <Label styleClass="porty-title" text="Dashboard" />
          <HBox prefHeight="892.0" prefWidth="1184.0" styleClass="porty-dashboard">
             <children>
-               <VBox prefHeight="200.0" prefWidth="500.0" styleClass="porty-dashboard-simple-control">
+               <VBox prefHeight="200.0" prefWidth="500.0" styleClass="porty-dashboard-simple-control">:q!
                   <children>
                       <VBox>
                           <Label styleClass="porty-dashboard-header" text="Scan" />

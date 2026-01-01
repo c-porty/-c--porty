@@ -6,9 +6,14 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
+<VBox xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="at.ac.hcw.porty.controller.ResultsController"
-            prefHeight="400.0" prefWidth="600.0">
-
-</AnchorPane>
+            prefHeight="960.0" prefWidth="1184.0" styleClass="porty-content-pane">
+    <HBox prefHeight="50.0" prefWidth="1184.0">
+        <ToggleButton fx:id="simplicityModeSwitch" mnemonicParsing="false" text="Simple/Advanced" styleClass="porty-switch-text" />
+        <Region HBox.hgrow="ALWAYS" styleClass="porty-top-bar-spacer" />
+        <ToggleButton fx:id="lightModeSwitch" mnemonicParsing="false" text="Theme" styleClass="porty-switch-icon"/>
+        <Button fx:id="languageButton" mnemonicParsing="false" text="EN" styleClass="porty-top-bar-button"/>
+    </HBox>
+</VBox>
