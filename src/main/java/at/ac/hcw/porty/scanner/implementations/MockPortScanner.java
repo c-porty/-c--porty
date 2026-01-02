@@ -51,7 +51,7 @@ public final class MockPortScanner extends PortScanner {
                     });
 
                     String note = status == PortStatus.OPEN ? String.format("service: mock-%d", port) : "";
-                    PortScanResult result = new PortScanResult(config.host(), port, status, Duration.ofMillis(delay), note);
+                    PortScanResult result = new PortScanResult(config.host(), port, status, note);
 
                     results.add(result);
                     for (PortScanListener listener : listeners) {

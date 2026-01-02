@@ -7,7 +7,6 @@ import org.w3c.dom.*;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
 import java.io.InputStream;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -43,7 +42,7 @@ public final class NmapXMLParser {
                 String extra = svcEl != null ? svcEl.getAttribute("extrainfo") : "";
 
                 PortStatus status = mapState(state);
-                StringBuilder note = new StringBuilder("nmap state: ").append(state);
+                StringBuilder note = new StringBuilder();
                 if (!serviceName.isBlank()) {
                     note.insert(0, "service: " + serviceName);
                     if (!product.isBlank() || !version.isBlank()) {
@@ -54,7 +53,7 @@ public final class NmapXMLParser {
                     if (!extra.isBlank()) note.append(" ").append(extra);
                 }
 
-                out.add(new PortScanResult(config.host(), port, status, Duration.ZERO, note.toString()));
+                out.add(new PortScanResult(config.host(), port, status, note.toString()));
             }
         }
 

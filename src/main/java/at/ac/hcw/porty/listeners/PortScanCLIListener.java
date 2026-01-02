@@ -17,7 +17,13 @@ public class PortScanCLIListener implements PortScanListener {
 
     @Override public void onStarted(ScanConfig config) { logger.info("Started: {}", config.host().address()); }
     @Override public void onResult(PortScanResult result) { logger.info("Result: {}:{} -> {}", result.host().address(), result.port(), result.status()); }
-    @Override public void onComplete(ScanSummary summary) { logger.info("Completed: {} ports", summary.results().size()); }
+    @Override public void onComplete(ScanSummary summary) {
+        logger.info("Completed: {} ports", summary.results().size());
+        logger.info("Detailed information on host {}: ", summary.host().address());
+        for (PortScanResult result : summary.results()) {
+            logger.info(result.toString());
+        }
+    }
     @Override public void onError(Throwable t) { logger.info("Error: {}", String.valueOf(t)); }
     @Override public void onProgress(String msg) { logger.info("Progress: {}", msg); }
     @Override public void onCancel() { logger.info("Task cancelled."); }

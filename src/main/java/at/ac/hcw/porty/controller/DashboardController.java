@@ -6,6 +6,7 @@ import at.ac.hcw.porty.listeners.PortScanUIListener;
 import at.ac.hcw.porty.scanner.Scanner;
 import at.ac.hcw.porty.scanner.ScannerFactory;
 import at.ac.hcw.porty.types.records.Host;
+import at.ac.hcw.porty.types.records.NmapOptions;
 import at.ac.hcw.porty.types.records.PortRange;
 import at.ac.hcw.porty.types.records.ScanConfig;
 import at.ac.hcw.porty.types.enums.ScanStrategy;
@@ -78,7 +79,8 @@ public class DashboardController {
     }
 
     protected ScanHandle scan(Host host, PortRange range){
-        ScanConfig config = new ScanConfig(host, range, Duration.ofMillis(10000), 2);
+        NmapOptions options = new NmapOptions();
+        ScanConfig config = new ScanConfig(host, range, options);
         Scanner scanner = new Scanner(ScannerFactory.create(ScanStrategy.NMAP));
         // both the CLI listener and the UI listener, UI listener is for actual frontend, CLI only for debugging
         PortScanListener[] listeners = { new PortScanUIListener(consoleLines), new PortScanCLIListener() };

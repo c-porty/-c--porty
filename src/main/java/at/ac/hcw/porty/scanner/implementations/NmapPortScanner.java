@@ -6,11 +6,13 @@ import at.ac.hcw.porty.types.records.ScanConfig;
 import at.ac.hcw.porty.types.records.ScanSummary;
 import at.ac.hcw.porty.types.interfaces.PortScanListener;
 import at.ac.hcw.porty.types.interfaces.ScanHandle;
-import at.ac.hcw.porty.utils.CommandBuilder;
+import at.ac.hcw.porty.utils.NmapCommandBuilder;
 import at.ac.hcw.porty.utils.NmapXMLParser;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.attribute.PosixFilePermissions;
 import java.time.Instant;
 import java.util.List;
 import java.util.concurrent.CancellationException;
@@ -37,11 +39,12 @@ public class NmapPortScanner extends PortScanner {
         super.setupScan(config, passedListeners);
         final AtomicBoolean cancelled = new AtomicBoolean(false);
 
-        // try to create the temp file we need for the scan output
-        File tempOutputFile;
+        // try to create the temp directory we need for the scan output (dir to let root user access it)
+        Path tempOutputDir;
+        Path tempOutputFile;
         try {
-            tempOutputFile = File.createTempFile("porty-", "-output");
-            tempOutputFile.deleteOnExit();
+            tempOutputDir = Files.createTempDirectory("porty-");
+            tempOutputFile = tempOutputDir.resolve("porty-nmap-output.xml");
         } catch (IOException e) {
             for (PortScanListener listener : listeners) {
                 listener.onError(e);
@@ -54,7 +57,7 @@ public class NmapPortScanner extends PortScanner {
         }
 
         // the command that the process uses
-        ProcessBuilder builder = CommandBuilder.buildNmapCommand(config, this.NMAP_PATH, tempOutputFile);
+        ProcessBuilder builder = NmapCommandBuilder.buildNmapCommand(config, this.NMAP_PATH, tempOutputFile);
 
         // try to start the built command
         final Process process;
@@ -94,7 +97,7 @@ public class NmapPortScanner extends PortScanner {
                     return;
                 }
 
-                try (InputStream fileInputStream = Files.newInputStream(tempOutputFile.toPath())) {
+                try (InputStream fileInputStream = Files.newInputStream(tempOutputFile)) {
                     NmapXMLParser parser = new NmapXMLParser();
                     List<PortScanResult> parsedResults = parser.parse(fileInputStream, config);
                     for (PortScanResult r : parsedResults) {
@@ -128,7 +131,8 @@ public class NmapPortScanner extends PortScanner {
                 }
                 if (!cf.isDone()) cf.completeExceptionally(e);
             } finally {
-                try { Files.deleteIfExists(tempOutputFile.toPath()); } catch (IOException ignored) {};  // delete file
+                try { Files.deleteIfExists(tempOutputFile); } catch (IOException ignored) {};  // delete file
+                try { Files.deleteIfExists(tempOutputDir); } catch (IOException ignored) {};   // delete dir
                 threadsExecutor.shutdown(); // if this thread finishes, all threads must close
             }
         });
