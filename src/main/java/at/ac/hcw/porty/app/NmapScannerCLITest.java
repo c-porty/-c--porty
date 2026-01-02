@@ -21,7 +21,7 @@ public class NmapScannerCLITest {
 
     public static void main(String[] args) {
         // possible hosts for tests (that are not "illegal" to use: scanme.nmap.org, webxio.at (my own domain)
-        NmapOptions options = new NmapOptions();
+        NmapOptions options = new NmapOptions(true, false, true, false);
         ScanConfig config = new ScanConfig(new Host("scanme.nmap.org"), new PortRange(10, 500), options);
         Scanner scanner = new Scanner(ScannerFactory.create(ScanStrategy.NMAP));
 

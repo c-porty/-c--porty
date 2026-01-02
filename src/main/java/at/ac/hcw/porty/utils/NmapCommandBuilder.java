@@ -3,31 +3,44 @@ package at.ac.hcw.porty.utils;
 import at.ac.hcw.porty.types.records.NmapOptions;
 import at.ac.hcw.porty.types.records.ScanConfig;
 
-import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
 public class NmapCommandBuilder {
-    public static ProcessBuilder buildNmapCommand(ScanConfig config, String path, File tempOutputFile) {
+    public static ProcessBuilder buildNmapCommand(ScanConfig config, String path, Path tempOutputFile) {
         final NmapOptions options = config.options();
         String host = config.host().address();
         int startPort = config.range().start();
         int endPort = config.range().end();
         String portSpec = String.format("%d-%d", startPort, endPort);
 
+        // workaround for root privileges
+        boolean needsPrivilegedRights = config.options().synScan() || config.options().osDetection();
+        String os = System.getProperty("os.name").toLowerCase();
+        boolean canAddDetectionWithPrivileges = false;
+
         List<String> nmapCommand = new ArrayList<>();
+
+        if (needsPrivilegedRights) {
+            if (!os.contains("win") && !os.contains("mac")) {
+                // on linux pkexec is available to run nmap as root
+                nmapCommand.add("pkexec");
+                canAddDetectionWithPrivileges = true;
+            }
+        }
         nmapCommand.add(path);
 
         if (options.serviceDetection()) {
             nmapCommand.add("-sV"); // version detection for services detected
         }
-        if (options.osDetection()) {
+        if (options.osDetection() && canAddDetectionWithPrivileges) {
             nmapCommand.add("-O");
         }
         if (options.tcpConnectScan()) {
             nmapCommand.add("-sT");
         }
-        if (options.synScan()) {
+        if (options.synScan() && canAddDetectionWithPrivileges) {
             nmapCommand.add("-sS"); // stealth mode
         }
         if (options.hostTimeout().getSeconds() != -1) {
@@ -47,7 +60,7 @@ public class NmapCommandBuilder {
 
         // these options must always be included
         nmapCommand.add("-oX"); // output as XML
-        nmapCommand.add(tempOutputFile.getPath());
+        nmapCommand.add(tempOutputFile.toString());
         nmapCommand.add(host);
 
         return new ProcessBuilder(nmapCommand);
