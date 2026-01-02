@@ -6,7 +6,7 @@ import at.ac.hcw.porty.types.records.ScanConfig;
 import at.ac.hcw.porty.types.records.ScanSummary;
 import at.ac.hcw.porty.types.interfaces.PortScanListener;
 import at.ac.hcw.porty.types.interfaces.ScanHandle;
-import at.ac.hcw.porty.utils.CommandBuilder;
+import at.ac.hcw.porty.utils.NmapCommandBuilder;
 import at.ac.hcw.porty.utils.NmapXMLParser;
 
 import java.io.*;
@@ -54,7 +54,7 @@ public class NmapPortScanner extends PortScanner {
         }
 
         // the command that the process uses
-        ProcessBuilder builder = CommandBuilder.buildNmapCommand(config, this.NMAP_PATH, tempOutputFile);
+        ProcessBuilder builder = NmapCommandBuilder.buildNmapCommand(config, this.NMAP_PATH, tempOutputFile);
 
         // try to start the built command
         final Process process;

@@ -7,6 +7,7 @@ import at.ac.hcw.porty.types.enums.ScanStrategy;
 import at.ac.hcw.porty.types.interfaces.PortScanListener;
 import at.ac.hcw.porty.types.interfaces.ScanHandle;
 import at.ac.hcw.porty.types.records.Host;
+import at.ac.hcw.porty.types.records.NmapOptions;
 import at.ac.hcw.porty.types.records.PortRange;
 import at.ac.hcw.porty.types.records.ScanConfig;
 import org.slf4j.Logger;
@@ -19,7 +20,8 @@ public class MockScannerCLITest {
             LoggerFactory.getLogger(MockScannerCLITest.class);
 
     public static void main(String[] args) {
-        ScanConfig config = new ScanConfig(new Host("localhost"), new PortRange(1, 50), Duration.ofMillis(100), 1);
+        NmapOptions options = new NmapOptions();    // has no effect on the mock scanner anyways
+        ScanConfig config = new ScanConfig(new Host("localhost"), new PortRange(1, 50), options);
         Scanner scanner = new Scanner(ScannerFactory.create(ScanStrategy.MOCK));
 
         PortScanListener[] listeners = { new PortScanCLIListener() };

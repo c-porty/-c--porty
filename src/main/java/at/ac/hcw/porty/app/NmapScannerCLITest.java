@@ -4,6 +4,7 @@ import at.ac.hcw.porty.listeners.PortScanCLIListener;
 import at.ac.hcw.porty.scanner.Scanner;
 import at.ac.hcw.porty.scanner.ScannerFactory;
 import at.ac.hcw.porty.types.records.Host;
+import at.ac.hcw.porty.types.records.NmapOptions;
 import at.ac.hcw.porty.types.records.PortRange;
 import at.ac.hcw.porty.types.records.ScanConfig;
 import at.ac.hcw.porty.types.enums.ScanStrategy;
@@ -20,7 +21,8 @@ public class NmapScannerCLITest {
 
     public static void main(String[] args) {
         // possible hosts for tests (that are not "illegal" to use: scanme.nmap.org, webxio.at (my own domain)
-        ScanConfig config = new ScanConfig(new Host("scanme.nmap.org"), new PortRange(10, 500), Duration.ofMillis(100), 0.5);
+        NmapOptions options = new NmapOptions();
+        ScanConfig config = new ScanConfig(new Host("scanme.nmap.org"), new PortRange(10, 500), options);
         Scanner scanner = new Scanner(ScannerFactory.create(ScanStrategy.NMAP));
 
         PortScanListener[] listeners = { new PortScanCLIListener() };
