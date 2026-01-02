@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane fx:id="mainBorderPane" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.hcw.porty.controller.MainController" prefHeight="960.0" prefWidth="1440.0" >
+    <left>
+        <VBox prefHeight="960.0" prefWidth="256.0" styleClass="porty-nav-bar">
+                <Label prefHeight="17.0" prefWidth="109.0" styleClass="porty-nav-title" text="Porty"/>
+            <VBox styleClass="porty-nav-buttons">
+                <Button mnemonicParsing="false" onAction="#navigateToDashboard" styleClass="porty-nav-button" text="Home"/>
+                <Button mnemonicParsing="false" onAction="#navigateToHistory" styleClass="porty-nav-button" text="History" />
+                <Button mnemonicParsing="false" onAction="#navigateToCredits" styleClass="porty-nav-button" text="About us" />
+            </VBox>
+         <Region VBox.vgrow="ALWAYS" styleClass="porty-nav-spacer" />
+            <VBox styleClass="porty-own-ip-field">
+                <Label styleClass="porty-label" text="Your IP Address:" />
+                <Label styleClass="porty-label" text="192.168.0.3" />
+            </VBox>
+        </VBox>
+    </left>
+    <center>
+        <fx:include source="dashboard.fxml"/>
+    </center>
+</BorderPane>

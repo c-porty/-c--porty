@@ -1,0 +1,69 @@
+@import "colors.css";
+@import "dashboard.css";
+
+.porty-nav-bar{
+    -fx-background-color: -porty-background;
+    -fx-padding: 24 8;
+    -fx-spacing: 24;
+    -fx-border-color: -porty-border;
+    -fx-border-width: 0 1 0 0;
+}
+
+.porty-nav-button{
+    -fx-background-color: -porty-background;
+    -fx-font-size: 16px;
+    -fx-padding: 8 16;
+    -fx-max-width: infinity;
+    -fx-spacing: 16px;
+    -fx-text-fill: -porty-on-background;
+    -fx-alignment: CENTER_LEFT;
+    -fx-font-family: "Inter";
+}
+
+.porty-nav-button:focused{
+    -fx-background-color: -porty-background-active;
+}
+
+.porty-nav-title{
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 0 16;
+    -fx-text-fill: -porty-on-background;
+    -fx-font-family: "Inter";
+}
+
+.porty-nav-spacer{
+    -fx-max-height: infinity;
+}
+
+.porty-label{
+    -fx-text-fill: -porty-on-background;
+    -fx-font-size: 15px;
+}
+
+.porty-content-pane{
+    -fx-background-color: -porty-background;
+    -fx-padding: 24 80;
+}
+
+.porty-title{
+    -fx-font-size: 34px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -porty-on-background;
+    -fx-font-family: "Inter";
+}
+
+.porty-title-large{
+    -fx-font-size: 45px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -porty-on-background;
+    -fx-font-family: "Inter";
+}
+
+.porty-top-bar-button{
+    -fx-font-size: 16px;
+    -fx-background-color: -porty-primary;
+    -fx-text-fill: -porty-on-primary;
+    -fx-padding: 8 16;
+    -fx-min-width: 54;
+}

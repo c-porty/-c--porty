@@ -13,4 +13,6 @@ module at.ac.hcw.porty {
 
     opens at.ac.hcw.porty to javafx.fxml;
     exports at.ac.hcw.porty;
+    exports at.ac.hcw.porty.controller;
+    opens at.ac.hcw.porty.controller to javafx.fxml;
 }
