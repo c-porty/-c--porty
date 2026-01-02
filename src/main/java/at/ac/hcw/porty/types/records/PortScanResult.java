@@ -2,6 +2,9 @@ package at.ac.hcw.porty.types.records;
 
 import at.ac.hcw.porty.types.enums.PortStatus;
 
-import java.time.Duration;
-
-public record PortScanResult(Host host, int port, PortStatus status, Duration responseTime, String note) { }
+public record PortScanResult(Host host, int port, PortStatus status, String note) {
+    @Override
+    public String toString() {
+        return String.format("Port %d -> %s (%s)", port, status, note);
+    }
+}

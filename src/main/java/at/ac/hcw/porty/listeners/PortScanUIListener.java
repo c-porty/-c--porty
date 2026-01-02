@@ -30,6 +30,10 @@ public class PortScanUIListener implements PortScanListener {
     @Override public void onComplete(ScanSummary summary) {
         Platform.runLater(() -> {
             outputTextList.add("Completed: " + summary.results().size() + " ports");
+            outputTextList.add(String.format("Detailed information on host %s: ", summary.host().address()));
+            for (PortScanResult result : summary.results()) {
+                outputTextList.add(result.toString());
+            }
         });
     }
 
