@@ -1,9 +1,9 @@
-Nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+Wir sind ein Team aus drei Studierenden an der Hochschule Campus Wien, die im Rahmen des ersten Semesters des Studienjahres 2025/26 gemeinsam an einem Projekt gearbeitet haben.
 
-Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat.
-nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent.
-Luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer.
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+Unser Ziel war es einen Portscanner zu erstellen, der dazu dient, offene Netzwerk-Ports zu identifizieren und grundlegende Einblicke in die Funktionsweise von Netzwerksicherheit zu geben. Dabei lag unser Fokus nicht nur auf der technischen Umsetzung, sondern auch auf einem klaren Aufbau und einer verständlichen Darstellung der Ergebnisse.
+
+Gemeinsame Entwicklung von:
+Kilian Halwachs, Felix Schöller, Moritz Bauer – Hochschule Campus Wien 2025/26
 
 In loving memory:
 Erik Daurer 01.09.2025 - 14.11.2025

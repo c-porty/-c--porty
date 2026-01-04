@@ -17,7 +17,7 @@
         <Label styleClass="porty-credits-subtitle" text="We can't C#" />
         </VBox>
         <Region fx:id="bar" prefHeight="8" prefWidth="1024" styleClass="porty-credits-bar" />
-        <HBox>
+        <HBox styleClass="porty-credits-text">
             <TextArea fx:id="creditsTextArea" editable="false" wrapText="true" HBox.hgrow="ALWAYS" prefHeight="674.0" styleClass="porty-credits-textarea" />
             <AnchorPane HBox.hgrow="ALWAYS">
                 <ImageView fx:id="creditsImage" fitHeight="411.0" fitWidth="598.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="0" AnchorPane.rightAnchor="0" />
