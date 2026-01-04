@@ -1,17 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 
-<VBox xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.hcw.porty.controller.CreditsController" prefHeight="960.0" prefWidth="1184.0" styleClass="porty-content-pane">
+<VBox prefHeight="960.0" prefWidth="1184.0" styleClass="porty-content-pane" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.hcw.porty.controller.CreditsController">
     <HBox prefHeight="50.0" prefWidth="1184.0">
-        <ToggleButton fx:id="simplicityModeSwitch" mnemonicParsing="false" text="Simple/Advanced" styleClass="porty-switch-text" />
-        <Region HBox.hgrow="ALWAYS" styleClass="porty-top-bar-spacer" />
-        <ToggleButton fx:id="lightModeSwitch" mnemonicParsing="false" text="Theme" styleClass="porty-switch-icon"/>
-        <Button fx:id="languageButton" mnemonicParsing="false" text="EN" styleClass="porty-top-bar-button"/>
+        <ToggleButton fx:id="simplicityModeSwitch" mnemonicParsing="false" styleClass="porty-switch-text" text="Simple/Advanced" />
+        <Region styleClass="porty-top-bar-spacer" HBox.hgrow="ALWAYS" />
+        <ToggleButton fx:id="lightModeSwitch" mnemonicParsing="false" styleClass="porty-switch-icon" text="Theme" />
+        <Button fx:id="languageButton" mnemonicParsing="false" styleClass="porty-top-bar-button" text="EN" />
     </HBox>
-    <VBox>
-        <Label text="About Us" styleClass="porty-title-large"/>
+    <VBox styleClass="porty-credits">
+        <VBox>
+        <Label styleClass="porty-title-large" text="About Us" />
+        <Label styleClass="porty-credits-subtitle" text="We can't C#" />
+        </VBox>
+        <Region prefHeight="8" prefWidth="1024" styleClass="porty-credits-bar" />
+        <HBox styleClass="porty-credits-text">
+            <TextArea fx:id="creditsTextArea" editable="false" HBox.hgrow="ALWAYS" minWidth="300.0" prefHeight="674.0" styleClass="porty-credits-textarea" />
+            <AnchorPane HBox.hgrow="ALWAYS">
+                <ImageView fx:id="creditsImage" fitHeight="411.0" fitWidth="598.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="0" AnchorPane.rightAnchor="0" />
+            </AnchorPane>
+        </HBox>
     </VBox>
 </VBox>

@@ -1,0 +1,9 @@
+Wir sind ein Team aus drei Studierenden an der Hochschule Campus Wien, die im Rahmen des ersten Semesters des Studienjahres 2025/26 gemeinsam an einem Projekt gearbeitet haben.
+
+Unser Ziel war es einen Portscanner zu erstellen, der dazu dient, offene Netzwerk-Ports zu identifizieren und grundlegende Einblicke in die Funktionsweise von Netzwerksicherheit zu geben. Dabei lag unser Fokus nicht nur auf der technischen Umsetzung, sondern auch auf einem klaren Aufbau und einer verständlichen Darstellung der Ergebnisse.
+
+Gemeinsame Entwicklung von:
+Kilian Halwachs, Felix Schöller, Moritz Bauer – Hochschule Campus Wien 2025/26
+
+In loving memory:
+Erik Daurer 01.09.2025 - 14.11.2025
