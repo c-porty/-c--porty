@@ -1,0 +1,36 @@
+.porty-credits-subtitle{
+    -fx-font-size: 20px;
+    -fx-text-fill: -porty-on-background;
+    -fx-font-family: "Inter";
+}
+
+.porty-credits-textarea {
+    -fx-control-inner-background: -porty-background;
+    -fx-text-fill: -porty-on-background;
+     -fx-background-color: -porty-background;
+        -fx-border-color: transparent;
+        -fx-border-radius: 0;
+        -fx-border-width: 0;
+        -fx-focus-color: transparent;
+        -fx-faint-focus-color: transparent;
+        -fx-padding: 0;
+}
+
+.porty-credits-textarea .content {
+        -fx-padding: 0;
+}
+
+.porty-credits-textarea .viewport {
+    -fx-background-color: -porty-background;
+}
+
+.porty-credits-bar {
+    -fx-max-width: infinity;
+    -fx-background-color: -porty-credits-bar;
+    -fx-background-radius: 14;
+}
+
+.porty-credits {
+    -fx-spacing: 28px;
+}
+
