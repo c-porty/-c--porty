@@ -16,10 +16,9 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.collections.ListChangeListener;
+import javafx.scene.layout.VBox;
 
 import java.time.Duration;
 
@@ -30,10 +29,17 @@ public class DashboardController {
     private ListView<String> scanProgressConsole;
     @FXML
     private TextField ipTextField;
+    @FXML
+    private ToggleButton simplicityModeSwitch;
+    @FXML
+    private VBox advancedOptionControl;
+    @FXML
+    private Label descriptorLabel;
 
     ObservableList<String> consoleLines = FXCollections.observableArrayList();
 
     private boolean onScan = false;
+    private boolean advancedOptions = false;
     private ScanHandle handle;
 
     private ScanConfigDTO scanConfigDTO;
@@ -48,6 +54,25 @@ public class DashboardController {
                 if (change.wasAdded()) {
                     scanProgressConsole.scrollTo(consoleLines.size() - 1);
                 }
+            }
+        });
+
+        //Control for advanced mode
+        advancedOptionControl.setVisible(false);
+        advancedOptionControl.setManaged(false);
+        descriptorLabel.setText("Quick Device Scan");
+
+        simplicityModeSwitch.setOnAction(e -> {
+            if (simplicityModeSwitch.isSelected()) {
+                advancedOptionControl.setVisible(true);
+                advancedOptionControl.setManaged(true);
+                descriptorLabel.setText("Scan with preferences");
+                advancedOptions = true;
+            } else {
+                advancedOptionControl.setVisible(false);
+                advancedOptionControl.setManaged(false);
+                descriptorLabel.setText("Quick Device Scan");
+                advancedOptions = false;
             }
         });
     }

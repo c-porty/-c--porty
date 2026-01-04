@@ -10,7 +10,7 @@
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="at.ac.hcw.porty.controller.HistoryController"
             prefHeight="960.0" prefWidth="1184.0" styleClass="porty-content-pane">
-    <HBox prefHeight="50.0" prefWidth="1184.0">
+    <HBox prefHeight="50.0" prefWidth="1184.0" styleClass="porty-top-bar">
         <ToggleButton fx:id="simplicityModeSwitch" mnemonicParsing="false" text="Simple/Advanced" styleClass="porty-switch-text" />
         <Region HBox.hgrow="ALWAYS" styleClass="porty-top-bar-spacer" />
         <ToggleButton fx:id="lightModeSwitch" mnemonicParsing="false" text="Theme" styleClass="porty-switch-icon"/>

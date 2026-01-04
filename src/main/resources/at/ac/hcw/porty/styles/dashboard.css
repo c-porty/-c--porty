@@ -1,7 +1,3 @@
-.porty-top-bar-spacer{
-    -fx-max-width: infinity;
-}
-
 .porty-dashboard-header{
     -fx-font-size: 20px;
     -fx-text-fill: -porty-on-background;
