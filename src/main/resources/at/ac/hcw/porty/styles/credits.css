@@ -7,6 +7,8 @@
 .porty-credits-textarea {
     -fx-control-inner-background: -porty-background;
     -fx-text-fill: -porty-on-background;
+    -fx-font-size: 20px;
+    -fx-font-family: "Inter";
      -fx-background-color: -porty-background;
         -fx-border-color: transparent;
         -fx-border-radius: 0;
