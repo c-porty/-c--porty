@@ -9,13 +9,14 @@
     -fx-text-fill: -porty-on-background;
     -fx-font-size: 20px;
     -fx-font-family: "Inter";
-     -fx-background-color: -porty-background;
-        -fx-border-color: transparent;
-        -fx-border-radius: 0;
-        -fx-border-width: 0;
-        -fx-focus-color: transparent;
-        -fx-faint-focus-color: transparent;
-        -fx-padding: 0;
+    -fx-background-color: -porty-background;
+    -fx-border-color: transparent;
+    -fx-border-radius: 0;
+    -fx-border-width: 0;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-padding: 0;
+    -fx-wrap-text: true;
 }
 
 .porty-credits-textarea .content {

@@ -21,7 +21,7 @@ public class CreditsController {
     @FXML
     public void initialize() throws IOException {
         Image image = new Image(
-                getClass().getResource("/at/ac/hcw/porty/images/credits-test-foto.png").toExternalForm());
+                getClass().getResource("/at/ac/hcw/porty/images/team-photo.png").toExternalForm());
 
         creditsImage.setImage(image);
 
