@@ -23,7 +23,12 @@
          <VBox fx:id="advancedOptionControl" prefHeight="1000.0" prefWidth="100.0">
                <TitledPane animated="false" styleClass="porty-titled-pane" text="Advanced Options">
                    <VBox>
-
+                       <CheckBox fx:id="serviceDetectionCheckbox" mnemonicParsing="false" text="Scan for Services" />
+                       <CheckBox fx:id="osDetectionCheckbox" mnemonicParsing="false" text="Scan for Operation System" />
+                       <CheckBox fx:id="tcpConnectScanCheckbox" mnemonicParsing="false" text="Enable TCP Connection Scan" />
+                       <CheckBox fx:id="synScanCheckbox" mnemonicParsing="false" text="Enable syn Scan" />
+                       <Slider fx:id="timeoutSlider" min="-1"/>
+                       <Slider fx:id="statsEverySlider" min="2" />
                    </VBox>
                </TitledPane>
                <StackPane prefHeight="327.0" styleClass="porty-file-field">

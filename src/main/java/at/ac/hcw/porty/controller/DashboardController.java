@@ -19,8 +19,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.collections.ListChangeListener;
 import javafx.scene.layout.VBox;
+import javafx.util.converter.DoubleStringConverter;
 
 import java.time.Duration;
+import java.util.function.UnaryOperator;
 
 public class DashboardController {
     @FXML
@@ -35,6 +37,18 @@ public class DashboardController {
     private VBox advancedOptionControl;
     @FXML
     private Label descriptorLabel;
+    @FXML
+    private CheckBox serviceDetectionCheckbox;
+    @FXML
+    private CheckBox osDetectionCheckbox;
+    @FXML
+    private CheckBox tcpConnectScanCheckbox;
+    @FXML
+    private CheckBox synScanCheckbox;
+    @FXML
+    private Slider timeoutSlider;
+    @FXML
+    private Slider statsEverySlider;
 
     ObservableList<String> consoleLines = FXCollections.observableArrayList();
 
@@ -46,7 +60,7 @@ public class DashboardController {
 
     @FXML
     public void initialize() {
-        scanConfigDTO = new ScanConfigDTO("");
+        scanConfigDTO = new ScanConfigDTO();
         scanProgressConsole.setItems(consoleLines);
 
         consoleLines.addListener((ListChangeListener<String>) change -> {
@@ -79,22 +93,13 @@ public class DashboardController {
 
     @FXML
     protected void onScanStartButtonClick() throws InterruptedException {
-        scanConfigDTO.setHost(ipTextField.getText());
         if(!onScan) {
-            if(!scanConfigDTO.getHost().isEmpty() && scanConfigDTO.getHost()!=null) {
-                startScanButton.setText("Stop");
-                onScan = true;
-                new Thread(() -> {
-                    // as long as we do not have input for the port range simply use all available ports
-                    handle = scan(new Host(scanConfigDTO.getHost()), new PortRange(-1, -1));
-                    handle.summary().join();
-                    Platform.runLater(() -> {
-                        startScanButton.setText("Start Scan");
-                        onScan = false;
-                    });
-                }).start();
+            if (advancedOptions) {
+                advancedScan();
+            } else {
+                simpleScan();
             }
-        }else{
+        } else{
             if(handle != null) {
                 handle.cancel();
             }
@@ -103,13 +108,64 @@ public class DashboardController {
         }
     }
 
-    protected ScanHandle scan(Host host, PortRange range){
-        NmapOptions options = new NmapOptions();
+    protected void scan(NmapOptions options){
+        if(!scanConfigDTO.getHost().isEmpty() && scanConfigDTO.getHost()!=null) {
+            startScanButton.setText("Stop");
+            onScan = true;
+            new Thread(() -> {
+                handle = scanHandleGenerator(new Host(scanConfigDTO.getHost()), new PortRange(-1, -1), options);
+                handle.summary().join();
+                Platform.runLater(() -> {
+                    startScanButton.setText("Start Scan");
+                    onScan = false;
+                });
+            }).start();
+        }
+    }
+
+    protected ScanHandle scanHandleGenerator(Host host, PortRange range, NmapOptions options){
         ScanConfig config = new ScanConfig(host, range, options);
         Scanner scanner = new Scanner(ScannerFactory.create(ScanStrategy.NMAP));
         // both the CLI listener and the UI listener, UI listener is for actual frontend, CLI only for debugging
         PortScanListener[] listeners = { new PortScanUIListener(consoleLines), new PortScanCLIListener() };
 
         return scanner.scan(config, listeners);
+    }
+
+    protected void simpleScan(){
+        scanConfigDTO.setHost(ipTextField.getText());
+        NmapOptions options = new NmapOptions();
+        scan(options);
+    }
+
+    protected void advancedScan(){
+        setDTO();
+        String os = System.getProperty("os.name").toLowerCase();
+        boolean onLinux = !os.contains("win") && !os.contains("mac");
+        NmapOptions options;
+        if ((!scanConfigDTO.isServiceDetection() && !scanConfigDTO.isOsDetection())||onLinux) {
+            options = new NmapOptions(scanConfigDTO.isServiceDetection(), scanConfigDTO.isOsDetection(), scanConfigDTO.isTcpConnectScan(), scanConfigDTO.isSynScan());
+        }
+        else{
+            options = new NmapOptions(false, false, scanConfigDTO.isTcpConnectScan(), scanConfigDTO.isSynScan());
+
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Fehler");
+            alert.setHeaderText(null);
+            alert.setContentText("Service and OS Detection currently not supported for your System!");
+
+            alert.showAndWait();
+        }
+        scan(options);
+    }
+
+    protected void setDTO(){
+        scanConfigDTO.setHost(ipTextField.getText());
+        scanConfigDTO.setServiceDetection(serviceDetectionCheckbox.isSelected());
+        scanConfigDTO.setOsDetection(osDetectionCheckbox.isSelected());
+        scanConfigDTO.setTcpConnectScan(tcpConnectScanCheckbox.isSelected());
+        scanConfigDTO.setSynScan(synScanCheckbox.isSelected());
+        scanConfigDTO.setStatsEvery(statsEverySlider.getValue());
+        scanConfigDTO.setHostTimeout((long)timeoutSlider.getValue());
     }
 }
