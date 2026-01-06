@@ -1,5 +1,6 @@
 package at.ac.hcw.porty.controller;
 
+import at.ac.hcw.porty.controller.interfaces.ModeAwareController;
 import at.ac.hcw.porty.dto.ScanConfigDTO;
 import at.ac.hcw.porty.listeners.PortScanCLIListener;
 import at.ac.hcw.porty.listeners.PortScanUIListener;
@@ -24,15 +25,13 @@ import javafx.util.converter.DoubleStringConverter;
 import java.time.Duration;
 import java.util.function.UnaryOperator;
 
-public class DashboardController {
+public class DashboardController implements ModeAwareController {
     @FXML
     private Button startScanButton;
     @FXML
     private ListView<String> scanProgressConsole;
     @FXML
     private TextField ipTextField;
-    @FXML
-    private ToggleButton simplicityModeSwitch;
     @FXML
     private VBox advancedOptionControl;
     @FXML
@@ -71,24 +70,7 @@ public class DashboardController {
             }
         });
 
-        //Control for advanced mode
-        advancedOptionControl.setVisible(false);
-        advancedOptionControl.setManaged(false);
-        descriptorLabel.setText("Quick Device Scan");
-
-        simplicityModeSwitch.setOnAction(e -> {
-            if (simplicityModeSwitch.isSelected()) {
-                advancedOptionControl.setVisible(true);
-                advancedOptionControl.setManaged(true);
-                descriptorLabel.setText("Scan with preferences");
-                advancedOptions = true;
-            } else {
-                advancedOptionControl.setVisible(false);
-                advancedOptionControl.setManaged(false);
-                descriptorLabel.setText("Quick Device Scan");
-                advancedOptions = false;
-            }
-        });
+        setSimpleMode();
     }
 
     @FXML
@@ -106,6 +88,22 @@ public class DashboardController {
             startScanButton.setText("Start Scan");
             onScan=false;
         }
+    }
+
+    @Override
+    public void setSimpleMode(){
+        advancedOptionControl.setVisible(false);
+        advancedOptionControl.setManaged(false);
+        descriptorLabel.setText("Quick Device Scan");
+        advancedOptions = false;
+    }
+
+    @Override
+    public void setAdvancedMode(){
+        advancedOptionControl.setVisible(true);
+        advancedOptionControl.setManaged(true);
+        descriptorLabel.setText("Scan with preferences");
+        advancedOptions = true;
     }
 
     protected void scan(NmapOptions options){

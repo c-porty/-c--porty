@@ -20,6 +20,18 @@
         </VBox>
     </left>
     <center>
-        <fx:include source="dashboard.fxml"/>
+        <BorderPane fx:id="contentBorderPane" prefHeight="960.0" prefWidth="1184.0" styleClass="porty-content-pane">
+            <top>
+                <HBox prefHeight="50.0" prefWidth="1184.0" styleClass="porty-top-bar">
+                    <ToggleButton fx:id="simplicityModeSwitch" mnemonicParsing="false" styleClass="porty-switch-text" text="Simple/Advanced" />
+                    <Region styleClass="porty-top-bar-spacer" HBox.hgrow="ALWAYS" />
+                    <ToggleButton fx:id="lightModeSwitch" mnemonicParsing="false" styleClass="porty-switch-icon" text="Theme" />
+                    <Button fx:id="languageButton" mnemonicParsing="false" styleClass="porty-top-bar-button" text="EN" />
+                </HBox>
+            </top>
+            <center>
+                <fx:include fx:id="dashboardView" source="dashboard.fxml"/>
+            </center>
+        </BorderPane>
     </center>
 </BorderPane>

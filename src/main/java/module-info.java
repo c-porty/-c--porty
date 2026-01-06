@@ -10,6 +10,7 @@ module at.ac.hcw.porty {
     requires java.desktop;
     requires org.slf4j;
     requires javafx.base;
+    requires javafx.graphics;
     requires com.fasterxml.jackson.dataformat.xml;
     requires com.fasterxml.jackson.databind;
     requires com.fasterxml.jackson.datatype.jsr310;
