@@ -11,7 +11,7 @@
         <Button fx:id="languageButton" mnemonicParsing="false" styleClass="porty-top-bar-button" text="EN" />
     </HBox>
     <Label styleClass="porty-title" text="Dashboard" />
-    <HBox prefHeight="892.0" prefWidth="1184.0" styleClass="porty-dashboard">
+    <HBox prefHeight="700.0" prefWidth="1184.0" styleClass="porty-dashboard">
         <VBox prefHeight="200.0" prefWidth="500.0" styleClass="porty-dashboard-simple-control">
             <VBox>
                 <Label styleClass="porty-dashboard-header" text="Scan" />
