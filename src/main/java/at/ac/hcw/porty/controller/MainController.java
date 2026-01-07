@@ -34,6 +34,7 @@ public class MainController {
             }
         });
 
+        navigateToDashboard(null);
     }
 
     @FXML
