@@ -1,6 +1,7 @@
 package at.ac.hcw.porty;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.text.Font;
@@ -20,5 +21,11 @@ public class PortScanApplication extends Application {
         stage.setTitle("Porty - Portscanner");
         stage.setScene(scene);
         stage.show();
+
+        // this is needed to stop ALL threads as soon as the application is closed
+        stage.setOnCloseRequest(evt -> {
+            Platform.exit();    // stop the JavaFX application
+            System.exit(0); // stop all associated threads and exit the process with status 0
+        });
     }
 }
