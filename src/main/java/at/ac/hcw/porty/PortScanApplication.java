@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
@@ -18,6 +19,7 @@ public class PortScanApplication extends Application {
         scene.getStylesheets().add(
                 Objects.requireNonNull(getClass().getResource("/at/ac/hcw/porty/styles/styles.css")).toExternalForm()
         );
+        stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/at/ac/hcw/porty/images/logo_32x32.png"))));
         stage.setTitle("Porty - Portscanner");
         stage.setScene(scene);
         stage.show();
