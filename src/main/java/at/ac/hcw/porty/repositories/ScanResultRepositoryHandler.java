@@ -1,6 +1,6 @@
 package at.ac.hcw.porty.repositories;
 
-import at.ac.hcw.porty.types.ScanResultRepository;
+import at.ac.hcw.porty.types.interfaces.IScanResultRepository;
 import at.ac.hcw.porty.types.records.Host;
 import at.ac.hcw.porty.types.records.ScanSummary;
 import org.slf4j.Logger;
@@ -12,17 +12,17 @@ import java.util.Optional;
 public class ScanResultRepositoryHandler {
     private static final Logger logger =
             LoggerFactory.getLogger(ScanResultRepositoryHandler.class);
-    private ScanResultRepository repository;
+    private IScanResultRepository repository;
 
-    public ScanResultRepositoryHandler(ScanResultRepository repository) {
+    public ScanResultRepositoryHandler(IScanResultRepository repository) {
         this.repository = repository;
     }
 
-    public void setRepository(ScanResultRepository repository) {
+    public void setRepository(IScanResultRepository repository) {
         this.repository = repository;
     }
 
-    public ScanResultRepository getRepository() {
+    public IScanResultRepository getRepository() {
         return this.repository;
     }
 

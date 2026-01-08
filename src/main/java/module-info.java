@@ -17,6 +17,9 @@ module at.ac.hcw.porty {
     opens at.ac.hcw.porty.types.records
             to com.fasterxml.jackson.databind,
             com.fasterxml.jackson.dataformat.xml;
+    opens at.ac.hcw.porty.types.enums
+            to com.fasterxml.jackson.databind,
+            com.fasterxml.jackson.dataformat.xml;
 
     opens at.ac.hcw.porty to javafx.fxml;
     exports at.ac.hcw.porty;

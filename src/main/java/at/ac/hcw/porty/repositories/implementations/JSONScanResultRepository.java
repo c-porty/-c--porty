@@ -1,6 +1,6 @@
 package at.ac.hcw.porty.repositories.implementations;
 
-import at.ac.hcw.porty.types.ScanResultRepository;
+import at.ac.hcw.porty.types.interfaces.IScanResultRepository;
 import at.ac.hcw.porty.types.records.Host;
 import at.ac.hcw.porty.types.records.ScanSummary;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,8 +12,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.Optional;
+import java.util.Set;
 
-public class JSONScanResultRepository extends ScanResultRepository {
+public class JSONScanResultRepository implements IScanResultRepository {
+    private static final String EXT = ".json";
+
     private final ObjectMapper objectMapper;
 
     public JSONScanResultRepository() {
@@ -26,14 +29,13 @@ public class JSONScanResultRepository extends ScanResultRepository {
     @Override
     public boolean save(ScanSummary summary) {
         try {
-            // ensure the dir is there
-            Path dir = Paths.get(this.savePath);
+            Path dir = Paths.get(IScanResultRepository.savePath);
             Files.createDirectories(dir);
-
-            String fileName = String.format("%s-%d.json",
+            String fileName = String.format("%s-%d%s",
                     summary.host().address(),
-                    summary.startedAt().getEpochSecond());
-
+                    summary.startedAt().getEpochSecond(),
+                    EXT
+            );
             Path file = dir.resolve(fileName);
             objectMapper.writeValue(file.toFile(), summary);
             return true;
@@ -43,17 +45,26 @@ public class JSONScanResultRepository extends ScanResultRepository {
 
     @Override
     public Optional<ScanSummary> load(Host host, Instant startedAt) {
-        String fileName = String.format("%s-%d.json",
+        String fileName = String.format("%s-%d%s",
                 host.address(),
-                startedAt.getEpochSecond());
-        Path path = Paths.get(this.savePath).resolve(fileName);
+                startedAt.getEpochSecond(),
+                EXT
+        );
+        Path path = Paths.get(IScanResultRepository.savePath).resolve(fileName);
+        return parse(path);
+    }
 
+    @Override
+    public Set<String> supportedExtensions() {
+        return Set.of(EXT);
+    }
+
+    @Override
+    public Optional<ScanSummary> parse(Path file) {
         try {
-            ScanSummary summary =
-                    objectMapper.readValue(path.toFile(), ScanSummary.class);
+            ScanSummary summary = objectMapper.readValue(file.toFile(), ScanSummary.class);
             return Optional.of(summary);
         } catch (Exception ignored) {}
-
         return Optional.empty();
     }
 }
