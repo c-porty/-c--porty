@@ -1,5 +1,8 @@
 package at.ac.hcw.porty.types;
 
+import at.ac.hcw.porty.repositories.ScanResultRepositoryFactory;
+import at.ac.hcw.porty.repositories.ScanResultRepositoryHandler;
+import at.ac.hcw.porty.types.enums.ScanResultRepositoryOption;
 import at.ac.hcw.porty.types.interfaces.IPortScanner;
 import at.ac.hcw.porty.types.interfaces.PortScanListener;
 import at.ac.hcw.porty.types.records.PortScanResult;
@@ -17,6 +20,8 @@ public abstract class PortScanner implements IPortScanner {
     protected Instant started;
     protected List<PortScanResult> results;
     protected CompletableFuture<ScanSummary> cf;
+    protected ScanResultRepositoryHandler scanResultRepositoryHandler =
+            new ScanResultRepositoryHandler(ScanResultRepositoryFactory.create(ScanResultRepositoryOption.JSON));
 
     protected void setupScan(ScanConfig config, PortScanListener[] passedListeners) {
         listeners = List.of(passedListeners);

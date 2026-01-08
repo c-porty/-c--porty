@@ -60,7 +60,7 @@ public final class MockPortScanner extends PortScanner {
                     }
                 }
                 results.sort(Comparator.comparingInt(PortScanResult::port));
-                ScanSummary summary = new ScanSummary(config.host(), List.copyOf(results), started, Instant.now());
+                ScanSummary summary = new ScanSummary(config.host(), List.copyOf(results), config, started, Instant.now());
                 for (PortScanListener listener : listeners) {
                     listener.onComplete(summary);
                 }

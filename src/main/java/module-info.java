@@ -10,6 +10,16 @@ module at.ac.hcw.porty {
     requires java.desktop;
     requires org.slf4j;
     requires javafx.base;
+    requires com.fasterxml.jackson.dataformat.xml;
+    requires com.fasterxml.jackson.databind;
+    requires com.fasterxml.jackson.datatype.jsr310;
+
+    opens at.ac.hcw.porty.types.records
+            to com.fasterxml.jackson.databind,
+            com.fasterxml.jackson.dataformat.xml;
+    opens at.ac.hcw.porty.types.enums
+            to com.fasterxml.jackson.databind,
+            com.fasterxml.jackson.dataformat.xml;
 
     opens at.ac.hcw.porty to javafx.fxml;
     exports at.ac.hcw.porty;
