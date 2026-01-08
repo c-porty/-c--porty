@@ -12,7 +12,6 @@ import at.ac.hcw.porty.utils.NmapXMLParser;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.attribute.PosixFilePermissions;
 import java.time.Instant;
 import java.util.List;
 import java.util.concurrent.CancellationException;
@@ -107,7 +106,7 @@ public class NmapPortScanner extends PortScanner {
                         }
                     }
 
-                    ScanSummary summary = new ScanSummary(config.host(), List.copyOf(results), started, Instant.now());
+                    ScanSummary summary = new ScanSummary(config.host(), List.copyOf(results), config, started, Instant.now());
                     for (PortScanListener listener : listeners) {
                         listener.onComplete(summary);
                     }
@@ -131,14 +130,19 @@ public class NmapPortScanner extends PortScanner {
                 }
                 if (!cf.isDone()) cf.completeExceptionally(e);
             } finally {
-                try { Files.deleteIfExists(tempOutputFile); } catch (IOException ignored) {};  // delete file
-                try { Files.deleteIfExists(tempOutputDir); } catch (IOException ignored) {};   // delete dir
+                try { Files.deleteIfExists(tempOutputFile); } catch (IOException ignored) {}  // delete file
+                try { Files.deleteIfExists(tempOutputDir); } catch (IOException ignored) {}   // delete dir
                 threadsExecutor.shutdown(); // if this thread finishes, all threads must close
             }
         });
 
         // always shut down all worker threads when cf is finished
-        cf.whenComplete((s, t) -> threadsExecutor.shutdown());
+        cf.whenComplete((s, t) -> {
+            if (s.config().options().saveScan()) {
+                this.scanResultRepositoryHandler.save(s);
+            }
+            threadsExecutor.shutdown();
+        });
 
         return new ScanHandle() {
             @Override
