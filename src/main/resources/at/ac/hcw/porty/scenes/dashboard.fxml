@@ -16,13 +16,13 @@
             <CheckBox fx:id="saveScanCheckbox" mnemonicParsing="false" styleClass="porty-dashboard-checkbox" text="Save Result" />
          <VBox fx:id="advancedOptionControl" prefHeight="1000.0" prefWidth="100.0">
                <TitledPane animated="false" styleClass="porty-titled-pane" text="Advanced Options">
-                   <VBox>
-                       <CheckBox fx:id="serviceDetectionCheckbox" mnemonicParsing="false" text="Scan for Services" />
-                       <CheckBox fx:id="osDetectionCheckbox" mnemonicParsing="false" text="Scan for Operation System" />
-                       <CheckBox fx:id="tcpConnectScanCheckbox" mnemonicParsing="false" text="Enable TCP Connection Scan" />
-                       <CheckBox fx:id="synScanCheckbox" mnemonicParsing="false" text="Enable syn Scan" />
-                       <Slider fx:id="timeoutSlider" min="-1"/>
-                       <Slider fx:id="statsEverySlider" min="2" />
+                   <VBox styleClass="porty-dashboard-advanced-menu">
+                       <CheckBox fx:id="serviceDetectionCheckbox" mnemonicParsing="false" text="Scan for Services" styleClass="porty-dashboard-menu-checkbox"/>
+                       <CheckBox fx:id="osDetectionCheckbox" mnemonicParsing="false" text="Scan for Operation System" styleClass="porty-dashboard-menu-checkbox"/>
+                       <CheckBox fx:id="tcpConnectScanCheckbox" mnemonicParsing="false" text="Enable TCP Connection Scan" styleClass="porty-dashboard-menu-checkbox"/>
+                       <CheckBox fx:id="synScanCheckbox" mnemonicParsing="false" text="Enable syn Scan" styleClass="porty-dashboard-menu-checkbox"/>
+                       <TextField fx:id="timeoutTextField" promptText="Timeout"/>
+                       <TextField fx:id="statsEveryTextField" promptText="Stats Every"/>
                    </VBox>
                </TitledPane>
                <StackPane prefHeight="327.0" styleClass="porty-file-field">
@@ -36,7 +36,7 @@
             <TitledPane fx:id="scanProgressConsoleTitledPane" animated="false" styleClass="porty-titled-pane" text="Console">
                 <ListView fx:id="scanProgressConsole" layoutX="1.0" prefHeight="179.0" prefWidth="500.0" />
             </TitledPane>
-            <TextArea fx:id="scanProgressInfo" layoutY="-1.0" prefHeight="181.0" prefWidth="500.0" />
+            <TextArea fx:id="scanProgressInfo" prefHeight="181.0" prefWidth="500.0" editable="false" styleClass="porty-dashboard-textarea"/>
         </VBox>
     </HBox>
 </VBox>

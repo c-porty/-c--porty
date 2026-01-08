@@ -45,9 +45,9 @@ public class DashboardController implements ModeAwareController {
     @FXML
     private CheckBox synScanCheckbox;
     @FXML
-    private Slider timeoutSlider;
+    private TextField timeoutTextField;
     @FXML
-    private Slider statsEverySlider;
+    private TextField statsEveryTextField;
 
     ObservableList<String> consoleLines = FXCollections.observableArrayList();
 
@@ -69,6 +69,39 @@ public class DashboardController implements ModeAwareController {
                 }
             }
         });
+
+        TextFormatter<Long> longFormatter = new TextFormatter<>(change -> {
+            String newText = change.getControlNewText();
+
+            if (newText.isEmpty()) {
+                return change;
+            }
+
+            try {
+                Long.parseLong(newText);
+                return change;
+            } catch (NumberFormatException e) {
+                return null;
+            }
+        });
+
+        TextFormatter<Double> doubleFormatter = new TextFormatter<>(change -> {
+            String newText = change.getControlNewText();
+
+            if (newText.isEmpty()) {
+                return change;
+            }
+
+            try {
+                Long.parseLong(newText);
+                return change;
+            } catch (NumberFormatException e) {
+                return null;
+            }
+        });
+
+        timeoutTextField.setTextFormatter(longFormatter);
+        statsEveryTextField.setTextFormatter(doubleFormatter);
 
         setSimpleMode();
     }
@@ -163,7 +196,17 @@ public class DashboardController implements ModeAwareController {
         scanConfigDTO.setOsDetection(osDetectionCheckbox.isSelected());
         scanConfigDTO.setTcpConnectScan(tcpConnectScanCheckbox.isSelected());
         scanConfigDTO.setSynScan(synScanCheckbox.isSelected());
-        scanConfigDTO.setStatsEvery(statsEverySlider.getValue());
-        scanConfigDTO.setHostTimeout((long)timeoutSlider.getValue());
+        if(Double.parseDouble(statsEveryTextField.getText())>0) {
+            scanConfigDTO.setStatsEvery(Double.parseDouble(statsEveryTextField.getText()));
+        }
+        else{
+            scanConfigDTO.setStatsEvery(-1);
+        }
+        if(Double.parseDouble(timeoutTextField.getText())>0) {
+            scanConfigDTO.setHostTimeout(Long.parseLong(timeoutTextField.getText()));
+        }
+        else{
+            scanConfigDTO.setHostTimeout(-1);
+        }
     }
 }
