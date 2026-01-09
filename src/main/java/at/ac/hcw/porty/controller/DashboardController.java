@@ -177,21 +177,11 @@ public class DashboardController implements ModeAwareController {
 
     protected void advancedScan(){
         setDTO();
-        String os = System.getProperty("os.name").toLowerCase();
-        boolean onLinux = !os.contains("win") && !os.contains("mac");
-        NmapOptions options;
-        if ((!scanConfigDTO.isServiceDetection() && !scanConfigDTO.isOsDetection())||onLinux) {
-            options = new NmapOptions(scanConfigDTO.isServiceDetection(), scanConfigDTO.isOsDetection(), scanConfigDTO.isTcpConnectScan(), scanConfigDTO.isSynScan());
-        } else{
-            options = new NmapOptions(false, false, scanConfigDTO.isTcpConnectScan(), scanConfigDTO.isSynScan());
-
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Fehler");
-            alert.setHeaderText(null);
-            alert.setContentText("Service and OS Detection currently not supported for your System!");
-
-            alert.showAndWait();
-        }
+        NmapOptions options = new NmapOptions(
+                scanConfigDTO.isServiceDetection(),
+                scanConfigDTO.isOsDetection(),
+                scanConfigDTO.isTcpConnectScan(),
+                scanConfigDTO.isSynScan());
         scan(options);
     }
 
