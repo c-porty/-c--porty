@@ -61,10 +61,74 @@
     -fx-font-family: "Inter";
 }
 
+.porty-top-bar{
+    -fx-spacing: 16px;
+    -fx-alignment: center
+}
+
 .porty-top-bar-button{
     -fx-font-size: 16px;
     -fx-background-color: -porty-primary;
     -fx-text-fill: -porty-on-primary;
     -fx-padding: 8 16;
     -fx-min-width: 54;
+}
+
+.porty-top-bar-spacer{
+    -fx-max-width: infinity;
+}
+
+.porty-file-field{
+    -fx-background-color: -porty-secondary-background;
+    -fx-background-radius: 10;
+}
+
+.porty-file-field Label{
+    -fx-text-fill: -porty-on-background;
+    -fx-font-size: 16px;
+}
+
+.porty-titled-pane > .title{
+    -fx-background-color: -porty-container;
+}
+
+.porty-titled-pane > .title > .text{
+    -fx-fill: -porty-on-background;
+}
+
+.porty-titled-pane > .content{
+    -fx-background-color: -porty-secondary-background;
+    -fx-border-color: -porty-secondary-background;
+}
+
+.porty-switch-text {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.porty-switch-text-box {
+    -fx-background-color: -porty-switch-container;
+    -fx-background-radius: 8;
+    -fx-padding: 4;
+}
+
+.porty-switch-label {
+    -fx-padding: 4 12;
+    -fx-text-fill: -porty-on-primary;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.porty-switch-text .left{
+    -fx-background-color: -porty-container;
+    -fx-background-radius: 4;
+}
+
+.porty-switch-text:selected .left{
+    -fx-background-color: transparent;
+}
+
+.porty-switch-text:selected .right {
+    -fx-background-color: -porty-container;
+    -fx-background-radius: 4;
 }
