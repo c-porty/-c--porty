@@ -25,7 +25,7 @@
                        <TextField fx:id="statsEveryTextField" promptText="Stats Every"/>
                    </VBox>
                </TitledPane>
-               <StackPane prefHeight="327.0" styleClass="porty-file-field">
+               <StackPane prefHeight="327.0" styleClass="porty-file-field" visible="false">
                   <Label text="Config File" />
                </StackPane>
          </VBox>
