@@ -16,5 +16,4 @@
                 <ImageView fx:id="creditsImage" fitHeight="411.0" fitWidth="598.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="0" AnchorPane.rightAnchor="0" />
             </AnchorPane>
         </HBox>
-    </VBox>
 </VBox>

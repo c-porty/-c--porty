@@ -176,8 +176,7 @@ public class DashboardController implements ModeAwareController {
         NmapOptions options;
         if ((!scanConfigDTO.isServiceDetection() && !scanConfigDTO.isOsDetection())||onLinux) {
             options = new NmapOptions(scanConfigDTO.isServiceDetection(), scanConfigDTO.isOsDetection(), scanConfigDTO.isTcpConnectScan(), scanConfigDTO.isSynScan());
-        }
-        else{
+        } else{
             options = new NmapOptions(false, false, scanConfigDTO.isTcpConnectScan(), scanConfigDTO.isSynScan());
 
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -196,16 +195,16 @@ public class DashboardController implements ModeAwareController {
         scanConfigDTO.setOsDetection(osDetectionCheckbox.isSelected());
         scanConfigDTO.setTcpConnectScan(tcpConnectScanCheckbox.isSelected());
         scanConfigDTO.setSynScan(synScanCheckbox.isSelected());
-        if(Double.parseDouble(statsEveryTextField.getText())>0) {
+
+        if(!statsEveryTextField.getText().isEmpty() && Double.parseDouble(statsEveryTextField.getText())>0) {
             scanConfigDTO.setStatsEvery(Double.parseDouble(statsEveryTextField.getText()));
-        }
-        else{
+        } else{
             scanConfigDTO.setStatsEvery(-1);
         }
-        if(Double.parseDouble(timeoutTextField.getText())>0) {
+
+        if(!timeoutTextField.getText().isEmpty() && Double.parseDouble(timeoutTextField.getText())>0) {
             scanConfigDTO.setHostTimeout(Long.parseLong(timeoutTextField.getText()));
-        }
-        else{
+        } else{
             scanConfigDTO.setHostTimeout(-1);
         }
     }
