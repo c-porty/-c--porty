@@ -31,4 +31,8 @@ public record NmapOptions(
     public NmapOptions(boolean serviceDetection, boolean osDetection, boolean tcpConnectScan, boolean synScan) {
         this(serviceDetection, osDetection, tcpConnectScan, synScan, Duration.ofSeconds(-1), 2, false, false);
     }
+
+    public NmapOptions(boolean saveScan){
+        this(true, false, true, false, Duration.ofSeconds(-1), 2, saveScan);
+    }
 }

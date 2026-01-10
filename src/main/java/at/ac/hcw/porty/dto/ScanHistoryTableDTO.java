@@ -2,32 +2,33 @@ package at.ac.hcw.porty.dto;
 
 import javafx.beans.property.*;
 
+import java.time.Instant;
 import java.util.Date;
 
 public class ScanHistoryTableDTO {
-    private final ObjectProperty<Date> date = new SimpleObjectProperty<Date>();
+    private final ObjectProperty<Instant> date = new SimpleObjectProperty<Instant>();
     private final StringProperty address = new SimpleStringProperty();
     private final IntegerProperty ports = new SimpleIntegerProperty();
     private final StringProperty file = new SimpleStringProperty();
 
     public ScanHistoryTableDTO(){};
 
-    public ScanHistoryTableDTO(Date date, String address, int ports, String file){
+    public ScanHistoryTableDTO(Instant date, String address, int ports, String file){
         this.date.set(date);
         this.address.set(address);
         this.ports.set(ports);
         this.file.set(file);
     };
 
-    public Date getDate() {
+    public Instant getDate() {
         return date.get();
     }
 
-    public ObjectProperty<Date> dateProperty() {
+    public ObjectProperty<Instant> dateProperty() {
         return date;
     }
 
-    public void setDate(Date date){
+    public void setDate(Instant date){
         this.date.set(date);
     }
 

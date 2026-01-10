@@ -48,6 +48,8 @@ public class DashboardController implements ModeAwareController {
     private TextField timeoutTextField;
     @FXML
     private TextField statsEveryTextField;
+    @FXML
+    private CheckBox saveScanCheckbox;
 
     private MainController mainController;
 
@@ -171,7 +173,7 @@ public class DashboardController implements ModeAwareController {
 
     protected void simpleScan(){
         scanConfigDTO.setHost(ipTextField.getText());
-        NmapOptions options = new NmapOptions();
+        NmapOptions options = new NmapOptions(saveScanCheckbox.isSelected());
         scan(options);
     }
 
@@ -181,7 +183,11 @@ public class DashboardController implements ModeAwareController {
                 scanConfigDTO.isServiceDetection(),
                 scanConfigDTO.isOsDetection(),
                 scanConfigDTO.isTcpConnectScan(),
-                scanConfigDTO.isSynScan());
+                scanConfigDTO.isSynScan(),
+                scanConfigDTO.getHostTimeout(),
+                scanConfigDTO.getStatsEvery(),
+                saveScanCheckbox.isSelected()
+        );
         scan(options);
     }
 

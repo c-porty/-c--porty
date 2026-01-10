@@ -37,7 +37,7 @@ public class ScanConfigDTO {
         return host;
     }
 
-    public double isStatsEvery() {
+    public double getStatsEvery() {
         return statsEvery.get();
     }
 
