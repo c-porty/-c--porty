@@ -49,6 +49,8 @@ public class DashboardController implements ModeAwareController {
     @FXML
     private TextField statsEveryTextField;
 
+    private MainController mainController;
+
     ObservableList<String> consoleLines = FXCollections.observableArrayList();
 
     private boolean onScan = false;
@@ -106,6 +108,10 @@ public class DashboardController implements ModeAwareController {
         setSimpleMode();
     }
 
+    public void setMainController(MainController mainController) {
+        this.mainController = mainController;
+    }
+
     @FXML
     protected void onScanStartButtonClick() throws InterruptedException {
         if(!onScan) {
@@ -158,7 +164,7 @@ public class DashboardController implements ModeAwareController {
         ScanConfig config = new ScanConfig(host, range, options);
         Scanner scanner = new Scanner(ScannerFactory.create(ScanStrategy.NMAP));
         // both the CLI listener and the UI listener, UI listener is for actual frontend, CLI only for debugging
-        PortScanListener[] listeners = { new PortScanUIListener(consoleLines), new PortScanCLIListener() };
+        PortScanListener[] listeners = { new PortScanUIListener(consoleLines, mainController), new PortScanCLIListener() };
 
         return scanner.scan(config, listeners);
     }
