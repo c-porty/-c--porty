@@ -74,7 +74,10 @@ public class HistoryController {
         ArrayList<ScanSummary> scanFiles = historyHandler.loadAll();
 
         for(ScanSummary scanFile : scanFiles){
-            ScanHistoryTableDTO entry = new ScanHistoryTableDTO(scanFile.startedAt(),scanFile.host().address(), scanFile.results().toArray().length, "hier");
+            String address = scanFile.host().address();
+            Instant timestamp = scanFile.startedAt();
+            String filename = address+"-"+timestamp.getEpochSecond();
+            ScanHistoryTableDTO entry = new ScanHistoryTableDTO(timestamp, address, scanFile.results().size(), filename);
             tableEntries.add(entry);
         }
 
