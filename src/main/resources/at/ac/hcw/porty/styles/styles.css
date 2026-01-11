@@ -2,6 +2,7 @@
 @import "dashboard.css";
 @import "credits.css";
 @import "results.css";
+@import "history.css";
 
 .porty-nav-bar{
     -fx-background-color: -porty-background;

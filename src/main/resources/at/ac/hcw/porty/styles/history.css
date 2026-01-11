@@ -43,3 +43,7 @@
     -fx-font-family: "Inter";
     -fx-alignment: center-left;
 }
+
+.porty-history-table .table-row-cell:empty {
+    -fx-background-color: transparent;
+}
