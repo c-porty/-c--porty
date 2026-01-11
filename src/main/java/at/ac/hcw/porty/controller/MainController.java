@@ -67,6 +67,15 @@ public class MainController {
 
             this.currentController = dashboardController;
 
+            simplicityModeSwitch.setVisible(true);
+            simplicityModeSwitch.setManaged(true);
+
+            if (simplicityModeSwitch.isSelected()) {
+                dashboardController.setAdvancedMode();
+            } else {
+                dashboardController.setSimpleMode();
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
