@@ -20,6 +20,9 @@ public class PortScanCLIListener implements PortScanListener {
     @Override public void onComplete(ScanSummary summary) {
         logger.info("Completed: {} ports", summary.results().size());
         logger.info("Detailed information on host {}: ", summary.host().address());
+        if (!summary.detectedOs().isEmpty()) {
+            logger.info("Detected OS: {}", summary.detectedOs());
+        }
         for (PortScanResult result : summary.results()) {
             logger.info(result.toString());
         }

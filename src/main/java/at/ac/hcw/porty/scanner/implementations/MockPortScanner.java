@@ -51,7 +51,7 @@ public final class MockPortScanner extends PortScanner {
                     });
 
                     String note = status == PortStatus.OPEN ? String.format("service: mock-%d", port) : "";
-                    PortScanResult result = new PortScanResult(config.host(), port, status, note);
+                    PortScanResult result = new PortScanResult(config.host(), port, status, note, "");
 
                     results.add(result);
                     for (PortScanListener listener : listeners) {
@@ -60,7 +60,7 @@ public final class MockPortScanner extends PortScanner {
                     }
                 }
                 results.sort(Comparator.comparingInt(PortScanResult::port));
-                ScanSummary summary = new ScanSummary(config.host(), List.copyOf(results), config, started, Instant.now());
+                ScanSummary summary = new ScanSummary(config.host(), List.copyOf(results), "", config, started, Instant.now());
                 for (PortScanListener listener : listeners) {
                     listener.onComplete(summary);
                 }

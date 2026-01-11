@@ -4,4 +4,4 @@ import java.io.Serializable;
 import java.time.Instant;
 import java.util.List;
 
-public record ScanSummary(Host host, List<PortScanResult> results, ScanConfig config, Instant startedAt, Instant finishedAt) implements Serializable { }
+public record ScanSummary(Host host, List<PortScanResult> results, String detectedOs, ScanConfig config, Instant startedAt, Instant finishedAt) implements Serializable { }
