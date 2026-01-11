@@ -35,7 +35,7 @@ public class NmapPortScanner extends PortScanner {
         super.setupScan(config, passedListeners);
 
         final AtomicBoolean cancelled = new AtomicBoolean(false);
-        final ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
+        final ExecutorService executor = Executors.newFixedThreadPool(3);
 
         // Create temporary output paths
         TempFiles tmp;

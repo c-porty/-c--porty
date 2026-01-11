@@ -6,6 +6,8 @@ import at.ac.hcw.porty.types.records.ScanSummary;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,6 +17,8 @@ import java.util.Optional;
 import java.util.Set;
 
 public class JSONScanResultRepository implements IScanResultRepository {
+    private static final Logger logger =
+            LoggerFactory.getLogger(JSONScanResultRepository.class);
     private static final String EXT = ".json";
 
     private final ObjectMapper objectMapper;
@@ -39,7 +43,9 @@ public class JSONScanResultRepository implements IScanResultRepository {
             Path file = dir.resolve(fileName);
             objectMapper.writeValue(file.toFile(), summary);
             return true;
-        } catch (Exception ignored) {}
+        } catch (Exception e) {
+            logger.error("Failed to save: {}", e.getMessage(), e);
+        }
         return false;
     }
 
@@ -64,7 +70,9 @@ public class JSONScanResultRepository implements IScanResultRepository {
         try {
             ScanSummary summary = objectMapper.readValue(file.toFile(), ScanSummary.class);
             return Optional.of(summary);
-        } catch (Exception ignored) {}
+        } catch (Exception e) {
+            logger.error("Failed to parse: {}", e.getMessage(), e);
+        }
         return Optional.empty();
     }
 }

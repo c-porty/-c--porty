@@ -3,6 +3,8 @@ package at.ac.hcw.porty.repositories.implementations;
 import at.ac.hcw.porty.types.interfaces.IScanResultRepository;
 import at.ac.hcw.porty.types.records.Host;
 import at.ac.hcw.porty.types.records.ScanSummary;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -14,6 +16,8 @@ import java.util.Optional;
 import java.util.Set;
 
 public class BinaryScanResultRepository implements IScanResultRepository {
+    private static final Logger logger =
+            LoggerFactory.getLogger(BinaryScanResultRepository.class);
     private static final String EXT = ".bin";
 
     @Override
@@ -31,7 +35,9 @@ public class BinaryScanResultRepository implements IScanResultRepository {
                 out.writeObject(summary);
             }
             return true;
-        } catch (Exception ignored) {}
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
         return false;
     }
 
@@ -51,7 +57,9 @@ public class BinaryScanResultRepository implements IScanResultRepository {
     public Optional<ScanSummary> parse(Path file) {
         try (ObjectInputStream in = new ObjectInputStream(Files.newInputStream(file))) {
             return Optional.of((ScanSummary) in.readObject());
-        } catch (Exception ignored) {}
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
         return Optional.empty();
     }
 }
