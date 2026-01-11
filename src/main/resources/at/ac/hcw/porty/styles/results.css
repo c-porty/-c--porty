@@ -1,3 +1,5 @@
+@import "colors.css";
+
 .porty-results-subtitle{
     -fx-font-size: 20px;
     -fx-text-fill: -porty-on-background;
@@ -13,4 +15,12 @@
 .alert-text {
     -fx-font-size: 15px;
     -fx-font-family: "Inter";
+}
+
+.dialog-pane .button:default,
+.dialog-pane .button:default:focused {
+    -fx-background-color: -porty-primary;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-text-fill: white;
 }
