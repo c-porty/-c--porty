@@ -1,6 +1,6 @@
 package at.ac.hcw.porty.controller;
 
-import at.ac.hcw.porty.controller.interfaces.ModeAwareController;
+import at.ac.hcw.porty.types.interfaces.ModeAwareController;
 import at.ac.hcw.porty.dto.ScanConfigDTO;
 import at.ac.hcw.porty.listeners.PortScanCLIListener;
 import at.ac.hcw.porty.listeners.PortScanUIListener;
@@ -20,10 +20,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.collections.ListChangeListener;
 import javafx.scene.layout.VBox;
-import javafx.util.converter.DoubleStringConverter;
-
-import java.time.Duration;
-import java.util.function.UnaryOperator;
 
 public class DashboardController implements ModeAwareController {
     @FXML
