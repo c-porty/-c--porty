@@ -6,6 +6,7 @@ import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.BorderPane;
@@ -39,7 +40,25 @@ public class MainController {
 
     @FXML
     private void navigateToDashboard(ActionEvent event) {
-        handleNavigation("/at/ac/hcw/porty/scenes/dashboard.fxml");
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/at/ac/hcw/porty/scenes/dashboard.fxml")
+            );
+
+            Parent view = loader.load();
+
+            DashboardController dashboardController =
+                    loader.getController();
+
+            dashboardController.setMainController(this);
+
+            contentBorderPane.setCenter(view);
+
+            this.currentController = dashboardController;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -51,6 +70,9 @@ public class MainController {
     private void navigateToCredits(ActionEvent event) {
         handleNavigation("/at/ac/hcw/porty/scenes/credits.fxml");
     }
+
+    @FXML
+    public void navigateToResults() { handleNavigation("/at/ac/hcw/porty/scenes/results.fxml"); }
 
     private void handleNavigation(String route) {
         URL url = getClass().getResource(route);
