@@ -1,0 +1,45 @@
+.porty-history-table{
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-table-cell-border-color: transparent;
+}
+
+.porty-history-table .table-row-cell {
+    -fx-background-color: -porty-secondary-background;
+    -fx-background-insets: 0 0 8 0;
+    -fx-padding: 0 0 8 0;
+    -fx-background-radius: 5;
+    -fx-text-fill: -porty-on-background;
+}
+
+.porty-history-table .table-row-cell:selected {
+    -fx-background-color: -porty-primary;
+}
+
+.porty-history-table .column-header-background {
+    -fx-background-color: -porty-container;
+    -fx-background-radius: 5;
+}
+
+.porty-history-table .column-header {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.porty-history-table .column-header .label {
+    -fx-text-fill: -porty-on-container;
+    -fx-font-size: 14px;
+    -fx-font-family: "Inter";
+    -fx-font-weight: bold;
+}
+
+.porty-history-table .virtual-flow {
+    -fx-background-color: transparent;
+}
+
+.porty-history-table .table-cell {
+    -fx-text-fill: -porty-on-container;
+    -fx-font-size: 14px;
+    -fx-font-family: "Inter";
+    -fx-alignment: center-left;
+}

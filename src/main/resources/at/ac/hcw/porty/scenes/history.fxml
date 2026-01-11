@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 
 <VBox xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.hcw.porty.controller.HistoryController">
-      <TableView fx:id="historyTable" prefHeight="200.0" prefWidth="200.0">
+      <TableView fx:id="historyTable" prefHeight="400.0" prefWidth="200.0" styleClass="porty-history-table">
         <columns>
             <TableColumn fx:id="dateCol" prefWidth="319.0" text="Date" />
             <TableColumn fx:id="addressCol" prefWidth="305.0" text="Scanned Address" />

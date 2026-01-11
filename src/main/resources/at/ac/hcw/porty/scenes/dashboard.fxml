@@ -14,21 +14,21 @@
             <TextField fx:id="ipTextField" promptText="IP Address" />
             <Button fx:id="startScanButton" mnemonicParsing="false" onAction="#onScanStartButtonClick" styleClass="porty-dashboard-button" text="Start Scan" />
             <CheckBox fx:id="saveScanCheckbox" mnemonicParsing="false" styleClass="porty-dashboard-checkbox" text="Save Result" />
-         <VBox fx:id="advancedOptionControl" prefHeight="1000.0" prefWidth="100.0">
-               <TitledPane animated="false" styleClass="porty-titled-pane" text="Advanced Options">
-                   <VBox styleClass="porty-dashboard-advanced-menu">
-                       <CheckBox fx:id="serviceDetectionCheckbox" mnemonicParsing="false" text="Scan for Services" styleClass="porty-dashboard-menu-checkbox"/>
-                       <CheckBox fx:id="osDetectionCheckbox" mnemonicParsing="false" text="Scan for Operation System" styleClass="porty-dashboard-menu-checkbox"/>
-                       <CheckBox fx:id="tcpConnectScanCheckbox" mnemonicParsing="false" text="Enable TCP Connection Scan" styleClass="porty-dashboard-menu-checkbox"/>
-                       <CheckBox fx:id="synScanCheckbox" mnemonicParsing="false" text="Enable syn Scan" styleClass="porty-dashboard-menu-checkbox"/>
-                       <TextField fx:id="timeoutTextField" promptText="Timeout"/>
-                       <TextField fx:id="statsEveryTextField" promptText="Stats Every"/>
-                   </VBox>
-               </TitledPane>
-               <StackPane prefHeight="327.0" styleClass="porty-file-field" visible="false">
-                  <Label text="Config File" />
-               </StackPane>
-         </VBox>
+            <VBox fx:id="advancedOptionControl" prefHeight="1000.0" prefWidth="100.0">
+                <TitledPane animated="false" styleClass="porty-titled-pane" text="Advanced Options">
+                    <VBox styleClass="porty-dashboard-advanced-menu">
+                        <CheckBox fx:id="serviceDetectionCheckbox" mnemonicParsing="false" text="Scan for Services" styleClass="porty-dashboard-menu-checkbox"/>
+                        <CheckBox fx:id="osDetectionCheckbox" mnemonicParsing="false" text="Scan for Operation System" styleClass="porty-dashboard-menu-checkbox"/>
+                        <CheckBox fx:id="tcpConnectScanCheckbox" mnemonicParsing="false" text="Enable TCP Connection Scan" styleClass="porty-dashboard-menu-checkbox"/>
+                        <CheckBox fx:id="synScanCheckbox" mnemonicParsing="false" text="Enable syn Scan" styleClass="porty-dashboard-menu-checkbox"/>
+                        <TextField fx:id="timeoutTextField" promptText="Timeout"/>
+                        <TextField fx:id="statsEveryTextField" promptText="Stats Every"/>
+                    </VBox>
+                </TitledPane>
+                <StackPane prefHeight="327.0" styleClass="porty-file-field" visible="false">
+                    <Label text="Config File" />
+                </StackPane>
+            </VBox>
         </VBox>
         <VBox prefHeight="200.0" prefWidth="500.0">
             <Label styleClass="porty-dashboard-header" text="Scan Status" />
