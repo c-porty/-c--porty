@@ -4,9 +4,9 @@ import at.ac.hcw.porty.types.enums.PortStatus;
 
 import java.io.Serializable;
 
-public record PortScanResult(Host host, int port, PortStatus status, String note) implements Serializable {
+public record PortScanResult(Host host, int port, PortStatus status, String service, String os) implements Serializable {
     @Override
     public String toString() {
-        return String.format("Port %d -> %s (%s)", port, status, note);
+        return String.format("Port %d -> %s (%s)", port, status, service);
     }
 }

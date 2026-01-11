@@ -4,6 +4,7 @@ import at.ac.hcw.porty.listeners.PortScanCLIListener;
 import at.ac.hcw.porty.repositories.ScanResultRepositoryFactory;
 import at.ac.hcw.porty.scanner.Scanner;
 import at.ac.hcw.porty.scanner.ScannerFactory;
+import at.ac.hcw.porty.types.enums.PortStatus;
 import at.ac.hcw.porty.types.enums.ScanResultRepositoryOption;
 import at.ac.hcw.porty.types.interfaces.IScanResultRepository;
 import at.ac.hcw.porty.types.records.*;
@@ -12,9 +13,14 @@ import at.ac.hcw.porty.types.interfaces.PortScanListener;
 import at.ac.hcw.porty.types.interfaces.ScanHandle;
 import at.ac.hcw.porty.utils.HistoryHandler;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.sound.sampled.Port;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,10 +28,10 @@ public class NmapScannerCLITest {
     private static final Logger logger =
             LoggerFactory.getLogger(NmapScannerCLITest.class);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws JsonProcessingException {
         // possible hosts for tests (that are not "illegal" to use: scanme.nmap.org, webxio.at (my own domain)
-        NmapOptions options = new NmapOptions(true, false, true);
-        ScanConfig config = new ScanConfig(new Host("webxio.at"), new PortRange(10, 500), options);
+        NmapOptions options = new NmapOptions(false, true, true);
+        ScanConfig config = new ScanConfig(new Host("webxio.at"), new PortRange(-1, -1), options);
         Scanner scanner = new Scanner(ScannerFactory.create(ScanStrategy.NMAP));
 
         PortScanListener[] listeners = { new PortScanCLIListener() };
@@ -41,5 +47,6 @@ public class NmapScannerCLITest {
 
         ArrayList<ScanSummary> all = history.loadAll();
         System.out.printf("Found %d entries.%n", all.size());
+        System.out.println(all.getFirst());
     }
 }
