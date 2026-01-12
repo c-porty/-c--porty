@@ -9,6 +9,9 @@ import at.ac.hcw.porty.utils.HistoryHandler;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
@@ -16,8 +19,7 @@ import javafx.scene.control.TableColumn;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class HistoryController {
     @FXML
@@ -30,6 +32,8 @@ public class HistoryController {
     private TableColumn<ScanHistoryTableDTO, Integer> portsCol;
     @FXML
     private TableColumn<ScanHistoryTableDTO, String> infoCol;
+    @FXML
+    private BarChart<String, Integer> historyChart;
 
     ObservableList<ScanHistoryTableDTO> tableEntries = FXCollections.observableArrayList();
 
@@ -83,6 +87,46 @@ public class HistoryController {
 
         historyTable.getSortOrder().add(dateCol);
         historyTable.sort();
+
+        historyTable.getSelectionModel()
+                .selectedItemProperty()
+                .addListener((obs, oldItem, newItem) -> {
+                    if (newItem != null) {
+                        setChartData(newItem.getAddress());
+                    }
+                });
     }
 
+    public void setChartData(String host) {
+        historyChart.getData().clear();
+
+        XYChart.Series<String, Integer> series = new XYChart.Series<>();
+        series.setName(host);
+
+        ArrayList<String> scanDates = new ArrayList<String>();
+
+        for(ScanHistoryTableDTO scan : tableEntries) {
+            if(Objects.equals(scan.getAddress(), host)) {
+                Instant instant = scan.getDate();
+
+                DateTimeFormatter formatter =
+                        DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")
+                                .withZone(ZoneId.systemDefault());
+
+                String formattedDate = formatter.format(instant);
+
+                scanDates.add(formattedDate);
+                series.getData().add(new XYChart.Data<>(formattedDate, scan.getPorts()));
+            }
+        }
+
+        Collections.sort(scanDates);
+        scanDates = new ArrayList<>(new LinkedHashSet<>(scanDates));
+
+        CategoryAxis xAxis = (CategoryAxis) historyChart.getXAxis();
+        xAxis.getCategories().clear();
+        xAxis.setCategories(FXCollections.observableArrayList(scanDates));
+
+        historyChart.getData().add(series);
+    }
 }
