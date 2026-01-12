@@ -33,7 +33,7 @@ public class NmapScannerCLITest {
         // possible hosts for tests (that are not "illegal" to use: scanme.nmap.org, webxio.at (my own domain)
         NmapOptions options = new NmapOptions(
             false,
-            false,
+            true,
             false,
             true,
             Duration.ofSeconds(15),
@@ -41,14 +41,15 @@ public class NmapScannerCLITest {
             true,
             true
         );
-        ScanConfig config = new ScanConfig(new Host("192.168.178.1", 24), new PortRange(-1, -1), options);
+        ScanConfig config = new ScanConfig(new Host("scanme.nmap.org"), new PortRange(-1, -1), options);
         Scanner scanner = new Scanner(ScannerFactory.create(ScanStrategy.NMAP));
 
         PortScanListener[] listeners = { new PortScanCLIListener() };
         ScanHandle handle = scanner.scan(config, listeners);
 
-        handle.summary().join();
+        ScanSummary summary = handle.summary().join();
         logger.debug("Done with {}.", scanner.getScanner().name());
+        System.out.println(summary.severityPercent());
 
         IScanResultRepository repositoryJSON = ScanResultRepositoryFactory.create(ScanResultRepositoryOption.JSON);
         IScanResultRepository repositoryBIN = ScanResultRepositoryFactory.create(ScanResultRepositoryOption.BINARY);
