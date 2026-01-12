@@ -11,6 +11,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableView;
@@ -33,7 +34,7 @@ public class HistoryController {
     @FXML
     private TableColumn<ScanHistoryTableDTO, String> infoCol;
     @FXML
-    private BarChart<String, Integer> historyChart;
+    private BarChart<String, Number> historyChart;
 
     ObservableList<ScanHistoryTableDTO> tableEntries = FXCollections.observableArrayList();
 
@@ -100,10 +101,12 @@ public class HistoryController {
     public void setChartData(String host) {
         historyChart.getData().clear();
 
-        XYChart.Series<String, Integer> series = new XYChart.Series<>();
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
         series.setName(host);
 
         ArrayList<String> scanDates = new ArrayList<String>();
+        double portMax = 0;
+        double portMin = 0;
 
         for(ScanHistoryTableDTO scan : tableEntries) {
             if(Objects.equals(scan.getAddress(), host)) {
@@ -116,12 +119,21 @@ public class HistoryController {
                 String formattedDate = formatter.format(instant);
 
                 scanDates.add(formattedDate);
+                portMax = Math.max(portMax, scan.getPorts());
+
                 series.getData().add(new XYChart.Data<>(formattedDate, scan.getPorts()));
             }
         }
 
         Collections.sort(scanDates);
         scanDates = new ArrayList<>(new LinkedHashSet<>(scanDates));
+
+        NumberAxis yAxis = (NumberAxis) historyChart.getYAxis();
+        yAxis.setAutoRanging(false);
+
+        yAxis.setLowerBound(portMin);
+        yAxis.setUpperBound(portMax + 1);
+        yAxis.setTickUnit(Math.max(1, (portMax - portMin) / 10));
 
         CategoryAxis xAxis = (CategoryAxis) historyChart.getXAxis();
         xAxis.getCategories().clear();
