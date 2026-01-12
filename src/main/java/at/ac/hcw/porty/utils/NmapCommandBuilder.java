@@ -1,5 +1,6 @@
 package at.ac.hcw.porty.utils;
 
+import at.ac.hcw.porty.types.enums.AddressType;
 import at.ac.hcw.porty.types.records.NmapOptions;
 import at.ac.hcw.porty.types.records.ScanConfig;
 
@@ -11,6 +12,8 @@ public class NmapCommandBuilder {
     public static ProcessBuilder buildNmapCommand(ScanConfig config, String path, Path tempOutputFile) {
         final NmapOptions options = config.options();
         String host = config.host().address();
+        Integer subnet = config.host().subnet();
+        AddressType type = config.host().type();
         int startPort = config.range().start();
         int endPort = config.range().end();
         String portSpec = String.format("%d-%d", startPort, endPort);
@@ -61,8 +64,18 @@ public class NmapCommandBuilder {
         // these options must always be included
         nmapCommand.add("-oX"); // output as XML
         nmapCommand.add(tempOutputFile.toString());
-        nmapCommand.add(host);
 
+        String target = host;
+        if (options.includeSubnet() && subnet != null) {
+            if (type == AddressType.IPv6) {
+                nmapCommand.add("-6");  // force nmap to use IPv6
+            }
+            target = String.format("%s/%d", host, subnet);
+        }
+
+        nmapCommand.add(target);
+
+        System.out.println(nmapCommand);
         return new ProcessBuilder(nmapCommand);
     }
 }

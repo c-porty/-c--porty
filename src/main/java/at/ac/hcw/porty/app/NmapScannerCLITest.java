@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.sound.sampled.Port;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,15 +31,25 @@ public class NmapScannerCLITest {
 
     public static void main(String[] args) throws JsonProcessingException {
         // possible hosts for tests (that are not "illegal" to use: scanme.nmap.org, webxio.at (my own domain)
-        NmapOptions options = new NmapOptions(false, true, true);
-        ScanConfig config = new ScanConfig(new Host("webxio.at"), new PortRange(-1, -1), options);
+        NmapOptions options = new NmapOptions(
+            false,
+            true,
+            false,
+            true,
+            Duration.ofSeconds(15),
+            2,
+            true,
+            true
+        );
+        ScanConfig config = new ScanConfig(new Host("scanme.nmap.org"), new PortRange(-1, -1), options);
         Scanner scanner = new Scanner(ScannerFactory.create(ScanStrategy.NMAP));
 
         PortScanListener[] listeners = { new PortScanCLIListener() };
         ScanHandle handle = scanner.scan(config, listeners);
 
-        handle.summary().join();
+        ScanSummary summary = handle.summary().join();
         logger.debug("Done with {}.", scanner.getScanner().name());
+        System.out.println(summary.severityPercent());
 
         IScanResultRepository repositoryJSON = ScanResultRepositoryFactory.create(ScanResultRepositoryOption.JSON);
         IScanResultRepository repositoryBIN = ScanResultRepositoryFactory.create(ScanResultRepositoryOption.BINARY);
@@ -47,6 +58,6 @@ public class NmapScannerCLITest {
 
         ArrayList<ScanSummary> all = history.loadAll();
         System.out.printf("Found %d entries.%n", all.size());
-        System.out.println(all.getFirst());
+        System.out.println(all.getLast());
     }
 }

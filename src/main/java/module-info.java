@@ -14,6 +14,7 @@ module at.ac.hcw.porty {
     requires com.fasterxml.jackson.dataformat.xml;
     requires com.fasterxml.jackson.databind;
     requires com.fasterxml.jackson.datatype.jsr310;
+    requires com.google.common;
 
     opens at.ac.hcw.porty.types.enums
             to com.fasterxml.jackson.databind,
@@ -22,6 +23,9 @@ module at.ac.hcw.porty {
             to com.fasterxml.jackson.databind,
             com.fasterxml.jackson.dataformat.xml;
     opens at.ac.hcw.porty.types.records
+            to com.fasterxml.jackson.databind,
+            com.fasterxml.jackson.dataformat.xml;
+    opens at.ac.hcw.porty.types
             to com.fasterxml.jackson.databind,
             com.fasterxml.jackson.dataformat.xml;
 
