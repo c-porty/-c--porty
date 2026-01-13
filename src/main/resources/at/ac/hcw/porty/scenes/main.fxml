@@ -17,7 +17,7 @@
          <Region styleClass="porty-nav-spacer" VBox.vgrow="ALWAYS" />
             <VBox styleClass="porty-own-ip-field">
                 <Label styleClass="porty-label" text="Your IP Address:" />
-                <Label styleClass="porty-label" text="192.168.0.3" />
+                <Label fx:id="systemIPAddress" styleClass="porty-label" text="192.168.0.3" />
             </VBox>
         </VBox>
     </left>

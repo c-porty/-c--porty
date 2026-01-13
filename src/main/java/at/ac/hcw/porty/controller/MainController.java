@@ -1,8 +1,7 @@
 package at.ac.hcw.porty.controller;
 
 import at.ac.hcw.porty.controller.interfaces.ModeAwareController;
-import at.ac.hcw.porty.dto.ScanConfigDTO;
-import javafx.collections.ListChangeListener;
+import at.ac.hcw.porty.utils.NetUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,16 +9,22 @@ import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URL;
 
 public class MainController {
+    private static final Logger logger =
+            LoggerFactory.getLogger(MainController.class);
+
     @FXML
     private BorderPane contentBorderPane;
     @FXML
     private ToggleButton simplicityModeSwitch;
+    @FXML
+    private Label systemIPAddress;
 
     private ModeAwareController currentController;
 
@@ -34,6 +39,12 @@ public class MainController {
                 currentController.setSimpleMode();
             }
         });
+
+        try {
+            systemIPAddress.setText(NetUtils.getLanIPv4Address());
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
 
         navigateToDashboard(null);
     }
