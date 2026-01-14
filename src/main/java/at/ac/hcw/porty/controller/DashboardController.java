@@ -46,6 +46,10 @@ public class DashboardController implements ModeAwareController {
     private TextField statsEveryTextField;
     @FXML
     private CheckBox saveScanCheckbox;
+    @FXML
+    private CheckBox ipMaskCheckbox;
+    @FXML
+    private TextField ipMaskTextField;
 
     private MainController mainController;
 
@@ -93,15 +97,33 @@ public class DashboardController implements ModeAwareController {
             }
 
             try {
-                Long.parseLong(newText);
+                Double.parseDouble(newText);
                 return change;
             } catch (NumberFormatException e) {
                 return null;
             }
         });
 
+        TextFormatter<Integer> intFormatter = new TextFormatter<>(change -> {
+            String newText = change.getControlNewText();
+
+            if (newText.isEmpty()) {
+                return change;
+            }
+
+            try {
+                Integer.parseInt(newText);
+                return change;
+            } catch (NumberFormatException e) {
+                return null;
+            }
+        });
+
+        ipMaskTextField.disableProperty().bind(ipMaskCheckbox.selectedProperty().not());
+
         timeoutTextField.setTextFormatter(longFormatter);
         statsEveryTextField.setTextFormatter(doubleFormatter);
+        ipMaskTextField.setTextFormatter(intFormatter);
 
         setSimpleMode();
     }
@@ -148,7 +170,7 @@ public class DashboardController implements ModeAwareController {
             startScanButton.setText("Stop");
             onScan = true;
             new Thread(() -> {
-                handle = scanHandleGenerator(new Host(scanConfigDTO.getHost()), new PortRange(-1, -1), options);
+                handle = scanHandleGenerator(new Host(scanConfigDTO.getHost(), scanConfigDTO.isIncludeSubnetMask()? scanConfigDTO.getSubnetMask(): null), new PortRange(-1, -1), options);
                 handle.summary().join();
                 Platform.runLater(() -> {
                     startScanButton.setText("Start Scan");
@@ -182,7 +204,8 @@ public class DashboardController implements ModeAwareController {
                 scanConfigDTO.isSynScan(),
                 scanConfigDTO.getHostTimeout(),
                 scanConfigDTO.getStatsEvery(),
-                saveScanCheckbox.isSelected()
+                saveScanCheckbox.isSelected(),
+                false
         );
         scan(options);
     }
@@ -204,6 +227,14 @@ public class DashboardController implements ModeAwareController {
             scanConfigDTO.setHostTimeout(Long.parseLong(timeoutTextField.getText()));
         } else{
             scanConfigDTO.setHostTimeout(-1);
+        }
+
+        if(ipMaskCheckbox.isSelected()){
+            scanConfigDTO.setIncludeSubnetMask(true);
+            scanConfigDTO.setSubnetMask(!timeoutTextField.getText().isEmpty()? Integer.parseInt(timeoutTextField.getText()): null );
+        }
+        else{
+            scanConfigDTO.setIncludeSubnetMask(false);
         }
     }
 }

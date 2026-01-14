@@ -33,6 +33,6 @@ public record NmapOptions(
     }
 
     public NmapOptions(boolean saveScan){
-        this(true, false, true, false, Duration.ofSeconds(-1), 2, saveScan);
+        this(true, false, true, false, Duration.ofSeconds(-1), 2, saveScan, false);
     }
 }

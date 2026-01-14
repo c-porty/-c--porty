@@ -25,6 +25,8 @@
                         <CheckBox fx:id="synScanCheckbox" mnemonicParsing="false" styleClass="porty-dashboard-menu-checkbox" text="Enable syn Scan" />
                         <TextField fx:id="timeoutTextField" promptText="Timeout" />
                         <TextField fx:id="statsEveryTextField" promptText="Stats Every" />
+                        <CheckBox fx:id="ipMaskCheckbox" mnemonicParsing="false" styleClass="porty-dashboard-menu-checkbox" text="Include Subnet Mask" />
+                        <TextField fx:id="ipMaskTextField" promptText="CIDR Subnet Mask" />
                     </VBox>
                 </TitledPane>
                 <StackPane prefHeight="327.0" styleClass="porty-file-field" visible="false">

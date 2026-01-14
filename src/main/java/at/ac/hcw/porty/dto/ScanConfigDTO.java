@@ -12,10 +12,12 @@ public class ScanConfigDTO {
     private final BooleanProperty synScan = new SimpleBooleanProperty();
     private final ObjectProperty<Duration> hostTimeout = new SimpleObjectProperty<Duration>();
     private final DoubleProperty statsEvery= new SimpleDoubleProperty();
+    private final BooleanProperty includeSubnetMask = new SimpleBooleanProperty();
+    private final IntegerProperty subnetMask = new SimpleIntegerProperty();
 
     public ScanConfigDTO() {}
 
-    public ScanConfigDTO(String host, boolean serviceDetection, boolean osDetection, boolean tcpConnectScan, boolean synScan, Duration hostTimeout, double statsEvery) {
+    public ScanConfigDTO(String host, boolean serviceDetection, boolean osDetection, boolean tcpConnectScan, boolean synScan, Duration hostTimeout, double statsEvery, boolean includeSubnetMask, int subnetMask) {
         this.host.set(host);
         this.serviceDetection.set(serviceDetection);
         this.osDetection.set(osDetection);
@@ -23,14 +25,12 @@ public class ScanConfigDTO {
         this.synScan.set(synScan);
         this.hostTimeout.set(hostTimeout);
         this.statsEvery.set(statsEvery);
+        this.includeSubnetMask.set(includeSubnetMask);
+        this.subnetMask.set(subnetMask);
     }
 
     public String getHost() {
         return host.get();
-    }
-
-    public StringProperty HostProperty() {
-        return host;
     }
 
     public StringProperty hostProperty() {
@@ -85,6 +85,22 @@ public class ScanConfigDTO {
         return serviceDetection;
     }
 
+    public boolean isIncludeSubnetMask() {
+        return includeSubnetMask.get();
+    }
+
+    public BooleanProperty includeSubnetMaskProperty() {
+        return includeSubnetMask;
+    }
+
+    public int getSubnetMask() {
+        return subnetMask.get();
+    }
+
+    public IntegerProperty subnetMaskProperty() {
+        return subnetMask;
+    }
+
     public void setHost(String host){
         this.host.set(host);
     }
@@ -98,4 +114,7 @@ public class ScanConfigDTO {
 
     public void setHostTimeout(Duration timeout){this.hostTimeout.set(timeout);}
     public void setHostTimeout(long seconds){this.hostTimeout.set(Duration.ofSeconds(seconds));}
+
+    public void setIncludeSubnetMask(boolean includeSubnetMask){this.includeSubnetMask.set(includeSubnetMask);}
+    public void setSubnetMask(int subnetMask){this.subnetMask.set(subnetMask);}
 }
