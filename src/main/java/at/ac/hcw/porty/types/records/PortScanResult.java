@@ -7,6 +7,6 @@ import java.io.Serializable;
 public record PortScanResult(Host host, int port, PortStatus status, String service, String os) implements Serializable {
     @Override
     public String toString() {
-        return String.format("Port %d -> %s (%s)", port, status, service);
+        return String.format("%s:%d -> %s (%s)", host.address(), port, status, service);
     }
 }

@@ -1,6 +1,7 @@
 package at.ac.hcw.porty.utils;
 
 import at.ac.hcw.porty.types.enums.PortStatus;
+import at.ac.hcw.porty.types.records.Host;
 import at.ac.hcw.porty.types.records.PortScanResult;
 import at.ac.hcw.porty.types.records.ScanConfig;
 import org.w3c.dom.*;
@@ -46,8 +47,9 @@ public final class NmapXMLParser {
                 Element svcEl = (Element) portEl.getElementsByTagName("service").item(0);
                 String service = buildServiceString(svcEl);
 
+                String host = extractHost(hostEl);
                 out.add(new PortScanResult(
-                    config.host(),
+                    new Host(host, config.host().subnet()),
                     port,
                     status,
                     service,
@@ -141,6 +143,56 @@ public final class NmapXMLParser {
         }
 
         return bestName;
+    }
+
+    private String extractHost(Element hostEl) {
+        // 1. Prefer hostnames (domain / DNS)
+        NodeList hostnamesEl = hostEl.getElementsByTagName("hostnames");
+        if (hostnamesEl.getLength() > 0) {
+            NodeList names = ((Element) hostnamesEl.item(0))
+                    .getElementsByTagName("hostname");
+
+            String user = "";
+            String ptr  = "";
+
+            for (int i = 0; i < names.getLength(); i++) {
+                Element hn = (Element) names.item(i);
+                String name = hn.getAttribute("name");
+                String type = hn.getAttribute("type");
+
+                if ("user".equals(type) && !name.isBlank()) {
+                    return name;
+                }
+                if (("PTR".equals(type) || "DNS".equals(type)) && ptr.isBlank()) {
+                    ptr = name;
+                }
+            }
+
+            if (!ptr.isBlank()) return ptr;
+        }
+
+        // 2. Fallback to addresses
+        NodeList addrNodes = hostEl.getElementsByTagName("address");
+
+        String ipv4 = "";
+        String ipv6 = "";
+        String mac  = "";
+
+        for (int i = 0; i < addrNodes.getLength(); i++) {
+            Element addrEl = (Element) addrNodes.item(i);
+            String type = addrEl.getAttribute("addrtype");
+            String addr = addrEl.getAttribute("addr");
+
+            switch (type) {
+                case "ipv4" -> ipv4 = addr;
+                case "ipv6" -> ipv6 = addr;
+                case "mac"  -> mac = addr;
+            }
+        }
+
+        if (!ipv4.isBlank()) return ipv4;
+        if (!ipv6.isBlank()) return ipv6;
+        return mac;
     }
 
     private String attr(Element el, String name) {
