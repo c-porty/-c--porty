@@ -4,7 +4,6 @@ import at.ac.hcw.porty.documentation.PortDocumentationProvider;
 import at.ac.hcw.porty.types.enums.PortStatus;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Optional;
 
 public record PortScanResult(

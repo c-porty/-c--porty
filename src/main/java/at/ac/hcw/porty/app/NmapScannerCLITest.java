@@ -35,13 +35,13 @@ public class NmapScannerCLITest {
             false,
             false,
             false,
-            true,
+            false,
             Duration.ofSeconds(15),
             2,
             true,
             false
         );
-        ScanConfig config = new ScanConfig(new Host("webxio.at", 24), new PortRange(-1, -1), options);
+        ScanConfig config = new ScanConfig(new Host("scanme.nmap.org", 24), new PortRange(-1, -1), options);
         Scanner scanner = new Scanner(ScannerFactory.create(ScanStrategy.NMAP));
 
         PortScanListener[] listeners = { new PortScanCLIListener() };

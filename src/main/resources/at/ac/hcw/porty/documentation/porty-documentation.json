@@ -1,0 +1,254 @@
+[
+  {
+    "port": 22,
+    "service": "ssh",
+    "uri": "https://en.wikipedia.org/wiki/Secure_Shell",
+    "title": "SSH (Secure Shell)"
+  },
+  {
+    "port": 22,
+    "service": null,
+    "uri": "https://en.wikipedia.org/wiki/Secure_Shell",
+    "title": "SSH (Secure Shell)"
+  },
+  {
+    "port": 23,
+    "service": "telnet",
+    "uri": "https://en.wikipedia.org/wiki/Telnet",
+    "title": "Telnet"
+  },
+  {
+    "port": 23,
+    "service": null,
+    "uri": "https://en.wikipedia.org/wiki/Telnet",
+    "title": "Telnet"
+  },
+  {
+    "port": 21,
+    "service": "ftp",
+    "uri": "https://en.wikipedia.org/wiki/File_Transfer_Protocol",
+    "title": "FTP (File Transfer Protocol)"
+  },
+  {
+    "port": 21,
+    "service": null,
+    "uri": "https://en.wikipedia.org/wiki/File_Transfer_Protocol",
+    "title": "FTP (File Transfer Protocol)"
+  },
+  {
+    "port": 25,
+    "service": "smtp",
+    "uri": "https://en.wikipedia.org/wiki/Simple_Mail_Transfer_Protocol",
+    "title": "SMTP (Email)"
+  },
+  {
+    "port": 25,
+    "service": null,
+    "uri": "https://en.wikipedia.org/wiki/Simple_Mail_Transfer_Protocol",
+    "title": "SMTP (Email)"
+  },
+  {
+    "port": 110,
+    "service": "pop3",
+    "uri": "https://en.wikipedia.org/wiki/Post_Office_Protocol",
+    "title": "POP3 Email Protocol"
+  },
+  {
+    "port": 110,
+    "service": null,
+    "uri": "https://en.wikipedia.org/wiki/Post_Office_Protocol",
+    "title": "POP3 Email Protocol"
+  },
+  {
+    "port": 143,
+    "service": "imap",
+    "uri": "https://en.wikipedia.org/wiki/Internet_Message_Access_Protocol",
+    "title": "IMAP Email Protocol"
+  },
+  {
+    "port": 143,
+    "service": null,
+    "uri": "https://en.wikipedia.org/wiki/Internet_Message_Access_Protocol",
+    "title": "IMAP Email Protocol"
+  },
+  {
+    "port": 80,
+    "service": "http",
+    "uri": "https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol",
+    "title": "HTTP"
+  },
+  {
+    "port": 80,
+    "service": null,
+    "uri": "https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol",
+    "title": "HTTP"
+  },
+  {
+    "port": 443,
+    "service": "https",
+    "uri": "https://en.wikipedia.org/wiki/HTTPS",
+    "title": "HTTPS"
+  },
+  {
+    "port": 443,
+    "service": null,
+    "uri": "https://en.wikipedia.org/wiki/HTTPS",
+    "title": "HTTPS"
+  },
+  {
+    "port": 53,
+    "service": "dns",
+    "uri": "https://en.wikipedia.org/wiki/Domain_Name_System",
+    "title": "DNS"
+  },
+  {
+    "port": 53,
+    "service": null,
+    "uri": "https://en.wikipedia.org/wiki/Domain_Name_System",
+    "title": "DNS"
+  },
+  {
+    "port": 139,
+    "service": "netbios-ssn",
+    "uri": "https://en.wikipedia.org/wiki/NetBIOS",
+    "title": "NetBIOS/SMB"
+  },
+  {
+    "port": 139,
+    "service": null,
+    "uri": "https://en.wikipedia.org/wiki/NetBIOS",
+    "title": "NetBIOS/SMB"
+  },
+  {
+    "port": 445,
+    "service": "smb",
+    "uri": "https://en.wikipedia.org/wiki/Server_Message_Block",
+    "title": "SMB (Server Message Block)"
+  },
+  {
+    "port": 445,
+    "service": null,
+    "uri": "https://en.wikipedia.org/wiki/Server_Message_Block",
+    "title": "SMB (Server Message Block)"
+  },
+  {
+    "port": 3389,
+    "service": "rdp",
+    "uri": "https://en.wikipedia.org/wiki/Remote_Desktop_Protocol",
+    "title": "RDP (Remote Desktop Protocol)"
+  },
+  {
+    "port": 3389,
+    "service": null,
+    "uri": "https://en.wikipedia.org/wiki/Remote_Desktop_Protocol",
+    "title": "RDP (Remote Desktop Protocol)"
+  },
+  {
+    "port": 3306,
+    "service": "mysql",
+    "uri": "https://en.wikipedia.org/wiki/MySQL",
+    "title": "MySQL Database"
+  },
+  {
+    "port": 3306,
+    "service": null,
+    "uri": "https://en.wikipedia.org/wiki/MySQL",
+    "title": "MySQL Database"
+  },
+  {
+    "port": 5432,
+    "service": "postgres",
+    "uri": "https://en.wikipedia.org/wiki/PostgreSQL",
+    "title": "PostgreSQL Database"
+  },
+  {
+    "port": 5432,
+    "service": null,
+    "uri": "https://en.wikipedia.org/wiki/PostgreSQL",
+    "title": "PostgreSQL Database"
+  },
+  {
+    "port": 6379,
+    "service": "redis",
+    "uri": "https://en.wikipedia.org/wiki/Redis",
+    "title": "Redis Database"
+  },
+  {
+    "port": 6379,
+    "service": null,
+    "uri": "https://en.wikipedia.org/wiki/Redis",
+    "title": "Redis Database"
+  },
+  {
+    "port": 27017,
+    "service": "mongodb",
+    "uri": "https://en.wikipedia.org/wiki/MongoDB",
+    "title": "MongoDB Database"
+  },
+  {
+    "port": 27017,
+    "service": null,
+    "uri": "https://en.wikipedia.org/wiki/MongoDB",
+    "title": "MongoDB Database"
+  },
+  {
+    "port": 9200,
+    "service": "elasticsearch",
+    "uri": "https://en.wikipedia.org/wiki/Elasticsearch",
+    "title": "Elasticsearch Database"
+  },
+  {
+    "port": 9200,
+    "service": null,
+    "uri": "https://en.wikipedia.org/wiki/Elasticsearch",
+    "title": "Elasticsearch Database"
+  },
+  {
+    "port": 5900,
+    "service": "vnc",
+    "uri": "https://en.wikipedia.org/wiki/Virtual_Network_Computing",
+    "title": "VNC"
+  },
+  {
+    "port": 5900,
+    "service": null,
+    "uri": "https://en.wikipedia.org/wiki/Virtual_Network_Computing",
+    "title": "VNC"
+  },
+  {
+    "port": 135,
+    "service": "msrpc",
+    "uri": "https://en.wikipedia.org/wiki/Microsoft_RPC",
+    "title": "Microsoft RPC"
+  },
+  {
+    "port": 135,
+    "service": null,
+    "uri": "https://en.wikipedia.org/wiki/Microsoft_RPC",
+    "title": "Microsoft RPC"
+  },
+  {
+    "port": 9929,
+    "service": "nping-echo",
+    "uri": "https://nmap.org/book/man-port-scanning.html",
+    "title": "Nping Echo Port"
+  },
+  {
+    "port": 9929,
+    "service": null,
+    "uri": "https://nmap.org/book/man-port-scanning.html",
+    "title": "Nping Echo Port"
+  },
+  {
+    "port": 31337,
+    "service": "elite",
+    "uri": "https://en.wikipedia.org/wiki/Backdoor_(computing)#Common_ports",
+    "title": "Elite / Backdoor Port"
+  },
+  {
+    "port": 31337,
+    "service": null,
+    "uri": "https://en.wikipedia.org/wiki/Backdoor_(computing)#Common_ports",
+    "title": "Elite / Backdoor Port"
+  }
+]
