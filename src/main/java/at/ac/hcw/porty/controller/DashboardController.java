@@ -239,7 +239,7 @@ public class DashboardController implements ModeAwareController {
 
         if(ipMaskCheckbox.isSelected()){
             scanConfigDTO.setIncludeSubnetMask(true);
-            scanConfigDTO.setSubnetMask(!timeoutTextField.getText().isEmpty()? Integer.parseInt(timeoutTextField.getText()): null );
+            scanConfigDTO.setSubnetMask(!ipMaskTextField.getText().isEmpty()? Integer.parseInt(ipMaskTextField.getText()): null );
         }
         else{
             scanConfigDTO.setIncludeSubnetMask(false);
