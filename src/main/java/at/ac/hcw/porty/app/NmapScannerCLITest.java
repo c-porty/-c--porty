@@ -33,15 +33,15 @@ public class NmapScannerCLITest {
         // possible hosts for tests (that are not "illegal" to use: scanme.nmap.org, webxio.at (my own domain)
         NmapOptions options = new NmapOptions(
             false,
-            true,
+            false,
             false,
             true,
             Duration.ofSeconds(15),
             2,
             true,
-            true
+            false
         );
-        ScanConfig config = new ScanConfig(new Host("scanme.nmap.org"), new PortRange(-1, -1), options);
+        ScanConfig config = new ScanConfig(new Host("webxio.at", 24), new PortRange(-1, -1), options);
         Scanner scanner = new Scanner(ScannerFactory.create(ScanStrategy.NMAP));
 
         PortScanListener[] listeners = { new PortScanCLIListener() };
