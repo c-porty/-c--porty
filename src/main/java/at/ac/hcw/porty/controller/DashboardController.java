@@ -50,6 +50,8 @@ public class DashboardController implements ModeAwareController {
     private CheckBox ipMaskCheckbox;
     @FXML
     private TextField ipMaskTextField;
+    @FXML
+    private ProgressIndicator scanProgressIndicator;
 
     private MainController mainController;
 
@@ -126,6 +128,7 @@ public class DashboardController implements ModeAwareController {
         ipMaskTextField.setTextFormatter(intFormatter);
 
         setSimpleMode();
+        setProgress(0.0);
     }
 
     public void setMainController(MainController mainController) {
@@ -134,6 +137,7 @@ public class DashboardController implements ModeAwareController {
 
     @FXML
     protected void onScanStartButtonClick() throws InterruptedException {
+        setProgress(0.0);
         if(!onScan) {
             if (advancedOptions) {
                 advancedScan();
@@ -184,7 +188,7 @@ public class DashboardController implements ModeAwareController {
         ScanConfig config = new ScanConfig(host, range, options);
         Scanner scanner = new Scanner(ScannerFactory.create(ScanStrategy.NMAP));
         // both the CLI listener and the UI listener, UI listener is for actual frontend, CLI only for debugging
-        PortScanListener[] listeners = { new PortScanUIListener(consoleLines, mainController), new PortScanCLIListener() };
+        PortScanListener[] listeners = { new PortScanUIListener(consoleLines, mainController, this), new PortScanCLIListener() };
 
         return scanner.scan(config, listeners);
     }
@@ -205,9 +209,13 @@ public class DashboardController implements ModeAwareController {
                 scanConfigDTO.getHostTimeout(),
                 scanConfigDTO.getStatsEvery(),
                 saveScanCheckbox.isSelected(),
-                false
+                scanConfigDTO.isIncludeSubnetMask()
         );
         scan(options);
+    }
+
+    public void setProgress(double percent){
+        scanProgressIndicator.setProgress(percent/100);
     }
 
     protected void setDTO(){

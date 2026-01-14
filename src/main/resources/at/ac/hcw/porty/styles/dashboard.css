@@ -128,8 +128,10 @@
     -fx-max-height: 200px;
 }
 
-.porty-dashboard-progress-indicator .indicator,
-.porty-dashboard-progress-indicator .track,
+.porty-dashboard-progress-indicator .indicator{
+    -fx-background-color: -porty-container;
+}
+
 .porty-dashboard-progress-indicator .progress {
     -fx-background-color: -porty-primary;
 }

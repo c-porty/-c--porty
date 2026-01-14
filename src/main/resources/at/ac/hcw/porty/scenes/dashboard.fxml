@@ -37,7 +37,7 @@
         <VBox styleClass="porty-dashboard-scan-view" prefHeight="200.0" prefWidth="500.0">
             <Label styleClass="porty-dashboard-header" text="Scan Status" />
             <StackPane>
-                <ProgressIndicator fx:id="scanProgressIndicator" progress="1.0" styleClass="porty-dashboard-progress-indicator" />
+                <ProgressIndicator fx:id="scanProgressIndicator" styleClass="porty-dashboard-progress-indicator" />
             </StackPane>
             <TitledPane fx:id="scanProgressConsoleTitledPane" animated="false" styleClass="porty-titled-pane" text="Console">
                 <ListView fx:id="scanProgressConsole" layoutX="1.0" prefHeight="400.0" prefWidth="500.0" />

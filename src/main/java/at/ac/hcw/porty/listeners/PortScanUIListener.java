@@ -1,5 +1,6 @@
 package at.ac.hcw.porty.listeners;
 
+import at.ac.hcw.porty.controller.DashboardController;
 import at.ac.hcw.porty.controller.MainController;
 import at.ac.hcw.porty.types.records.PortScanResult;
 import at.ac.hcw.porty.types.records.ScanConfig;
@@ -17,14 +18,18 @@ import javafx.scene.layout.Priority;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PortScanUIListener implements PortScanListener {
     private final ObservableList<String> outputTextList;
     private final MainController mainController;
+    private final DashboardController dashboardController;
 
-    public PortScanUIListener(ObservableList<String> list, MainController mainController) {
+    public PortScanUIListener(ObservableList<String> list, MainController mainController, DashboardController dashboardController) {
         this.outputTextList = list;
         this.mainController = mainController;
+        this.dashboardController = dashboardController;
     }
 
     @Override public void onStarted(ScanConfig config) {
@@ -82,6 +87,18 @@ public class PortScanUIListener implements PortScanListener {
     @Override public void onProgress(String msg) {
         Platform.runLater(() -> {
             outputTextList.add("Progress: " + msg);
+
+            Pattern pattern = Pattern.compile("(\\d+(?:\\.\\d+)?)%");
+            Matcher matcher = pattern.matcher(msg);
+
+            if (msg.contains("Connect Scan Timing") && matcher.find()) {
+                double percent = Double.parseDouble(matcher.group(1));
+                dashboardController.setProgress(percent);
+            }
+
+            if(msg.contains("Nmap done")){
+                dashboardController.setProgress(100.0);
+            }
         });
     }
 
