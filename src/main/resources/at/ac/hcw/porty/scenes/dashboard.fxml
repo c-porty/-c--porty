@@ -2,10 +2,12 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
 
-<VBox xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.hcw.porty.controller.DashboardController">
+<?import javafx.geometry.Insets?>
+<VBox styleClass="porty-dashboard" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.hcw.porty.controller.DashboardController">
     <Label styleClass="porty-title" text="Dashboard" />
-    <HBox prefHeight="700.0" prefWidth="1184.0" styleClass="porty-dashboard">
+    <HBox prefHeight="700.0" prefWidth="1184.0" styleClass="porty-dashboard-content">
         <VBox prefHeight="200.0" prefWidth="500.0" styleClass="porty-dashboard-simple-control">
             <VBox>
                 <Label styleClass="porty-dashboard-header" text="Scan" />
@@ -14,29 +16,33 @@
             <TextField fx:id="ipTextField" promptText="IP Address" />
             <Button fx:id="startScanButton" mnemonicParsing="false" onAction="#onScanStartButtonClick" styleClass="porty-dashboard-button" text="Start Scan" />
             <CheckBox fx:id="saveScanCheckbox" mnemonicParsing="false" styleClass="porty-dashboard-checkbox" text="Save Result" />
-         <VBox fx:id="advancedOptionControl" prefHeight="1000.0" prefWidth="100.0">
-               <TitledPane animated="false" styleClass="porty-titled-pane" text="Advanced Options">
-                   <VBox styleClass="porty-dashboard-advanced-menu">
-                       <CheckBox fx:id="serviceDetectionCheckbox" mnemonicParsing="false" text="Scan for Services" styleClass="porty-dashboard-menu-checkbox"/>
-                       <CheckBox fx:id="osDetectionCheckbox" mnemonicParsing="false" text="Scan for Operation System" styleClass="porty-dashboard-menu-checkbox"/>
-                       <CheckBox fx:id="tcpConnectScanCheckbox" mnemonicParsing="false" text="Enable TCP Connection Scan" styleClass="porty-dashboard-menu-checkbox"/>
-                       <CheckBox fx:id="synScanCheckbox" mnemonicParsing="false" text="Enable syn Scan" styleClass="porty-dashboard-menu-checkbox"/>
-                       <TextField fx:id="timeoutTextField" promptText="Timeout"/>
-                       <TextField fx:id="statsEveryTextField" promptText="Stats Every"/>
-                   </VBox>
-               </TitledPane>
-               <StackPane prefHeight="327.0" styleClass="porty-file-field" visible="false">
-                  <Label text="Config File" />
-               </StackPane>
-         </VBox>
+            <VBox fx:id="advancedOptionControl" prefHeight="1000.0" prefWidth="100.0">
+                <TitledPane animated="false" styleClass="porty-titled-pane" text="Advanced Options">
+                    <VBox styleClass="porty-dashboard-advanced-menu">
+                        <CheckBox fx:id="serviceDetectionCheckbox" mnemonicParsing="false" styleClass="porty-dashboard-menu-checkbox" text="Scan for Services" />
+                        <CheckBox fx:id="osDetectionCheckbox" mnemonicParsing="false" styleClass="porty-dashboard-menu-checkbox" text="Scan for Operation System" />
+                        <CheckBox fx:id="tcpConnectScanCheckbox" mnemonicParsing="false" styleClass="porty-dashboard-menu-checkbox" text="Enable TCP Connection Scan" />
+                        <CheckBox fx:id="synScanCheckbox" mnemonicParsing="false" styleClass="porty-dashboard-menu-checkbox" text="Enable syn Scan" />
+                        <TextField fx:id="timeoutTextField" promptText="Timeout" />
+                        <TextField fx:id="statsEveryTextField" promptText="Stats Every" />
+                        <CheckBox fx:id="ipMaskCheckbox" mnemonicParsing="false" styleClass="porty-dashboard-menu-checkbox" text="Include Subnet Mask" />
+                        <TextField fx:id="ipMaskTextField" promptText="CIDR Subnet Mask" />
+                    </VBox>
+                </TitledPane>
+                <StackPane prefHeight="327.0" styleClass="porty-file-field" visible="false">
+                    <Label text="Config File" />
+                </StackPane>
+            </VBox>
         </VBox>
-        <VBox prefHeight="200.0" prefWidth="500.0">
+        <VBox styleClass="porty-dashboard-scan-view" prefHeight="200.0" prefWidth="500.0">
             <Label styleClass="porty-dashboard-header" text="Scan Status" />
-            <ProgressIndicator fx:id="scanProgressIndicator" prefHeight="40.0" prefWidth="115.0" progress="0.0" />
+            <StackPane>
+                <ProgressIndicator fx:id="scanProgressIndicator" styleClass="porty-dashboard-progress-indicator" />
+            </StackPane>
             <TitledPane fx:id="scanProgressConsoleTitledPane" animated="false" styleClass="porty-titled-pane" text="Console">
-                <ListView fx:id="scanProgressConsole" layoutX="1.0" prefHeight="179.0" prefWidth="500.0" />
+                <ListView fx:id="scanProgressConsole" layoutX="1.0" prefHeight="400.0" prefWidth="500.0" />
             </TitledPane>
-            <TextArea fx:id="scanProgressInfo" prefHeight="181.0" prefWidth="500.0" editable="false" styleClass="porty-dashboard-textarea"/>
+            <TextArea fx:id="scanProgressInfo" editable="false" prefHeight="400.0" prefWidth="500.0" styleClass="porty-dashboard-textarea" />
         </VBox>
     </HBox>
 </VBox>

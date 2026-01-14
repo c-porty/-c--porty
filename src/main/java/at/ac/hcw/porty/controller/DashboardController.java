@@ -1,6 +1,6 @@
 package at.ac.hcw.porty.controller;
 
-import at.ac.hcw.porty.controller.interfaces.ModeAwareController;
+import at.ac.hcw.porty.types.interfaces.ModeAwareController;
 import at.ac.hcw.porty.dto.ScanConfigDTO;
 import at.ac.hcw.porty.listeners.PortScanCLIListener;
 import at.ac.hcw.porty.listeners.PortScanUIListener;
@@ -20,10 +20,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.collections.ListChangeListener;
 import javafx.scene.layout.VBox;
-import javafx.util.converter.DoubleStringConverter;
-
-import java.time.Duration;
-import java.util.function.UnaryOperator;
 
 public class DashboardController implements ModeAwareController {
     @FXML
@@ -48,6 +44,14 @@ public class DashboardController implements ModeAwareController {
     private TextField timeoutTextField;
     @FXML
     private TextField statsEveryTextField;
+    @FXML
+    private CheckBox saveScanCheckbox;
+    @FXML
+    private CheckBox ipMaskCheckbox;
+    @FXML
+    private TextField ipMaskTextField;
+    @FXML
+    private ProgressIndicator scanProgressIndicator;
 
     private MainController mainController;
 
@@ -95,17 +99,36 @@ public class DashboardController implements ModeAwareController {
             }
 
             try {
-                Long.parseLong(newText);
+                Double.parseDouble(newText);
                 return change;
             } catch (NumberFormatException e) {
                 return null;
             }
         });
 
+        TextFormatter<Integer> intFormatter = new TextFormatter<>(change -> {
+            String newText = change.getControlNewText();
+
+            if (newText.isEmpty()) {
+                return change;
+            }
+
+            try {
+                Integer.parseInt(newText);
+                return change;
+            } catch (NumberFormatException e) {
+                return null;
+            }
+        });
+
+        ipMaskTextField.disableProperty().bind(ipMaskCheckbox.selectedProperty().not());
+
         timeoutTextField.setTextFormatter(longFormatter);
         statsEveryTextField.setTextFormatter(doubleFormatter);
+        ipMaskTextField.setTextFormatter(intFormatter);
 
         setSimpleMode();
+        setProgress(0.0);
     }
 
     public void setMainController(MainController mainController) {
@@ -114,6 +137,7 @@ public class DashboardController implements ModeAwareController {
 
     @FXML
     protected void onScanStartButtonClick() throws InterruptedException {
+        setProgress(0.0);
         if(!onScan) {
             if (advancedOptions) {
                 advancedScan();
@@ -150,7 +174,7 @@ public class DashboardController implements ModeAwareController {
             startScanButton.setText("Stop");
             onScan = true;
             new Thread(() -> {
-                handle = scanHandleGenerator(new Host(scanConfigDTO.getHost()), new PortRange(-1, -1), options);
+                handle = scanHandleGenerator(new Host(scanConfigDTO.getHost(), scanConfigDTO.isIncludeSubnetMask()? scanConfigDTO.getSubnetMask(): null), new PortRange(-1, -1), options);
                 handle.summary().join();
                 Platform.runLater(() -> {
                     startScanButton.setText("Start Scan");
@@ -164,35 +188,34 @@ public class DashboardController implements ModeAwareController {
         ScanConfig config = new ScanConfig(host, range, options);
         Scanner scanner = new Scanner(ScannerFactory.create(ScanStrategy.NMAP));
         // both the CLI listener and the UI listener, UI listener is for actual frontend, CLI only for debugging
-        PortScanListener[] listeners = { new PortScanUIListener(consoleLines, mainController), new PortScanCLIListener() };
+        PortScanListener[] listeners = { new PortScanUIListener(consoleLines, mainController, this), new PortScanCLIListener() };
 
         return scanner.scan(config, listeners);
     }
 
     protected void simpleScan(){
         scanConfigDTO.setHost(ipTextField.getText());
-        NmapOptions options = new NmapOptions();
+        NmapOptions options = new NmapOptions(saveScanCheckbox.isSelected());
         scan(options);
     }
 
     protected void advancedScan(){
         setDTO();
-        String os = System.getProperty("os.name").toLowerCase();
-        boolean onLinux = !os.contains("win") && !os.contains("mac");
-        NmapOptions options;
-        if ((!scanConfigDTO.isServiceDetection() && !scanConfigDTO.isOsDetection())||onLinux) {
-            options = new NmapOptions(scanConfigDTO.isServiceDetection(), scanConfigDTO.isOsDetection(), scanConfigDTO.isTcpConnectScan(), scanConfigDTO.isSynScan());
-        } else{
-            options = new NmapOptions(false, false, scanConfigDTO.isTcpConnectScan(), scanConfigDTO.isSynScan());
-
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Fehler");
-            alert.setHeaderText(null);
-            alert.setContentText("Service and OS Detection currently not supported for your System!");
-
-            alert.showAndWait();
-        }
+        NmapOptions options = new NmapOptions(
+                scanConfigDTO.isServiceDetection(),
+                scanConfigDTO.isOsDetection(),
+                scanConfigDTO.isTcpConnectScan(),
+                scanConfigDTO.isSynScan(),
+                scanConfigDTO.getHostTimeout(),
+                scanConfigDTO.getStatsEvery(),
+                saveScanCheckbox.isSelected(),
+                scanConfigDTO.isIncludeSubnetMask()
+        );
         scan(options);
+    }
+
+    public void setProgress(double percent){
+        scanProgressIndicator.setProgress(percent/100);
     }
 
     protected void setDTO(){
@@ -212,6 +235,14 @@ public class DashboardController implements ModeAwareController {
             scanConfigDTO.setHostTimeout(Long.parseLong(timeoutTextField.getText()));
         } else{
             scanConfigDTO.setHostTimeout(-1);
+        }
+
+        if(ipMaskCheckbox.isSelected()){
+            scanConfigDTO.setIncludeSubnetMask(true);
+            scanConfigDTO.setSubnetMask(!ipMaskTextField.getText().isEmpty()? Integer.parseInt(ipMaskTextField.getText()): null );
+        }
+        else{
+            scanConfigDTO.setIncludeSubnetMask(false);
         }
     }
 }

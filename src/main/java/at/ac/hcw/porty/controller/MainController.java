@@ -1,7 +1,7 @@
 package at.ac.hcw.porty.controller;
 
-import at.ac.hcw.porty.controller.interfaces.ModeAwareController;
 import at.ac.hcw.porty.utils.NetUtils;
+import at.ac.hcw.porty.types.interfaces.ModeAwareController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -66,6 +66,15 @@ public class MainController {
             contentBorderPane.setCenter(view);
 
             this.currentController = dashboardController;
+
+            simplicityModeSwitch.setVisible(true);
+            simplicityModeSwitch.setManaged(true);
+
+            if (simplicityModeSwitch.isSelected()) {
+                dashboardController.setAdvancedMode();
+            } else {
+                dashboardController.setSimpleMode();
+            }
 
         } catch (IOException e) {
             e.printStackTrace();

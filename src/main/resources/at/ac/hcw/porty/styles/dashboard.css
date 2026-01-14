@@ -22,7 +22,7 @@
     -fx-spacing: 16px;
 }
 
-.porty-dashboard{
+.porty-dashboard-content{
     -fx-spacing: 52px;
 }
 
@@ -117,4 +117,30 @@
 
 .porty-dashboard-advanced-menu{
     -fx-spacing: 8px;
+}
+
+.porty-dashboard-progress-indicator {
+    -fx-min-width: 200px;
+    -fx-min-height: 200px;
+    -fx-pref-width: 200px;
+    -fx-pref-height: 200px;
+    -fx-max-width: 200px;
+    -fx-max-height: 200px;
+}
+
+.porty-dashboard-progress-indicator .indicator{
+    -fx-background-color: -porty-container;
+}
+
+.porty-dashboard-progress-indicator .progress {
+    -fx-background-color: -porty-primary;
+}
+
+.porty-dashboard-scan-view{
+    -fx-spacing: 40px;
+}
+
+.porty-dashboard{
+    -fx-spacing: 8px;
+    -fx-padding: 16 0 0 0;
 }

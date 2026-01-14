@@ -1,13 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+<?import javafx.scene.chart.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="at.ac.hcw.porty.controller.HistoryController"
-            prefHeight="960.0" prefWidth="1184.0" styleClass="porty-content-pane">
+<VBox xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.hcw.porty.controller.HistoryController">
+      <TableView fx:id="historyTable" prefHeight="400.0" prefWidth="200.0" styleClass="porty-history-table">
+        <columns>
+            <TableColumn fx:id="dateCol" prefWidth="319.0" text="Date" />
+            <TableColumn fx:id="addressCol" prefWidth="305.0" text="Scanned Address" />
+            <TableColumn fx:id="portsCol" prefWidth="200.0" text="Open Ports" />
+            <TableColumn fx:id="infoCol" prefWidth="200.0" text="Info" />
+        </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
+      </TableView>
+   <BarChart fx:id="historyChart">
+     <xAxis>
+       <CategoryAxis side="BOTTOM" label="Scan"/>
+     </xAxis>
+     <yAxis>
+       <NumberAxis side="LEFT" label="OPEN"/>
+     </yAxis>
+   </BarChart>
 </VBox>
