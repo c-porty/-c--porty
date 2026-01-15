@@ -16,66 +16,73 @@ public class NmapCommandBuilder {
         AddressType type = config.host().type();
         int startPort = config.range().start();
         int endPort = config.range().end();
-        String portSpec = String.format("%d-%d", startPort, endPort);
 
-        // workaround for root privileges
-        boolean needsPrivilegedRights = config.options().synScan() || config.options().osDetection();
+        boolean needsPrivilegedRights = options.synScan() || options.osDetection();
         String os = System.getProperty("os.name").toLowerCase();
-        boolean canAddDetectionWithPrivileges = false;
 
-        List<String> nmapCommand = new ArrayList<>();
+        List<String> nmapArgs = new ArrayList<>();
+        nmapArgs.add(path);
+        nmapArgs.add("-n");
 
-        if (needsPrivilegedRights) {
-            if (!os.contains("win") && !os.contains("mac")) {
-                // on linux pkexec is available to run nmap as root
-                nmapCommand.add("pkexec");
-                canAddDetectionWithPrivileges = true;
-            }
-        }
-        nmapCommand.add(path);
+        if (options.serviceDetection()) nmapArgs.add("-sV");
+        if (options.tcpConnectScan()) nmapArgs.add("-sT");
+        if (options.synScan()) nmapArgs.add("-sS");
+        if (options.osDetection()) nmapArgs.add("-O");
 
-        if (options.serviceDetection()) {
-            nmapCommand.add("-sV"); // version detection for services detected
-        }
-        if (options.osDetection() && canAddDetectionWithPrivileges) {
-            nmapCommand.add("-O");
-        }
-        if (options.tcpConnectScan()) {
-            nmapCommand.add("-sT");
-        }
-        if (options.synScan() && canAddDetectionWithPrivileges) {
-            nmapCommand.add("-sS"); // stealth mode
-        }
         if (options.hostTimeout().getSeconds() != -1) {
-            nmapCommand.add("--host-timeout");
-            nmapCommand.add(String.format("%ds", options.hostTimeout().getSeconds()));
-        }
-        if (options.statsEvery() != -1) {
-            nmapCommand.add("-v");  // to enable even more verbose stats
-            nmapCommand.add("--stats-every");
-            nmapCommand.add(options.statsEvery() + "s");
-        }
-        // if the user wishes to scan a port range, include it into the command
-        if (startPort != -1 && endPort != -1) {
-            nmapCommand.add("-p");
-            nmapCommand.add(portSpec);
+            nmapArgs.add("--host-timeout");
+            nmapArgs.add(options.hostTimeout().getSeconds() + "s");
         }
 
-        // these options must always be included
-        nmapCommand.add("-oX"); // output as XML
-        nmapCommand.add(tempOutputFile.toString());
+        if (options.statsEvery() != -1) {
+            nmapArgs.add("-v");
+            nmapArgs.add("--stats-every");
+            nmapArgs.add(options.statsEvery() + "s");
+        }
+
+        if (startPort != -1 && endPort != -1) {
+            nmapArgs.add("-p");
+            nmapArgs.add(startPort + "-" + endPort);
+        }
+
+        nmapArgs.add("-oX");
+        nmapArgs.add(tempOutputFile.toString());
 
         String target = host;
         if (options.includeSubnet() && subnet != null) {
-            if (type == AddressType.IPv6) {
-                nmapCommand.add("-6");  // force nmap to use IPv6
+            if (type == AddressType.IPv6) nmapArgs.add("-6");
+            target = host + "/" + subnet;
+        }
+        nmapArgs.add(target);
+
+        if (needsPrivilegedRights && os.contains("mac")) {
+            // Build ONE shell command
+            StringBuilder cmd = new StringBuilder();
+            for (String a : nmapArgs) {
+                cmd.append(escapeForShell(a)).append(" ");
             }
-            target = String.format("%s/%d", host, subnet);
+
+            String appleScript =
+                    "do shell script " +
+                            "\"" + cmd.toString().trim().replace("\\", "\\\\").replace("\"", "\\\"") + "\"" +
+                            " with administrator privileges";
+
+            return new ProcessBuilder("osascript", "-e", appleScript);
         }
 
-        nmapCommand.add(target);
+        // Linux
+        if (needsPrivilegedRights && os.contains("linux")) {
+            nmapArgs.add(0, "pkexec");
+        }
 
-        System.out.println(nmapCommand);
-        return new ProcessBuilder(nmapCommand);
+        return new ProcessBuilder(nmapArgs);
+    }
+
+    private static String escapeForShell(String s) {
+        // Wrap in single quotes; if single quotes present, break/escape them
+        if (s.contains("'")) {
+            return "'" + s.replace("'", "'\"'\"'") + "'";
+        }
+        return "'" + s + "'";
     }
 }
