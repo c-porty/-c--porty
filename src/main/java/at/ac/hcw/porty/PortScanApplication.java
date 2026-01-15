@@ -1,5 +1,6 @@
 package at.ac.hcw.porty;
 
+import at.ac.hcw.porty.controller.MainController;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -16,11 +17,12 @@ public class PortScanApplication extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(PortScanApplication.class.getResource("scenes/main.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 1440, 960);
-        scene.getStylesheets().add(
-                Objects.requireNonNull(getClass().getResource("/at/ac/hcw/porty/styles/styles.css")).toExternalForm()
-        );
         stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/at/ac/hcw/porty/images/logo_32x32.png"))));
         stage.setTitle("Porty - Portscanner");
+
+        MainController controller = fxmlLoader.getController();
+        controller.setScene(scene);
+
         stage.setScene(scene);
         stage.show();
 

@@ -42,7 +42,7 @@ public class AlertManager {
         alert.getDialogPane().setContent(grid);
         alert.getDialogPane().setPrefSize(500, 250);
         alert.getDialogPane().getStylesheets()
-                .add(AlertManager.class.getResource("/at/ac/hcw/porty/styles/styles.css").toExternalForm());
+                .add(AlertManager.class.getResource("/at/ac/hcw/porty/styles/styles_dark.css").toExternalForm());
 
         return alert;
     }

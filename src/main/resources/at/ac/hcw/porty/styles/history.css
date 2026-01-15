@@ -5,7 +5,7 @@
 }
 
 .porty-history-table .table-row-cell {
-    -fx-background-color: -porty-secondary-background;
+    -fx-background-color: -porty-secondary-container;
     -fx-background-insets: 0 0 8 0;
     -fx-padding: 0 0 8 0;
     -fx-background-radius: 5;

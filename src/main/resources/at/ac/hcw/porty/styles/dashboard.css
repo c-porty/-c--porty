@@ -75,11 +75,13 @@
 }
 
 .porty-dashboard-textarea .content {
+    -fx-background-color: transparent;
     -fx-padding: 0;
 }
 
 .porty-dashboard-textarea .viewport {
-    -fx-background-color: -porty-background;
+    -fx-background-color: transparent;
+    -fx-padding: 0;
 }
 
 .porty-dashboard-menu-checkbox{
@@ -89,7 +91,7 @@
 }
 
 .porty-dashboard-menu-checkbox .box{
-    -fx-background-color: -porty-container;
+    -fx-background-color: transparent;
     -fx-border-color: -porty-secondary-border;
     -fx-border-radius: 4;
     -fx-border-width: 2;
@@ -129,11 +131,11 @@
 }
 
 .porty-dashboard-progress-indicator .indicator{
-    -fx-background-color: -porty-container;
+    -fx-background-color: -porty-scan-ring;
 }
 
 .porty-dashboard-progress-indicator .progress {
-    -fx-background-color: -porty-primary;
+    -fx-background-color: -porty-scan-progress;
 }
 
 .porty-dashboard-scan-view{
@@ -143,4 +145,20 @@
 .porty-dashboard{
     -fx-spacing: 8px;
     -fx-padding: 16 0 0 0;
+}
+
+.porty-switch-icon .thumb{
+    -fx-background-color: #4F378B;
+}
+
+.porty-switch-icon .thumb-area{
+    -fx-background-color: #D0BCFE;
+}
+
+.porty-switch-icon:selected .thumb {
+    -fx-background-color: white;
+}
+
+.porty-switch-icon:selected .thumb-area {
+    -fx-background-color: #4F378B;
 }

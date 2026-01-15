@@ -6,9 +6,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.BorderPane;
+import org.controlsfx.control.ToggleSwitch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,11 +27,29 @@ public class MainController {
     private ToggleButton simplicityModeSwitch;
     @FXML
     private Label systemIPAddress;
+    @FXML
+    private ToggleSwitch lightModeSwitch;
 
     private ModeAwareController currentController;
 
+    private Scene scene;
+
+    private String lightCss;
+    private String darkCss;
+
     @FXML
     public void initialize() {
+
+        lightCss = getClass().getResource("/at/ac/hcw/porty/styles/styles_light.css").toExternalForm();
+        darkCss  = getClass().getResource("/at/ac/hcw/porty/styles/styles_dark.css").toExternalForm();
+
+        lightModeSwitch.selectedProperty().addListener((obs, oldVal, light) -> {
+            if (scene != null) {
+                scene.getStylesheets().clear();
+                scene.getStylesheets().add(light ? lightCss : darkCss);
+            }
+        });
+
         simplicityModeSwitch.setOnAction(e -> {
             if (currentController == null) return;
 
@@ -47,6 +67,12 @@ public class MainController {
         }
 
         navigateToDashboard(null);
+    }
+
+    public void setScene(Scene scene) {
+        this.scene = scene;
+
+        scene.getStylesheets().add(darkCss);
     }
 
     @FXML
