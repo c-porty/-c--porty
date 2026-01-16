@@ -1,5 +1,6 @@
 package at.ac.hcw.porty.controller;
 
+import at.ac.hcw.porty.dto.ScanResultDTO;
 import at.ac.hcw.porty.types.records.PortScanResult;
 import at.ac.hcw.porty.types.records.ScanSummary;
 import javafx.application.Platform;
@@ -16,6 +17,7 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -32,7 +34,7 @@ public class ResultsController {
     private MainController mainController;
     private ScanSummary scanSummary;
 
-    int gridLastRow = 0;
+    int row = 0;
 
     public void setMainController(MainController mainController) {
         this.mainController = mainController;
@@ -59,30 +61,41 @@ public class ResultsController {
     }
 
     public void displayScanSummary() {
-        int row = 0;
 
-        addRow(row++, "Scanned Address", scanSummary.host().address());
-        addRow(row++, "Time taken", scanSummary.finishedAt().getEpochSecond() - scanSummary.startedAt().getEpochSecond() + "s");
+        ArrayList<ScanResultDTO> scanOverview = new ArrayList<>();
+        scanOverview.add(new ScanResultDTO( "Scanned Address", scanSummary.host().address()));
+        scanOverview.add(new ScanResultDTO("Time taken", scanSummary.finishedAt().getEpochSecond() - scanSummary.startedAt().getEpochSecond() + "s"));
         if(!scanSummary.detectedOs().isEmpty()) {
-            addRow(row++, "Operating system", scanSummary.detectedOs());
+            scanOverview.add(new ScanResultDTO( "Operating system", scanSummary.detectedOs()));
         }
-        addRow(row++, "Open ports", String.valueOf(scanSummary.results().size()));
-        addRow(row++, "Average security risk", getRiskLabel(scanSummary.severity())
-        );
+        scanOverview.add(new ScanResultDTO( "Open ports", String.valueOf(scanSummary.results().size())));
+        scanOverview.add(new ScanResultDTO( "Average security risk", getRiskLabel(scanSummary.severity())));
+
+        addBlock(scanOverview);
+        addEmptyRow();
 
         Set<String> hostsInNetwork = new HashSet<>();
         for (PortScanResult port : scanSummary.results()) {
             hostsInNetwork.add(port.host().address());
         }
 
+        int blockRemaining = hostsInNetwork.size();
         for (String host: hostsInNetwork){
-            addRow(row++, "Host", host);
-            int i = 1;
-            for(PortScanResult port : scanSummary.results()){
-                if(port.host().address().equals(host)){
-                    addRow(row++, "Port #" + i, port.port() + (!port.service().isEmpty()?" ("+port.service()+")":""));
-                    i++;
+            ArrayList<ScanResultDTO> hostOverview = new ArrayList<>();
+            hostOverview.add(new ScanResultDTO( "Host", host));
+            for(int i=0; i<scanSummary.results().size();i++){
+                if(scanSummary.results().get(i).host().address().equals(host)){
+                    hostOverview.add(new ScanResultDTO(
+                            "Port #" + (i+1),
+                            scanSummary.results().get(i).port() +
+                                    (!scanSummary.results().get(i).service().isEmpty()?" " +
+                                            "("+scanSummary.results().get(i).service()+")":"")));
                 }
+            }
+            addBlock(hostOverview);
+            blockRemaining--;
+            if(blockRemaining>0){
+                addEmptyRow();
             }
         }
     }
@@ -97,30 +110,40 @@ public class ResultsController {
         }
     }
 
-    private void addRow(int row, String leftText, String rightText) {
+    private void addBlock(ArrayList<ScanResultDTO> entries){
+        for(int i=0;i<entries.size();i++){
+            addRow(entries.get(i).getProperty(), entries.get(i).getEntry(),i==0, i==entries.size()-1, i%2==0);
+        }
+    }
+
+    private void addRow(String leftText, String rightText,boolean firstRow, boolean lastRow, boolean even) {
         Label left = new Label(leftText);
         Label right = new Label(rightText);
 
-        String rowStyle = (row % 2 == 0) ? "porty-results-row-even" : "porty-results-row-odd";
+        String rowStyle = (even) ? "porty-results-row-even" : "porty-results-row-odd";
         left.getStyleClass().add(rowStyle);
         right.getStyleClass().add(rowStyle);
         right.getStyleClass().add("porty-result-border");
 
-        if (row == 0) {
+        if (firstRow) {
             left.setStyle("-fx-background-radius: 5 0 0 0; -fx-border-radius: 5 0 0 0;");
             right.setStyle("-fx-background-radius: 0 5 0 0; -fx-border-radius: 0 5 0 0;");
         }
 
-        int lastRow = 4 + scanSummary.results().size();
-        if(!scanSummary.detectedOs().isEmpty()) {lastRow++;}
-
-
-        if (row == lastRow) {
+        if (lastRow) {
             left.setStyle(left.getStyle() + "-fx-background-radius: 0 0 0 5; -fx-border-radius: 0 0 0 5;");
             right.setStyle(right.getStyle() + "-fx-background-radius: 0 0 5 0; -fx-border-radius: 0 0 5 0;");
         }
 
         resultGrid.addRow(row, left, right);
+        row++;
+    }
+
+    private void addEmptyRow(){
+        Region filler = new Region();
+        filler.setPrefHeight(24);
+        resultGrid.addRow(row, filler);
+        row++;
     }
 
     private void updateRiskBar(float severity) {
