@@ -1,6 +1,5 @@
 package at.ac.hcw.porty.controller;
 
-import at.ac.hcw.porty.types.interfaces.ModeAwareController;
 import at.ac.hcw.porty.dto.ScanConfigDTO;
 import at.ac.hcw.porty.listeners.PortScanCLIListener;
 import at.ac.hcw.porty.listeners.PortScanUIListener;
@@ -21,7 +20,7 @@ import javafx.scene.control.*;
 import javafx.collections.ListChangeListener;
 import javafx.scene.layout.VBox;
 
-public class DashboardController implements ModeAwareController {
+public class DashboardController {
     @FXML
     private Button startScanButton;
     @FXML
@@ -155,7 +154,6 @@ public class DashboardController implements ModeAwareController {
         }
     }
 
-    @Override
     public void setSimpleMode(){
         advancedOptionControl.setVisible(false);
         advancedOptionControl.setManaged(false);
@@ -163,7 +161,6 @@ public class DashboardController implements ModeAwareController {
         advancedOptions = false;
     }
 
-    @Override
     public void setAdvancedMode(){
         advancedOptionControl.setVisible(true);
         advancedOptionControl.setManaged(true);
