@@ -8,6 +8,7 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 
 import java.lang.ref.Reference;
@@ -15,6 +16,8 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ResultsController {
     @FXML
@@ -28,6 +31,8 @@ public class ResultsController {
 
     private MainController mainController;
     private ScanSummary scanSummary;
+
+    int gridLastRow = 0;
 
     public void setMainController(MainController mainController) {
         this.mainController = mainController;
@@ -56,21 +61,30 @@ public class ResultsController {
     public void displayScanSummary() {
         int row = 0;
 
-        addRow(row++, "IP-Address", scanSummary.host().address());
+        addRow(row++, "Scanned Address", scanSummary.host().address());
         addRow(row++, "Time taken", scanSummary.finishedAt().getEpochSecond() - scanSummary.startedAt().getEpochSecond() + "s");
         if(!scanSummary.detectedOs().isEmpty()) {
             addRow(row++, "Operating system", scanSummary.detectedOs());
         }
         addRow(row++, "Open ports", String.valueOf(scanSummary.results().size()));
+        addRow(row++, "Average security risk", getRiskLabel(scanSummary.severity())
+        );
 
-        int i = 1;
+        Set<String> hostsInNetwork = new HashSet<>();
         for (PortScanResult port : scanSummary.results()) {
-            addRow(row++, "Port #" + i, port.port() + " " + (!port.service().isEmpty() ? "(" + port.service() + ")" : ""));
-            i++;
+            hostsInNetwork.add(port.host().address());
         }
 
-        addRow(row, "Average security risk", getRiskLabel(scanSummary.severity())
-        );
+        for (String host: hostsInNetwork){
+            addRow(row++, "Host", host);
+            int i = 1;
+            for(PortScanResult port : scanSummary.results()){
+                if(port.host().address().equals(host)){
+                    addRow(row++, "Port #" + i, port.port() + (!port.service().isEmpty()?" ("+port.service()+")":""));
+                    i++;
+                }
+            }
+        }
     }
 
     private String getRiskLabel(float severity) {
@@ -97,7 +111,7 @@ public class ResultsController {
             right.setStyle("-fx-background-radius: 0 5 0 0; -fx-border-radius: 0 5 0 0;");
         }
 
-        int lastRow = 3 + scanSummary.results().size();
+        int lastRow = 4 + scanSummary.results().size();
         if(!scanSummary.detectedOs().isEmpty()) {lastRow++;}
 
 
