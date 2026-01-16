@@ -69,33 +69,45 @@ public class ResultsController {
             scanOverview.add(new ScanResultDTO( "Operating system", scanSummary.detectedOs()));
         }
         scanOverview.add(new ScanResultDTO( "Open ports", String.valueOf(scanSummary.results().size())));
+        if(scanSummary.host().subnet()==null) {
+            int i = 1;
+            for (PortScanResult port : scanSummary.results()) {
+                scanOverview.add(new ScanResultDTO(
+                        "Port #" + i,
+                        port.port() + (!port.service().isEmpty() ? " " + "(" + port.service() + ")" : "")));
+                i++;
+            }
+        }
         scanOverview.add(new ScanResultDTO( "Average security risk", getRiskLabel(scanSummary.severity())));
 
         addBlock(scanOverview);
-        addEmptyRow();
 
-        Set<String> hostsInNetwork = new HashSet<>();
-        for (PortScanResult port : scanSummary.results()) {
-            hostsInNetwork.add(port.host().address());
-        }
+        if (!(scanSummary.host().subnet()==null)) {
+            addEmptyRow();
 
-        int blockRemaining = hostsInNetwork.size();
-        for (String host: hostsInNetwork){
-            ArrayList<ScanResultDTO> hostOverview = new ArrayList<>();
-            hostOverview.add(new ScanResultDTO( "Host", host));
-            for(int i=0; i<scanSummary.results().size();i++){
-                if(scanSummary.results().get(i).host().address().equals(host)){
-                    hostOverview.add(new ScanResultDTO(
-                            "Port #" + (i+1),
-                            scanSummary.results().get(i).port() +
-                                    (!scanSummary.results().get(i).service().isEmpty()?" " +
-                                            "("+scanSummary.results().get(i).service()+")":"")));
-                }
+            Set<String> hostsInNetwork = new HashSet<>();
+            for (PortScanResult port : scanSummary.results()) {
+                hostsInNetwork.add(port.host().address());
             }
-            addBlock(hostOverview);
-            blockRemaining--;
-            if(blockRemaining>0){
-                addEmptyRow();
+
+            int blockRemaining = hostsInNetwork.size();
+            for (String host : hostsInNetwork) {
+                ArrayList<ScanResultDTO> hostOverview = new ArrayList<>();
+                hostOverview.add(new ScanResultDTO("Host", host));
+                for (int i = 0; i < scanSummary.results().size(); i++) {
+                    if (scanSummary.results().get(i).host().address().equals(host)) {
+                        hostOverview.add(new ScanResultDTO(
+                                "Port #" + (i + 1),
+                                scanSummary.results().get(i).port() +
+                                        (!scanSummary.results().get(i).service().isEmpty() ? " " +
+                                                "(" + scanSummary.results().get(i).service() + ")" : "")));
+                    }
+                }
+                addBlock(hostOverview);
+                blockRemaining--;
+                if (blockRemaining > 0) {
+                    addEmptyRow();
+                }
             }
         }
     }
