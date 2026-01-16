@@ -40,7 +40,7 @@
                 <ProgressIndicator fx:id="scanProgressIndicator" styleClass="porty-dashboard-progress-indicator" />
             </StackPane>
             <TitledPane fx:id="scanProgressConsoleTitledPane" animated="false" styleClass="porty-titled-pane" text="Console">
-                <ListView fx:id="scanProgressConsole" layoutX="1.0" prefHeight="400.0" prefWidth="500.0" />
+                <ListView fx:id="scanProgressConsole" layoutX="1.0" prefHeight="400.0" prefWidth="500.0" styleClass="porty-console"/>
             </TitledPane>
             <TextArea fx:id="scanProgressInfo" editable="false" prefHeight="400.0" prefWidth="500.0" styleClass="porty-dashboard-textarea" />
         </VBox>

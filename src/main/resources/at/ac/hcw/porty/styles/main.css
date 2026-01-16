@@ -128,3 +128,20 @@
     -fx-background-color: -porty-switch-active;
     -fx-background-radius: 4;
 }
+
+.porty-console .list-cell{
+    -fx-background-color: -porty-secondary-background;
+    -fx-text-fill: -porty-on-background;
+}
+
+.porty-console .scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+
+.porty-console .scroll-bar:horizontal {
+    -fx-background-color: transparent;
+}
+
+.porty-console .scroll-bar .thumb {
+    -fx-background-color: -porty-container;
+}

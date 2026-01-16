@@ -139,6 +139,7 @@ public class DashboardController implements ModeAwareController {
     protected void onScanStartButtonClick() throws InterruptedException {
         setProgress(0.0);
         if(!onScan) {
+
             if (advancedOptions) {
                 advancedScan();
             } else {
@@ -148,6 +149,7 @@ public class DashboardController implements ModeAwareController {
             if(handle != null) {
                 handle.cancel();
             }
+            startScanButton.setStyle("-fx-background-color: -porty-secondary;");
             startScanButton.setText("Start Scan");
             onScan=false;
         }
@@ -171,12 +173,14 @@ public class DashboardController implements ModeAwareController {
 
     protected void scan(NmapOptions options){
         if(!scanConfigDTO.getHost().isEmpty() && scanConfigDTO.getHost()!=null) {
+            startScanButton.setStyle("-fx-background-color: red;");
             startScanButton.setText("Stop");
             onScan = true;
             new Thread(() -> {
                 handle = scanHandleGenerator(new Host(scanConfigDTO.getHost(), scanConfigDTO.isIncludeSubnetMask()? scanConfigDTO.getSubnetMask(): null), new PortRange(-1, -1), options);
                 handle.summary().join();
                 Platform.runLater(() -> {
+                    startScanButton.setStyle("-fx-background-color: -porty-secondary;");
                     startScanButton.setText("Start Scan");
                     onScan = false;
                 });
