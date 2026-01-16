@@ -73,7 +73,7 @@ public class PortScanUIListener implements PortScanListener {
             Optional<ButtonType> result = alert.showAndWait();
 
             if (result.isPresent() && result.get() == moreButton) {
-                mainController.navigateToResults();
+                mainController.navigateToResults(summary);
             }
         });
     }

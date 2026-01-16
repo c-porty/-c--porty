@@ -1,11 +1,10 @@
 package at.ac.hcw.porty.controller;
 
+import at.ac.hcw.porty.types.records.ScanSummary;
 import at.ac.hcw.porty.utils.NetUtils;
-import at.ac.hcw.porty.types.interfaces.ModeAwareController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.BorderPane;
@@ -18,7 +17,6 @@ import java.net.URL;
 public class MainController {
     private static final Logger logger =
             LoggerFactory.getLogger(MainController.class);
-
     @FXML
     private BorderPane contentBorderPane;
     @FXML
@@ -26,17 +24,19 @@ public class MainController {
     @FXML
     private Label systemIPAddress;
 
-    private ModeAwareController currentController;
+    private DashboardController dashBoardController;
+    private String currentRoute = "/at/ac/hcw/porty/scenes/dashboard.fxml";
+    private String tracebackRoute = "/at/ac/hcw/porty/scenes/dashboard.fxml";
 
     @FXML
     public void initialize() {
         simplicityModeSwitch.setOnAction(e -> {
-            if (currentController == null) return;
+            if (dashBoardController == null) return;
 
             if (simplicityModeSwitch.isSelected()) {
-                currentController.setAdvancedMode();
+                dashBoardController.setAdvancedMode();
             } else {
-                currentController.setSimpleMode();
+                dashBoardController.setSimpleMode();
             }
         });
 
@@ -51,78 +51,64 @@ public class MainController {
 
     @FXML
     private void navigateToDashboard(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/at/ac/hcw/porty/scenes/dashboard.fxml")
-            );
-
-            Parent view = loader.load();
-
-            DashboardController dashboardController =
-                    loader.getController();
-
-            dashboardController.setMainController(this);
-
-            contentBorderPane.setCenter(view);
-
-            this.currentController = dashboardController;
-
-            simplicityModeSwitch.setVisible(true);
-            simplicityModeSwitch.setManaged(true);
-
-            if (simplicityModeSwitch.isSelected()) {
-                dashboardController.setAdvancedMode();
-            } else {
-                dashboardController.setSimpleMode();
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        handleNavigation("/at/ac/hcw/porty/scenes/dashboard.fxml", null);
     }
 
     @FXML
     private void navigateToHistory(ActionEvent event) {
-        handleNavigation("/at/ac/hcw/porty/scenes/history.fxml");
+        handleNavigation("/at/ac/hcw/porty/scenes/history.fxml", null);
     }
 
     @FXML
     private void navigateToCredits(ActionEvent event) {
-        handleNavigation("/at/ac/hcw/porty/scenes/credits.fxml");
+        handleNavigation("/at/ac/hcw/porty/scenes/credits.fxml", null);
     }
 
     @FXML
-    public void navigateToResults() { handleNavigation("/at/ac/hcw/porty/scenes/results.fxml"); }
+    public void navigateToResults(ScanSummary summary) {
+        handleNavigation("/at/ac/hcw/porty/scenes/results.fxml", summary);
+    }
 
-    private void handleNavigation(String route) {
+    public void traceBackNavigation(){
+        handleNavigation(tracebackRoute, null);
+    }
+
+    private void handleNavigation(String route, ScanSummary scanSummary) {
         URL url = getClass().getResource(route);
+        tracebackRoute = currentRoute;
 
         try {
             FXMLLoader loader = new FXMLLoader(url);
             contentBorderPane.setCenter(loader.load());
 
             Object controller = loader.getController();
+            if (controller instanceof ResultsController resultsController) {
+                resultsController.setMainController(this);
+                if (scanSummary != null) {
+                    resultsController.setScanSummary(scanSummary);
+                }
+            }
 
-            if (controller instanceof ModeAwareController modeAware) {
-                currentController = modeAware;
+            if (controller instanceof DashboardController dashboardController) {
+                dashBoardController = dashboardController;
+                dashboardController.setMainController(this);
 
                 simplicityModeSwitch.setVisible(true);
                 simplicityModeSwitch.setManaged(true);
 
                 if (simplicityModeSwitch.isSelected()) {
-                    modeAware.setAdvancedMode();
+                    dashboardController.setAdvancedMode();
                 } else {
-                    modeAware.setSimpleMode();
+                    dashboardController.setSimpleMode();
                 }
             } else {
-                currentController = null;
-
                 simplicityModeSwitch.setVisible(false);
                 simplicityModeSwitch.setManaged(false);
             }
-        }
-        catch (IOException e) {
-            e.printStackTrace();
+
+            currentRoute = route;
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
         }
     }
 }
