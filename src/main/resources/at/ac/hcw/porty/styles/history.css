@@ -4,21 +4,33 @@
     -fx-table-cell-border-color: transparent;
 }
 
+.porty-history-table *{
+    -fx-border-color: transparent;
+}
+
 .porty-history-table .table-row-cell {
     -fx-background-color: -porty-secondary-container;
-    -fx-background-insets: 0 0 8 0;
-    -fx-padding: 0 0 8 0;
     -fx-background-radius: 5;
-    -fx-text-fill: -porty-on-background;
+    -fx-background-insets: 0 0 8 0;
 }
 
 .porty-history-table .table-row-cell:selected {
     -fx-background-color: -porty-primary;
+    -fx-border-color: transparent;
+}
+
+.porty-history-table .table-row-cell:selected .table-cell{
+    -fx-text-fill: -porty-on-primary;
+}
+
+.porty-history-table .table-cell:selected:focused {
+    -fx-border-color: transparent;
 }
 
 .porty-history-table .column-header-background {
     -fx-background-color: -porty-container;
     -fx-background-radius: 5;
+    -fx-padding: 4;
 }
 
 .porty-history-table .column-header {
@@ -28,9 +40,10 @@
 
 .porty-history-table .column-header .label {
     -fx-text-fill: -porty-on-container;
-    -fx-font-size: 14px;
+    -fx-font-size: 16px;
     -fx-font-family: "Inter";
     -fx-font-weight: bold;
+    -fx-padding: 0 0 0 16;
 }
 
 .porty-history-table .virtual-flow {
@@ -39,11 +52,76 @@
 
 .porty-history-table .table-cell {
     -fx-text-fill: -porty-on-container;
-    -fx-font-size: 14px;
+    -fx-font-size: 16px;
     -fx-font-family: "Inter";
     -fx-alignment: center-left;
+    -fx-padding: 16 8 12 20;
+}
+
+.porty-history-table .table-cell.left-aligned {
+    -fx-alignment: CENTER-LEFT;
+}
+
+.porty-history-table .table-cell.center-aligned {
+    -fx-alignment: CENTER;
+}
+
+.porty-history-table .column-header.left-aligned .label {
+    -fx-alignment: CENTER-LEFT;
 }
 
 .porty-history-table .table-row-cell:empty {
     -fx-background-color: transparent;
+}
+
+.porty-history-table .scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+
+.porty-history-table .scroll-bar:horizontal {
+    -fx-background-color: transparent;
+}
+
+.porty-history-table .scroll-bar .thumb {
+    -fx-background-color: -porty-container;
+}
+
+.porty-history-table .column-header .scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+
+.porty-history-table .filler{
+    -fx-background-color: transparent;
+}
+
+.porty-history{
+    -fx-spacing: 24px;
+}
+
+.porty-history-chart .axis {
+    -fx-stroke: -porty-on-background;
+}
+
+.porty-history-chart .chart-plot-background {
+    -fx-background-color: transparent;
+}
+
+.porty-history-chart .chart-legend {
+    -fx-background-color: transparent;
+}
+
+.porty-history-chart .chart *{
+    -fx-text-fill: -porty-on-background;
+}
+
+.porty-history-chart .chart-legend-item-symbol{
+    -fx-background-color: transparent;
+}
+
+.porty-history-table-drop-button{
+    -fx-font-size: 14px;
+    -fx-text-fill: -porty-on-secondary;
+    -fx-background-color: -porty-secondary;
+    -fx-font-family: "Inter";
+    -fx-padding: 8 16;
 }
