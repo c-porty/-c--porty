@@ -158,7 +158,6 @@
     -fx-padding: 0;
 }
 
-
 .porty-switch-icon .thumb {
     -fx-pref-width: 16px;
     -fx-pref-height: 16px;
@@ -169,4 +168,17 @@
 
     -fx-background-radius: 50%;
     -fx-alignment: center;
+    -fx-background-color: #4F378B;
+}
+
+.porty-switch-icon .thumb-area{
+    -fx-background-color: #D0BCFE;
+}
+
+.porty-switch-icon:selected .thumb {
+    -fx-background-color: white;
+}
+
+.porty-switch-icon:selected .thumb-area {
+    -fx-background-color: #4F378B;
 }

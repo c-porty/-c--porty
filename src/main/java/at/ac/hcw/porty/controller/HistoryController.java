@@ -10,6 +10,7 @@ import at.ac.hcw.porty.utils.HistoryHandler;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
@@ -160,7 +161,19 @@ public class HistoryController {
             if(Objects.equals(scan.getHost(), host)) {
                 portMax = Math.max(portMax, scan.getPorts());
                 scanDates.add(scan.getTimestamp());
-                series.getData().add(scan.getBar());
+                DateTimeFormatter formatter =
+                        DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")
+                                .withZone(ZoneId.systemDefault());
+                XYChart.Data<String, Number> data =
+                        new XYChart.Data<>(formatter.format(scan.getTimestamp()), scan.getPorts());
+
+                series.getData().add(data);
+
+                data.nodeProperty().addListener((obs, oldNode, newNode) -> {
+                    if (newNode != null) {
+                        applyBarColor(scan, newNode);
+                    }
+                });
             }
         }
 
@@ -190,27 +203,17 @@ public class HistoryController {
         xAxis.setCategories(FXCollections.observableArrayList(scanDatesAxis));
 
         historyChart.getData().add(series);
-
-        setBarColors(host);
     }
 
-    public void setBarColors(String host){
-        for(ScanHistoryDTO scan : tableEntries) {
-            if(Objects.equals(scan.getHost(), host)) {
-                getBarColor(scan);
-            }
-        }
-    }
-
-    public void getBarColor(ScanHistoryDTO entry){
+    public void applyBarColor(ScanHistoryDTO entry, Node node){
         if(entry.getSeverity()<0.33){
-            entry.getBar().getNode().setStyle("-fx-bar-fill: #74E37B;");
+            node.setStyle("-fx-bar-fill: #74E37B;");
             return;
         }
         if(entry.getSeverity()<0.66){
-            entry.getBar().getNode().setStyle("-fx-bar-fill: orange;");
+            node.setStyle("-fx-bar-fill: orange;");
             return;
         }
-        entry.getBar().getNode().setStyle("-fx-bar-fill: red;");
+        node.setStyle("-fx-bar-fill: red;");
     }
 }

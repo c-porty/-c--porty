@@ -147,18 +147,6 @@
     -fx-padding: 16 0 0 0;
 }
 
-.porty-switch-icon .thumb{
-    -fx-background-color: #4F378B;
-}
-
-.porty-switch-icon .thumb-area{
-    -fx-background-color: #D0BCFE;
-}
-
-.porty-switch-icon:selected .thumb {
-    -fx-background-color: white;
-}
-
-.porty-switch-icon:selected .thumb-area {
-    -fx-background-color: #4F378B;
+.porty-console .corner {
+    -fx-background-color: transparent;
 }

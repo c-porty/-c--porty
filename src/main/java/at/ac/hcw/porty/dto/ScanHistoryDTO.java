@@ -15,7 +15,6 @@ public class ScanHistoryDTO {
     private final StringProperty file = new SimpleStringProperty();
 
     private final FloatProperty severity = new SimpleFloatProperty();
-    private final ObjectProperty<XYChart.Data<String, Number>> bar = new SimpleObjectProperty<>();
 
     public ScanHistoryDTO(){};
 
@@ -25,11 +24,6 @@ public class ScanHistoryDTO {
         this.ports.set(ports);
         this.file.set(file);
         this.severity.set(severity);
-
-        DateTimeFormatter formatter =
-                DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")
-                        .withZone(ZoneId.systemDefault());
-        this.bar.set(new XYChart.Data<String, Number>(formatter.format(this.timestamp.get()), ports));
     };
 
     public Instant getTimestamp() {
@@ -78,14 +72,6 @@ public class ScanHistoryDTO {
 
     public void setFile(String file){
         this.file.set(file);
-    }
-
-    public XYChart.Data<String, Number> getBar() {
-        return bar.get();
-    }
-
-    public ObjectProperty<XYChart.Data<String, Number>> barProperty() {
-        return bar;
     }
 
     public float getSeverity() {
