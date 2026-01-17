@@ -49,6 +49,8 @@ dependencies {
     implementation("com.google.guava:guava:33.5.0-jre")
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+    implementation("org.kordamp.ikonli:ikonli-javafx:12.4.0")
+    implementation("org.kordamp.ikonli:ikonli-materialdesign2-pack:12.4.0")
 }
 
 tasks.withType<Test> {

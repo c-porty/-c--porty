@@ -125,3 +125,17 @@
     -fx-font-family: "Inter";
     -fx-padding: 8 16;
 }
+
+.porty-history-table-info-icon{
+    -fx-icon-color: -porty-on-container;
+    -fx-icon-size: 32px;
+}
+
+.porty-history-table .table-row-cell:selected .porty-history-table-info-icon{
+    -fx-icon-color: -porty-on-primary;
+}
+
+.porty-history-table-info-button{
+    -fx-background-color: transparent;
+    -fx-translate-x: 1;
+}

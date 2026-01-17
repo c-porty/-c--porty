@@ -14,9 +14,8 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TableColumn;
+import javafx.scene.control.*;
+import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -77,6 +76,36 @@ public class HistoryController {
         infoCol.setCellValueFactory(cell ->
                 cell.getValue().fileProperty());
 
+        infoCol.setCellFactory(col -> new TableCell<ScanHistoryDTO, String>() {
+            private final Button btn = new Button();
+
+            {
+                FontIcon icon = new FontIcon("mdi2i-information-outline");
+                icon.getStyleClass().add("porty-history-table-info-icon");
+
+                btn.setGraphic(icon);
+                btn.getStyleClass().add("porty-history-table-info-button");
+                btn.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+
+                btn.setOnAction(e -> {
+                    String file = getItem();
+                    openResultPage(file);
+                });
+            }
+
+            @Override
+            protected void updateItem(String file, boolean empty) {
+                super.updateItem(file, empty);
+
+                if (empty || file == null) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(btn);
+                    setText(null);
+                }
+            }
+        });
+
         dateCol.getStyleClass().add("left-aligned");
         addressCol.getStyleClass().add("left-aligned");
 
@@ -110,6 +139,10 @@ public class HistoryController {
                 });
 
         historyChart.setLegendVisible(false);
+    }
+
+    public void openResultPage(String file){
+
     }
 
     public void setChartData(String host) {
