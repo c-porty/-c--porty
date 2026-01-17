@@ -91,7 +91,7 @@ public class PortScanUIListener implements PortScanListener {
             Pattern pattern = Pattern.compile("(\\d+(?:\\.\\d+)?)%");
             Matcher matcher = pattern.matcher(msg);
 
-            if (msg.contains("Connect Scan Timing") && matcher.find()) {
+            if ((msg.contains("Connect Scan Timing") || msg.contains("SYN Stealth Scan Timing"))&& matcher.find()) {
                 double percent = Double.parseDouble(matcher.group(1));
                 dashboardController.setProgress(percent);
             }

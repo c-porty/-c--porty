@@ -17,15 +17,19 @@
     -fx-faint-focus-color: transparent;
     -fx-padding: 0;
     -fx-wrap-text: true;
+    -fx-border-color: red;
 }
 
 .porty-credits-textarea .content {
-        -fx-padding: 0;
+    -fx-background-color: transparent;
+    -fx-padding: 0;
 }
 
 .porty-credits-textarea .viewport {
     -fx-background-color: -porty-background;
+    -fx-padding: 0;
 }
+
 
 .porty-credits-bar {
     -fx-max-width: infinity;

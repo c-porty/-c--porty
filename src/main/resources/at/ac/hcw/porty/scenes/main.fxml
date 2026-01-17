@@ -4,15 +4,28 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import org.controlsfx.control.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 
 <BorderPane fx:id="mainBorderPane" prefHeight="960.0" prefWidth="1440.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.hcw.porty.controller.MainController">
     <left>
         <VBox prefHeight="960.0" prefWidth="256.0" styleClass="porty-nav-bar">
                 <Label prefHeight="17.0" prefWidth="109.0" styleClass="porty-nav-title" text="Porty" />
             <VBox styleClass="porty-nav-buttons">
-                <Button mnemonicParsing="false" onAction="#navigateToDashboard" styleClass="porty-nav-button" text="Home" />
-                <Button mnemonicParsing="false" onAction="#navigateToHistory" styleClass="porty-nav-button" text="History" />
-                <Button mnemonicParsing="false" onAction="#navigateToCredits" styleClass="porty-nav-button" text="About us" />
+                <Button mnemonicParsing="false" onAction="#navigateToDashboard" styleClass="porty-nav-button" text="Home" >
+                    <graphic>
+                        <FontIcon iconLiteral="mdi2h-home" styleClass="porty-menu-icon"/>
+                    </graphic>
+                </Button>
+                <Button mnemonicParsing="false" onAction="#navigateToHistory" styleClass="porty-nav-button" text="History">
+                    <graphic>
+                        <FontIcon iconLiteral="mdi2h-history" styleClass="porty-menu-icon"/>
+                    </graphic>
+                </Button>
+                <Button mnemonicParsing="false" onAction="#navigateToCredits" styleClass="porty-nav-button" text="About us">
+                    <graphic>
+                        <FontIcon iconLiteral="mdi2a-account" styleClass="porty-menu-icon"/>
+                    </graphic>
+                </Button>
             </VBox>
          <Region styleClass="porty-nav-spacer" VBox.vgrow="ALWAYS" />
             <VBox styleClass="porty-own-ip-field">

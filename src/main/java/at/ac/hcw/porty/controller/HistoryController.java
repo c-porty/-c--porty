@@ -1,21 +1,22 @@
 package at.ac.hcw.porty.controller;
 
-import at.ac.hcw.porty.dto.ScanHistoryTableDTO;
+import at.ac.hcw.porty.dto.ScanHistoryDTO;
 import at.ac.hcw.porty.repositories.ScanResultRepositoryFactory;
 import at.ac.hcw.porty.types.enums.ScanResultRepositoryOption;
 import at.ac.hcw.porty.types.interfaces.IScanResultRepository;
+import at.ac.hcw.porty.types.records.Host;
 import at.ac.hcw.porty.types.records.ScanSummary;
 import at.ac.hcw.porty.utils.HistoryHandler;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TableColumn;
+import javafx.scene.control.*;
+import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -24,25 +25,32 @@ import java.util.*;
 
 public class HistoryController {
     @FXML
-    private TableView<ScanHistoryTableDTO> historyTable;
+    private TableView<ScanHistoryDTO> historyTable;
     @FXML
-    private TableColumn<ScanHistoryTableDTO, Instant> dateCol;
+    private TableColumn<ScanHistoryDTO, Instant> dateCol;
     @FXML
-    private TableColumn<ScanHistoryTableDTO, String> addressCol;
+    private TableColumn<ScanHistoryDTO, String> addressCol;
     @FXML
-    private TableColumn<ScanHistoryTableDTO, Integer> portsCol;
+    private TableColumn<ScanHistoryDTO, Integer> portsCol;
     @FXML
-    private TableColumn<ScanHistoryTableDTO, String> infoCol;
+    private TableColumn<ScanHistoryDTO, String> infoCol;
     @FXML
     private BarChart<String, Number> historyChart;
 
-    ObservableList<ScanHistoryTableDTO> tableEntries = FXCollections.observableArrayList();
+    ObservableList<ScanHistoryDTO> tableEntries = FXCollections.observableArrayList();
+
+    IScanResultRepository repositoryJSON = ScanResultRepositoryFactory.create(ScanResultRepositoryOption.JSON);
+    IScanResultRepository repositoryBIN = ScanResultRepositoryFactory.create(ScanResultRepositoryOption.BINARY);
+
+    HistoryHandler historyHandler = new HistoryHandler(IScanResultRepository.savePath, List.of(repositoryJSON, repositoryBIN));
+
+    String chartLoadedHost = "";
 
     @FXML
     public void initialize() {
 
         dateCol.setCellValueFactory(cell ->
-                cell.getValue().dateProperty());
+                cell.getValue().timestampProperty());
         DateTimeFormatter formatter =
                 DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")
                         .withZone(ZoneId.systemDefault());
@@ -61,7 +69,7 @@ public class HistoryController {
         });
 
         addressCol.setCellValueFactory(cell ->
-                cell.getValue().addressProperty());
+                cell.getValue().hostProperty());
 
         portsCol.setCellValueFactory(cell ->
                 cell.getValue().portsProperty().asObject());
@@ -69,12 +77,43 @@ public class HistoryController {
         infoCol.setCellValueFactory(cell ->
                 cell.getValue().fileProperty());
 
+        infoCol.setCellFactory(col -> new TableCell<ScanHistoryDTO, String>() {
+            private final Button btn = new Button();
+
+            {
+                FontIcon icon = new FontIcon("mdi2i-information-outline");
+                icon.getStyleClass().add("porty-history-table-info-icon");
+
+                btn.setGraphic(icon);
+                btn.getStyleClass().add("porty-history-table-info-button");
+                btn.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+
+                btn.setOnAction(e -> {
+                    String file = getItem();
+                    openResultPage(file);
+                });
+            }
+
+            @Override
+            protected void updateItem(String file, boolean empty) {
+                super.updateItem(file, empty);
+
+                if (empty || file == null) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(btn);
+                    setText(null);
+                }
+            }
+        });
+
+        dateCol.getStyleClass().add("left-aligned");
+        addressCol.getStyleClass().add("left-aligned");
+
+        portsCol.getStyleClass().add("center-aligned");
+        infoCol.getStyleClass().add("center-aligned");
+
         historyTable.setItems(tableEntries);
-
-        IScanResultRepository repositoryJSON = ScanResultRepositoryFactory.create(ScanResultRepositoryOption.JSON);
-        IScanResultRepository repositoryBIN = ScanResultRepositoryFactory.create(ScanResultRepositoryOption.BINARY);
-
-        HistoryHandler historyHandler = new HistoryHandler(IScanResultRepository.savePath, List.of(repositoryJSON, repositoryBIN));
 
         ArrayList<ScanSummary> scanFiles = historyHandler.loadAll();
 
@@ -82,7 +121,7 @@ public class HistoryController {
             String address = scanFile.host().address();
             Instant timestamp = scanFile.startedAt();
             String filename = address+"-"+timestamp.getEpochSecond();
-            ScanHistoryTableDTO entry = new ScanHistoryTableDTO(timestamp, address, scanFile.results().size(), filename);
+            ScanHistoryDTO entry = new ScanHistoryDTO(timestamp, address, scanFile.results().size(), filename, scanFile.severity());
             tableEntries.add(entry);
         }
 
@@ -93,9 +132,18 @@ public class HistoryController {
                 .selectedItemProperty()
                 .addListener((obs, oldItem, newItem) -> {
                     if (newItem != null) {
-                        setChartData(newItem.getAddress());
+                        if(!Objects.equals(chartLoadedHost, newItem.getHost())) {
+                            chartLoadedHost = newItem.getHost();
+                            setChartData(newItem.getHost());
+                        }
                     }
                 });
+
+        historyChart.setLegendVisible(false);
+    }
+
+    public void openResultPage(String file){
+
     }
 
     public void setChartData(String host) {
@@ -104,29 +152,44 @@ public class HistoryController {
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         series.setName(host);
 
-        ArrayList<String> scanDates = new ArrayList<String>();
+        ArrayList<Instant> scanDates = new ArrayList<Instant>();
         double portMax = 0;
         double portMin = 0;
 
-        for(ScanHistoryTableDTO scan : tableEntries) {
-            if(Objects.equals(scan.getAddress(), host)) {
-                Instant instant = scan.getDate();
 
+        for(ScanHistoryDTO scan : tableEntries) {
+            if(Objects.equals(scan.getHost(), host)) {
+                portMax = Math.max(portMax, scan.getPorts());
+                scanDates.add(scan.getTimestamp());
                 DateTimeFormatter formatter =
                         DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")
                                 .withZone(ZoneId.systemDefault());
+                XYChart.Data<String, Number> data =
+                        new XYChart.Data<>(formatter.format(scan.getTimestamp()), scan.getPorts());
 
-                String formattedDate = formatter.format(instant);
+                series.getData().add(data);
 
-                scanDates.add(formattedDate);
-                portMax = Math.max(portMax, scan.getPorts());
-
-                series.getData().add(new XYChart.Data<>(formattedDate, scan.getPorts()));
+                data.nodeProperty().addListener((obs, oldNode, newNode) -> {
+                    if (newNode != null) {
+                        applyBarColor(scan, newNode);
+                    }
+                });
             }
         }
 
+
         Collections.sort(scanDates);
-        scanDates = new ArrayList<>(new LinkedHashSet<>(scanDates));
+
+        ArrayList<String> scanDatesAxis = new ArrayList<>();
+
+        DateTimeFormatter formatter =
+                DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm")
+                        .withZone(ZoneId.systemDefault());
+        for(Instant scanDate : scanDates){
+            scanDatesAxis.add(formatter.format(scanDate));
+        }
+
+        scanDatesAxis = new ArrayList<>(new LinkedHashSet<>(scanDatesAxis));
 
         NumberAxis yAxis = (NumberAxis) historyChart.getYAxis();
         yAxis.setAutoRanging(false);
@@ -137,8 +200,20 @@ public class HistoryController {
 
         CategoryAxis xAxis = (CategoryAxis) historyChart.getXAxis();
         xAxis.getCategories().clear();
-        xAxis.setCategories(FXCollections.observableArrayList(scanDates));
+        xAxis.setCategories(FXCollections.observableArrayList(scanDatesAxis));
 
         historyChart.getData().add(series);
+    }
+
+    public void applyBarColor(ScanHistoryDTO entry, Node node){
+        if(entry.getSeverity()<0.33){
+            node.setStyle("-fx-bar-fill: #74E37B;");
+            return;
+        }
+        if(entry.getSeverity()<0.66){
+            node.setStyle("-fx-bar-fill: orange;");
+            return;
+        }
+        node.setStyle("-fx-bar-fill: red;");
     }
 }

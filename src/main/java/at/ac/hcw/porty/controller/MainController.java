@@ -2,13 +2,18 @@ package at.ac.hcw.porty.controller;
 
 import at.ac.hcw.porty.utils.NetUtils;
 import at.ac.hcw.porty.types.interfaces.ModeAwareController;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
+import org.controlsfx.control.ToggleSwitch;
+import org.kordamp.ikonli.javafx.FontIcon;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,11 +30,31 @@ public class MainController {
     private ToggleButton simplicityModeSwitch;
     @FXML
     private Label systemIPAddress;
+    @FXML
+    private ToggleSwitch lightModeSwitch;
+
+    private FontIcon switchIcon;
 
     private ModeAwareController currentController;
 
+    private Scene scene;
+
+    private String lightCss;
+    private String darkCss;
+
     @FXML
     public void initialize() {
+
+        lightCss = getClass().getResource("/at/ac/hcw/porty/styles/styles_light.css").toExternalForm();
+        darkCss  = getClass().getResource("/at/ac/hcw/porty/styles/styles_dark.css").toExternalForm();
+
+        lightModeSwitch.selectedProperty().addListener((obs, oldVal, light) -> {
+            if (scene != null) {
+                scene.getStylesheets().clear();
+                scene.getStylesheets().add(light ? lightCss : darkCss);
+            }
+        });
+
         simplicityModeSwitch.setOnAction(e -> {
             if (currentController == null) return;
 
@@ -40,13 +65,38 @@ public class MainController {
             }
         });
 
+        lightModeSwitch.selectedProperty().addListener((obs, oldVal, isOn) -> {
+            if (switchIcon != null) {
+                switchIcon.setIconLiteral(
+                        isOn ? "mdi2w-weather-sunny"
+                                : "mdi2w-weather-night"
+                );
+            }
+        });
+
         try {
             systemIPAddress.setText(NetUtils.getLanIPv4Address());
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
 
+        Platform.runLater(() -> {
+            StackPane thumb = (StackPane) lightModeSwitch.lookup(".thumb");
+            thumb.getStyleClass().add("porty-switch-thumb-pane");
+
+            switchIcon = new FontIcon("mdi2w-weather-night");
+            switchIcon.getStyleClass().add("porty-switch-icon");
+
+            thumb.getChildren().add(switchIcon);
+        });
+
         navigateToDashboard(null);
+    }
+
+    public void setScene(Scene scene) {
+        this.scene = scene;
+
+        scene.getStylesheets().add(darkCss);
     }
 
     @FXML
