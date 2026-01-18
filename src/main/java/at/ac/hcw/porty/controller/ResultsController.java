@@ -30,6 +30,7 @@ import java.util.concurrent.Executors;
 import javafx.scene.control.Button;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.kordamp.ikonli.javafx.FontIcon;
 
 public class ResultsController {
     private static final Logger logger =
@@ -169,7 +170,10 @@ public class ResultsController {
         Label portLabel = new Label(rightText);
         portLabel.getStyleClass().add(rowStyle);
 
-        Button infoButton = new Button("ℹ");
+        Button infoButton = new Button();
+        FontIcon icon = new FontIcon("mdi2i-information-outline");
+        icon.getStyleClass().add("porty-result-info-icon");
+        infoButton.setGraphic(icon);
         infoButton.getStyleClass().add("porty-port-info-button");
 
         if (technicalReference != null) {
@@ -222,13 +226,14 @@ public class ResultsController {
     }
 
     private void updateRiskBar(float severity) {
-        double maxWidth = redBar.getWidth();
-        double newWidth = (1 - severity) * maxWidth;
+           double maxWidth = redBar.getWidth();
+           double greenWidth = (1 - severity) * maxWidth;
 
-        if (newWidth < 0) newWidth = 0;
-        if (newWidth > maxWidth) newWidth = maxWidth;
+           if (greenWidth < 0) greenWidth = 0;
+           if (greenWidth > maxWidth) greenWidth = maxWidth;
 
-        greenBar.setPrefWidth(newWidth);
+           greenBar.setPrefWidth(greenWidth);
+           redBar.setPrefWidth(maxWidth-greenWidth);
     }
 
     private void openTechnicalReference(TechnicalReference ref) {

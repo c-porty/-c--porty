@@ -6,6 +6,7 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="at.ac.hcw.porty.controller.ResultsController"
@@ -17,23 +18,20 @@
         </VBox>
         <Region HBox.hgrow="ALWAYS" />
         <HBox alignment="CENTER_LEFT">
-            <Button mnemonicParsing="false" onAction="#navigateBack" styleClass="porty-results-button-close">
+            <Button styleClass="porty-results-button-close" mnemonicParsing="false" onAction="#navigateBack">
                 <graphic>
-                    <ImageView fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true">
-                        <Image url="@../images/close-white.png" />
-                    </ImageView>
+                    <FontIcon iconLiteral="mdi2c-close" styleClass="porty-results-button-close-icon"/>
                 </graphic>
             </Button>
-            <!--<Button mnemonicParsing="false" styleClass="" text="Download" />-->
         </HBox>
     </HBox>
 
     <Region prefHeight="32" />
 
-    <StackPane>
-        <Region fx:id="redBar" prefHeight="7" prefWidth="1024" styleClass="porty-risk-high" />
-        <Region fx:id="greenBar" prefHeight="7" prefWidth="1024" styleClass="porty-risk-low" />
-    </StackPane>
+    <HBox>
+        <Region fx:id="greenBar" prefHeight="7" styleClass="porty-risk-low" />
+        <Region fx:id="redBar" prefHeight="7" HBox.hgrow="ALWAYS" styleClass="porty-risk-high" />
+    </HBox>
 
     <Region prefHeight="30" />
 
