@@ -146,6 +146,7 @@ public class DashboardController {
     public void setSimpleMode(){
         advancedOptionControl.setVisible(false);
         advancedOptionControl.setManaged(false);
+        descriptorLabel.textProperty().unbind();
         descriptorLabel.textProperty().bind(I18n.bind("dashboard.quickScan"));
         advancedOptions = false;
     }
@@ -153,6 +154,7 @@ public class DashboardController {
     public void setAdvancedMode(){
         advancedOptionControl.setVisible(true);
         advancedOptionControl.setManaged(true);
+        descriptorLabel.textProperty().unbind();
         descriptorLabel.textProperty().bind(I18n.bind("dashboard.advancedScan"));
         advancedOptions = true;
     }
@@ -160,6 +162,7 @@ public class DashboardController {
     protected void scan(NmapOptions options){
         if(!scanConfigDTO.getHost().isEmpty() && scanConfigDTO.getHost()!=null) {
             startScanButton.setStyle("-fx-background-color: red;");
+            startScanButton.textProperty().unbind();
             startScanButton.textProperty().bind(I18n.bind("dashboard.stopScan"));
             onScan = true;
             new Thread(() -> {
@@ -167,6 +170,7 @@ public class DashboardController {
                 handle.summary().join();
                 Platform.runLater(() -> {
                     startScanButton.setStyle("-fx-background-color: -porty-secondary;");
+                    startScanButton.textProperty().unbind();
                     startScanButton.textProperty().bind(I18n.bind("dashboard.startScan"));
                     onScan = false;
                 });
