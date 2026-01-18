@@ -7,6 +7,7 @@ import at.ac.hcw.porty.types.interfaces.IScanResultRepository;
 import at.ac.hcw.porty.types.records.Host;
 import at.ac.hcw.porty.types.records.ScanSummary;
 import at.ac.hcw.porty.utils.HistoryHandler;
+import at.ac.hcw.porty.utils.I18n;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -24,18 +25,14 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class HistoryController {
-    @FXML
-    private TableView<ScanHistoryDTO> historyTable;
-    @FXML
-    private TableColumn<ScanHistoryDTO, Instant> dateCol;
-    @FXML
-    private TableColumn<ScanHistoryDTO, String> addressCol;
-    @FXML
-    private TableColumn<ScanHistoryDTO, Integer> portsCol;
-    @FXML
-    private TableColumn<ScanHistoryDTO, String> infoCol;
-    @FXML
-    private BarChart<String, Number> historyChart;
+    @FXML private TableView<ScanHistoryDTO> historyTable;
+    @FXML private TableColumn<ScanHistoryDTO, Instant> dateCol;
+    @FXML private TableColumn<ScanHistoryDTO, String> addressCol;
+    @FXML private TableColumn<ScanHistoryDTO, Integer> portsCol;
+    @FXML private TableColumn<ScanHistoryDTO, String> infoCol;
+    @FXML private BarChart<String, Number> historyChart;
+    @FXML private Label historyTitle;
+    @FXML private Button deleteEntryButton;
 
     ObservableList<ScanHistoryDTO> tableEntries = FXCollections.observableArrayList();
 
@@ -48,6 +45,7 @@ public class HistoryController {
 
     @FXML
     public void initialize() {
+        setupLanguageTexts();
 
         dateCol.setCellValueFactory(cell ->
                 cell.getValue().timestampProperty());
@@ -215,5 +213,14 @@ public class HistoryController {
             return;
         }
         node.setStyle("-fx-bar-fill: red;");
+    }
+
+    private void setupLanguageTexts() {
+        historyTitle.textProperty().bind(I18n.bind("history"));
+        dateCol.textProperty().bind(I18n.bind("history.date"));
+        addressCol.textProperty().bind(I18n.bind("history.scanned-address"));
+        portsCol.textProperty().bind(I18n.bind("history.open-ports"));
+        infoCol.textProperty().bind(I18n.bind("history.info"));
+        deleteEntryButton.textProperty().bind(I18n.bind("history.delete-entry"));
     }
 }
