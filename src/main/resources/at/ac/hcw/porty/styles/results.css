@@ -1,7 +1,63 @@
 .porty-results-subtitle{
-    -fx-font-size: 20px;
+    -fx-font-size: 15px;
     -fx-text-fill: -porty-on-background;
     -fx-font-family: "Inter";
+}
+
+.porty-risk-high {
+    -fx-max-width: infinity;
+    -fx-background-color: red;
+    -fx-background-radius: 14;
+}
+
+.porty-risk-low {
+    -fx-max-width: infinity;
+    -fx-background-color: #74E37B;
+    -fx-background-radius: 14;
+}
+
+.porty-result-text {
+    -fx-font-size: 16px;
+}
+
+.porty-results-row-even {
+    -fx-background-color: -porty-grid-even;
+    -fx-text-fill: -porty-on-container;
+    -fx-max-width: infinity;
+    -fx-padding: 5 0 5 10;
+}
+
+.porty-results-row-odd {
+    -fx-background-color: -porty-grid-odd;
+    -fx-text-fill: -porty-on-container;
+    -fx-max-width: infinity;
+    -fx-padding: 5 0 5 10;
+}
+
+.porty-result-border {
+    -fx-border-color: transparent transparent transparent -porty-secondary-border;
+    -fx-border-width: 0 0 0 1;
+}
+
+.porty-results-button-close {
+    -fx-background-color: transparent;
+}
+
+.porty-results-button-close-icon {
+    -fx-icon-color: -porty-on-background;
+    -fx-icon-size: 40px;
+}
+
+.porty-port-info-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: -porty-on-container;
+    -fx-font-size: 18px;
+    -fx-cursor: hand;
+    -fx-padding: 0 6 0 6;
+}
+
+.porty-port-info-button:hover {
+    -fx-text-fill: #00c2ff;
 }
 
 .alert-title {
@@ -21,4 +77,9 @@
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
     -fx-text-fill: white;
+}
+
+.porty-result-info-icon{
+    -fx-icon-color: -porty-on-container;
+    -fx-icon-size: 16px;
 }

@@ -64,7 +64,9 @@ public class PortScanUIListener implements PortScanListener {
                         "Time taken:",
                         String.format("%d s", summary.finishedAt().getEpochSecond()
                             - summary.startedAt().getEpochSecond())
-                    )
+                    ),
+                    500,
+                    200
             );
             ButtonType moreButton = new ButtonType("More", ButtonBar.ButtonData.OK_DONE);
             ButtonType closeButton = new ButtonType("Close", ButtonBar.ButtonData.CANCEL_CLOSE);
@@ -73,7 +75,7 @@ public class PortScanUIListener implements PortScanListener {
             Optional<ButtonType> result = alert.showAndWait();
 
             if (result.isPresent() && result.get() == moreButton) {
-                mainController.navigateToResults();
+                mainController.navigateToResults(summary);
             }
         });
     }

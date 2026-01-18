@@ -47,6 +47,7 @@ dependencies {
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.20.1")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.20.1")
     implementation("com.google.guava:guava:33.5.0-jre")
+    implementation("org.kordamp.ikonli:ikonli-zondicons-pack:12.4.0")
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
     implementation("org.kordamp.ikonli:ikonli-javafx:12.4.0")

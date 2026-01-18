@@ -48,13 +48,15 @@ public final class NmapXMLParser {
                 String service = buildServiceString(svcEl);
 
                 String host = extractHost(hostEl);
-                out.add(new PortScanResult(
-                    new Host(host, config.host().subnet()),
-                    port,
-                    status,
-                    service,
-                    os
-                ));
+                if (status == PortStatus.OPEN) {
+                    out.add(new PortScanResult(
+                        new Host(host, config.host().subnet()),
+                        port,
+                        status,
+                        service,
+                        os
+                    ));
+                }
             }
         }
 
