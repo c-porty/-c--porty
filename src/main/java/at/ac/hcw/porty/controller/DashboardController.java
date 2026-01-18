@@ -224,7 +224,7 @@ public class DashboardController {
         if(!statsEveryTextField.getText().isEmpty() && Double.parseDouble(statsEveryTextField.getText())>0) {
             scanConfigDTO.setStatsEvery(Double.parseDouble(statsEveryTextField.getText()));
         } else{
-            scanConfigDTO.setStatsEvery(-1);
+            scanConfigDTO.setStatsEvery(2);
         }
 
         if(!timeoutTextField.getText().isEmpty() && Double.parseDouble(timeoutTextField.getText())>0) {

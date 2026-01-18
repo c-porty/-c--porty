@@ -22,7 +22,7 @@
             <VBox fx:id="advancedOptionControl" prefHeight="1000.0" prefWidth="100.0">
                 <TitledPane animated="false" styleClass="porty-titled-pane" text="%dashboard.advancedOptions">
                     <VBox styleClass="porty-dashboard-advanced-menu">
-                        <CheckBox fx:id="serviceDetectionCheckbox" mnemonicParsing="false" styleClass="porty-dashboard-menu-checkbox" text="%dashboard.scanServices" />
+                        <CheckBox fx:id="serviceDetectionCheckbox" selected="true" mnemonicParsing="false" styleClass="porty-dashboard-menu-checkbox" text="%dashboard.scanServices" />
                         <CheckBox fx:id="osDetectionCheckbox" mnemonicParsing="false" styleClass="porty-dashboard-menu-checkbox" text="%dashboard.scanOs" />
                         <CheckBox fx:id="tcpConnectScanCheckbox" mnemonicParsing="false" styleClass="porty-dashboard-menu-checkbox" text="%dashboard.enableTcpConnectScan" />
                         <CheckBox fx:id="synScanCheckbox" mnemonicParsing="false" styleClass="porty-dashboard-menu-checkbox" text="%dashboard.enableSynScan" />
