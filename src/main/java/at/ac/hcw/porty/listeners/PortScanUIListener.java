@@ -7,6 +7,7 @@ import at.ac.hcw.porty.types.records.ScanConfig;
 import at.ac.hcw.porty.types.records.ScanSummary;
 import at.ac.hcw.porty.types.interfaces.PortScanListener;
 import at.ac.hcw.porty.utils.AlertManager;
+import at.ac.hcw.porty.utils.I18n;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
@@ -35,41 +36,41 @@ public class PortScanUIListener implements PortScanListener {
     @Override public void onStarted(ScanConfig config) {
         Platform.runLater(() -> {
             outputTextList.clear();
-            outputTextList.add("Started: " + config.host().address());
+            outputTextList.add(I18n.bind("listener.started").get() + " " + config.host().address());
         });
     }
 
     @Override public void onResult(PortScanResult result) {
         Platform.runLater(() -> {
-            outputTextList.add("Result: " + result.host().address() + ":" + result.port() + " -> " + result.status());
+            outputTextList.add(I18n.bind("listener.result").get() + result.host().address() + ":" + result.port() + " -> " + result.status());
         });
     }
 
     @Override public void onComplete(ScanSummary summary) {
         Platform.runLater(() -> {
-            outputTextList.add("Completed: " + summary.results().size() + " ports");
-            outputTextList.add(String.format("Detailed information on host %s: ", summary.host().address()));
+            outputTextList.add(I18n.bind("listener.completed").get() + " " + summary.results().size() + " Ports");
+            outputTextList.add(String.format("%s %s: ", I18n.bind("listener.detailed-information").get(), summary.host().address()));
             for (PortScanResult result : summary.results()) {
                 outputTextList.add(result.toString());
             }
             Alert alert = AlertManager.createAlert(
                     Alert.AlertType.CONFIRMATION,
-                    "Scan successful",
-                    "Short summary",
+                    I18n.bind("listener.scan-successful").get(),
+                    I18n.bind("listener.short-summary").get(),
                     List.of(
-                        "Host:",
+                        I18n.bind("history.scanned-address").get(),
                         summary.host().address(),
-                        "Open ports:",
+                        I18n.bind("history.open-ports").get(),
                         String.valueOf(summary.results().size()),
-                        "Time taken:",
+                        I18n.bind("result.time-taken").get(),
                         String.format("%d s", summary.finishedAt().getEpochSecond()
                             - summary.startedAt().getEpochSecond())
                     ),
                     500,
                     200
             );
-            ButtonType moreButton = new ButtonType("More", ButtonBar.ButtonData.OK_DONE);
-            ButtonType closeButton = new ButtonType("Close", ButtonBar.ButtonData.CANCEL_CLOSE);
+            ButtonType moreButton = new ButtonType(I18n.bind("button.more").get(), ButtonBar.ButtonData.OK_DONE);
+            ButtonType closeButton = new ButtonType(I18n.bind("button.close").get(), ButtonBar.ButtonData.CANCEL_CLOSE);
 
             alert.getButtonTypes().setAll(moreButton, closeButton);
             Optional<ButtonType> result = alert.showAndWait();
@@ -82,13 +83,13 @@ public class PortScanUIListener implements PortScanListener {
 
     @Override public void onError(Throwable t) {
         Platform.runLater(() -> {
-            outputTextList.add("Error: " + t);
+            outputTextList.add(I18n.bind("listener.error").get() + " " + t);
         });
     }
 
     @Override public void onProgress(String msg) {
         Platform.runLater(() -> {
-            outputTextList.add("Progress: " + msg);
+            outputTextList.add(I18n.bind("listener.progress").get() + " " + msg);
 
             Pattern pattern = Pattern.compile("(\\d+(?:\\.\\d+)?)%");
             Matcher matcher = pattern.matcher(msg);
@@ -106,7 +107,7 @@ public class PortScanUIListener implements PortScanListener {
 
     @Override public void onCancel() {
         Platform.runLater(() -> {
-            outputTextList.add("Task cancelled");
+            outputTextList.add(I18n.bind("listener.cancelled").get());
         });
     }
 }
