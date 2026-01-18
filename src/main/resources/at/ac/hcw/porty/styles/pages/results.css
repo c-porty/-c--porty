@@ -60,25 +60,6 @@
     -fx-text-fill: #00c2ff;
 }
 
-.alert-title {
-    -fx-font-size: 15px;
-    -fx-font-weight: bold;
-    -fx-font-family: "Inter";
-}
-
-.alert-text {
-    -fx-font-size: 15px;
-    -fx-font-family: "Inter";
-}
-
-.dialog-pane .button:default,
-.dialog-pane .button:default:focused {
-    -fx-background-color: -porty-primary;
-    -fx-focus-color: transparent;
-    -fx-faint-focus-color: transparent;
-    -fx-text-fill: white;
-}
-
 .porty-result-info-icon{
     -fx-icon-color: -porty-on-container;
     -fx-icon-size: 16px;

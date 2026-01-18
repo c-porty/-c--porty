@@ -59,7 +59,7 @@ public class PortScanUIListener implements PortScanListener {
             }
 
 
-            Alert alert = AlertManager.createAlert(
+            Alert alert = AlertManager.createGridAlert(
                     Alert.AlertType.CONFIRMATION,
                     I18n.bind("listener.scan-successful").get(),
                     I18n.bind("listener.short-summary").get(),

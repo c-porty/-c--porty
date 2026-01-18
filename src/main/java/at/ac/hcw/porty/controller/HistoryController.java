@@ -8,6 +8,7 @@ import at.ac.hcw.porty.types.interfaces.IScanResultRepository;
 import at.ac.hcw.porty.types.records.Host;
 import at.ac.hcw.porty.types.records.PortScanResult;
 import at.ac.hcw.porty.types.records.ScanSummary;
+import at.ac.hcw.porty.utils.AlertManager;
 import at.ac.hcw.porty.utils.HistoryHandler;
 import at.ac.hcw.porty.utils.I18n;
 import javafx.collections.FXCollections;
@@ -155,6 +156,16 @@ public class HistoryController {
 
     public void openResultPage(String file){
 
+    }
+
+    @FXML
+    public void onDropButtonClick(){
+        Alert alert = AlertManager.createDangerAlert("Delete selected history file?", "Delete");
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.isPresent() && result.get().getButtonData()== ButtonBar.ButtonData.OK_DONE) {
+            System.out.println("DELETE");
+        }
     }
 
     public void setChartData(String host) {
