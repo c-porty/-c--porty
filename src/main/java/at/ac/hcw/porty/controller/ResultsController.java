@@ -5,6 +5,7 @@ import at.ac.hcw.porty.types.records.PortScanResult;
 import at.ac.hcw.porty.types.records.ScanSummary;
 import at.ac.hcw.porty.types.records.TechnicalReference;
 import at.ac.hcw.porty.utils.AlertManager;
+import at.ac.hcw.porty.utils.I18n;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -37,14 +38,11 @@ public class ResultsController {
             LoggerFactory.getLogger(ResultsController.class);
     private static final ExecutorService BROWSER_THREAD = Executors.newCachedThreadPool();
 
-    @FXML
-    private Label dateTimeLabel;
-    @FXML
-    private GridPane resultGrid;
-    @FXML
-    private Region redBar;
-    @FXML
-    private Region greenBar;
+    @FXML private Label dateTimeLabel;
+    @FXML private GridPane resultGrid;
+    @FXML private Region redBar;
+    @FXML private Region greenBar;
+    @FXML private Label resultTitle;
 
     private MainController mainController;
     private ScanSummary scanSummary;
@@ -75,14 +73,21 @@ public class ResultsController {
     }
 
     public void displayScanSummary() {
+        setupLanguageTexts();
 
         ArrayList<ScanResultDTO> scanOverview = new ArrayList<>();
-        scanOverview.add(new ScanResultDTO( "Scanned Address", scanSummary.host().address()));
-        scanOverview.add(new ScanResultDTO("Time taken", scanSummary.finishedAt().getEpochSecond() - scanSummary.startedAt().getEpochSecond() + "s"));
+        scanOverview.add(new ScanResultDTO(I18n.bind("history.scanned-address").get(), scanSummary.host().address()));
+        scanOverview.add(new ScanResultDTO(I18n.bind(
+                "result.time-taken").get(),
+                scanSummary.finishedAt().getEpochSecond() - scanSummary.startedAt().getEpochSecond() + "s")
+        );
         if(!scanSummary.detectedOs().isEmpty()) {
-            scanOverview.add(new ScanResultDTO( "Operating system", scanSummary.detectedOs()));
+            scanOverview.add(new ScanResultDTO( I18n.bind("result.os").get(), scanSummary.detectedOs()));
         }
-        scanOverview.add(new ScanResultDTO( "Open ports", String.valueOf(scanSummary.results().size())));
+        scanOverview.add(new ScanResultDTO(
+                I18n.bind("history.open-ports").get(),
+                String.valueOf(scanSummary.results().size())
+        ));
         if(scanSummary.host().subnet()==null) {
             int i = 1;
             for (PortScanResult port : scanSummary.results()) {
@@ -93,7 +98,7 @@ public class ResultsController {
                 i++;
             }
         }
-        scanOverview.add(new ScanResultDTO( "Average security risk", getRiskLabel(scanSummary.severity())));
+        scanOverview.add(new ScanResultDTO(I18n.bind("result.avg-risk").get(), getRiskLabel(scanSummary.severity())));
 
         addBlock(scanOverview);
 
@@ -129,11 +134,11 @@ public class ResultsController {
 
     private String getRiskLabel(float severity) {
         if (severity < 0.33f) {
-            return "Low";
+            return I18n.bind("result.risk.low").get();
         } else if (severity < 0.66f) {
-            return "Medium";
+            return I18n.bind("result.risk.medium").get();
         } else {
-            return "High";
+            return I18n.bind("result.risk.high").get();
         }
     }
 
@@ -158,6 +163,10 @@ public class ResultsController {
         right.getStyleClass().addAll(rowStyle, "porty-result-border");
 
         addRow(left, right, firstRow, lastRow);
+    }
+
+    private void setupLanguageTexts() {
+        resultTitle.textProperty().bind(I18n.bind("result.title"));
     }
 
     private void addPortRow(String leftText, String rightText, TechnicalReference technicalReference, boolean firstRow, boolean lastRow, boolean even) {
@@ -242,8 +251,8 @@ public class ResultsController {
             logger.warn("Desktop browsing not supported on this platform");
             Alert warning = AlertManager.createAlert(
                 Alert.AlertType.WARNING,
-                    "Failed to open!",
-                    "Desktop browsing not supported on this platform",
+                    I18n.bind("result.open-failed.title").get(),
+                    I18n.bind("result.open-failed.body").get(),
                 new ArrayList<>(0),
                     400,
                     100

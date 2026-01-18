@@ -13,7 +13,7 @@
       prefHeight="960.0" prefWidth="1184.0">
     <HBox>
         <VBox spacing="-8">
-            <Label styleClass="porty-title-large" text="Scan result" />
+            <Label fx:id="resultTitle" styleClass="porty-title-large" text="%result.title" />
             <Label fx:id="dateTimeLabel" styleClass="porty-results-subtitle" />
         </VBox>
         <Region HBox.hgrow="ALWAYS" />
