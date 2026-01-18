@@ -2,6 +2,7 @@ package at.ac.hcw.porty.listeners;
 
 import at.ac.hcw.porty.controller.DashboardController;
 import at.ac.hcw.porty.controller.MainController;
+import at.ac.hcw.porty.types.enums.PortStatus;
 import at.ac.hcw.porty.types.records.PortScanResult;
 import at.ac.hcw.porty.types.records.ScanConfig;
 import at.ac.hcw.porty.types.records.ScanSummary;
@@ -52,7 +53,12 @@ public class PortScanUIListener implements PortScanListener {
             outputTextList.add(String.format("%s %s: ", I18n.bind("listener.detailed-information").get(), summary.host().address()));
             for (PortScanResult result : summary.results()) {
                 outputTextList.add(result.toString());
+                if(result.status()== PortStatus.OPEN){
+                    openPorts++;
+                }
             }
+
+
             Alert alert = AlertManager.createAlert(
                     Alert.AlertType.CONFIRMATION,
                     I18n.bind("listener.scan-successful").get(),

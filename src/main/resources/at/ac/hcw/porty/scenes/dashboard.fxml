@@ -30,6 +30,12 @@
                         <TextField fx:id="statsEveryTextField" promptText="%dashboard.statsEvery" />
                         <CheckBox fx:id="ipMaskCheckbox" mnemonicParsing="false" styleClass="porty-dashboard-menu-checkbox" text="%dashboard.includeSubnetMask" />
                         <TextField fx:id="ipMaskTextField" promptText="%dashboard.cidrSubnetMask" />
+                        <CheckBox fx:id="portRangeCheckbox" mnemonicParsing="false" styleClass="porty-dashboard-menu-checkbox" text="Set Port Range" />
+                        <HBox>
+                            <TextField fx:id="portRangeStartTextField" promptText="Start" />
+                            <Label fx:id="portRangeConnector" alignment="CENTER"  prefWidth="50" text="–"  styleClass="porty-connector-label" />
+                            <TextField fx:id="portRangeEndTextField" promptText="End" />
+                        </HBox>
                     </VBox>
                 </TitledPane>
 
@@ -38,7 +44,6 @@
                 </StackPane>
             </VBox>
         </VBox>
-
         <VBox prefHeight="200.0" prefWidth="500.0" styleClass="porty-dashboard-scan-view">
             <Label styleClass="porty-dashboard-header" text="%dashboard.scanStatus" />
             <StackPane>

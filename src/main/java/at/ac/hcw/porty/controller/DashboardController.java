@@ -14,8 +14,10 @@ import at.ac.hcw.porty.types.enums.ScanStrategy;
 import at.ac.hcw.porty.types.interfaces.PortScanListener;
 import at.ac.hcw.porty.types.interfaces.ScanHandle;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.collections.ListChangeListener;
@@ -40,6 +42,10 @@ public class DashboardController {
     @FXML private ProgressIndicator scanProgressIndicator;
     @FXML private Label dashboardTitle;
     @FXML private Label scanLabel;
+    @FXML private CheckBox portRangeCheckbox;
+    @FXML private TextField portRangeStartTextField;
+    @FXML private TextField portRangeEndTextField;
+    @FXML private Label portRangeConnector;
     @FXML private Tooltip resultSaveTooltip;
 
     private MainController mainController;
@@ -111,11 +117,56 @@ public class DashboardController {
             }
         });
 
+        TextFormatter<Integer> portRangeStartFormatter = new TextFormatter<>(change -> {
+            String newText = change.getControlNewText();
+
+            if (newText.isEmpty()) {
+                return change;
+            }
+
+            try {
+                Integer.parseInt(newText);
+                return change;
+            } catch (NumberFormatException e) {
+                return null;
+            }
+        });
+
+        TextFormatter<Integer> portRangeEndFormatter = new TextFormatter<>(change -> {
+            String newText = change.getControlNewText();
+
+            if (newText.isEmpty()) {
+                return change;
+            }
+
+            try {
+                Integer.parseInt(newText);
+                return change;
+            } catch (NumberFormatException e) {
+                return null;
+            }
+        });
+
+
         ipMaskTextField.disableProperty().bind(ipMaskCheckbox.selectedProperty().not());
+
+        portRangeStartTextField.disableProperty().bind(portRangeCheckbox.selectedProperty().not());
+        portRangeEndTextField.disableProperty().bind(portRangeCheckbox.selectedProperty().not());
+
+        PseudoClass INACTIVE = PseudoClass.getPseudoClass("inactive");
+        portRangeConnector.pseudoClassStateChanged(INACTIVE, true);
+        portRangeCheckbox.selectedProperty().addListener((obs, oldVal, selected) -> {
+            portRangeConnector.pseudoClassStateChanged(
+                    INACTIVE,
+                    !selected
+            );
+        });
 
         timeoutTextField.setTextFormatter(longFormatter);
         statsEveryTextField.setTextFormatter(doubleFormatter);
         ipMaskTextField.setTextFormatter(intFormatter);
+        portRangeStartTextField.setTextFormatter(portRangeStartFormatter);
+        portRangeEndTextField.setTextFormatter(portRangeEndFormatter);
 
         setSimpleMode();
         setProgress(0.0);
@@ -192,7 +243,7 @@ public class DashboardController {
     protected void simpleScan(){
         scanConfigDTO.setHost(ipTextField.getText());
         NmapOptions options = new NmapOptions(saveScanCheckbox.isSelected());
-        scan(options);
+        scan(options, new PortRange(-1,-1));
     }
 
     protected void advancedScan(){
@@ -207,7 +258,7 @@ public class DashboardController {
                 saveScanCheckbox.isSelected(),
                 scanConfigDTO.isIncludeSubnetMask()
         );
-        scan(options);
+        scan(options, scanConfigDTO.getPortRange());
     }
 
     public void setProgress(double percent){
@@ -236,8 +287,7 @@ public class DashboardController {
         if(ipMaskCheckbox.isSelected()){
             scanConfigDTO.setIncludeSubnetMask(true);
             scanConfigDTO.setSubnetMask(!ipMaskTextField.getText().isEmpty()? Integer.parseInt(ipMaskTextField.getText()): null );
-        }
-        else{
+        } else{
             scanConfigDTO.setIncludeSubnetMask(false);
         }
     }

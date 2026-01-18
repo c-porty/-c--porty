@@ -221,3 +221,14 @@
 .porty-switch-icon:selected .thumb-area {
     -fx-background-color: #4F378B;
 }
+
+.porty-connector-label{
+        -fx-font-size: 16px;
+        -fx-font-weight: bold;
+        -fx-text-fill: -porty-on-container;
+        -fx-font-family: "Inter";
+}
+
+.porty-connector-label:inactive{
+        -fx-text-fill: -porty-on-container-inactive;
+}

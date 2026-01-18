@@ -1,5 +1,6 @@
 package at.ac.hcw.porty.dto;
 
+import at.ac.hcw.porty.types.records.PortRange;
 import javafx.beans.property.*;
 
 import java.time.Duration;
@@ -14,10 +15,11 @@ public class ScanConfigDTO {
     private final DoubleProperty statsEvery= new SimpleDoubleProperty();
     private final BooleanProperty includeSubnetMask = new SimpleBooleanProperty();
     private final IntegerProperty subnetMask = new SimpleIntegerProperty();
+    private final ObjectProperty<PortRange> portRange = new SimpleObjectProperty<>();
 
     public ScanConfigDTO() {}
 
-    public ScanConfigDTO(String host, boolean serviceDetection, boolean osDetection, boolean tcpConnectScan, boolean synScan, Duration hostTimeout, double statsEvery, boolean includeSubnetMask, int subnetMask) {
+    public ScanConfigDTO(String host, boolean serviceDetection, boolean osDetection, boolean tcpConnectScan, boolean synScan, Duration hostTimeout, double statsEvery, boolean includeSubnetMask, int subnetMask, PortRange portRange) {
         this.host.set(host);
         this.serviceDetection.set(serviceDetection);
         this.osDetection.set(osDetection);
@@ -27,6 +29,7 @@ public class ScanConfigDTO {
         this.statsEvery.set(statsEvery);
         this.includeSubnetMask.set(includeSubnetMask);
         this.subnetMask.set(subnetMask);
+        this.portRange.set(portRange);
     }
 
     public String getHost() {
@@ -101,6 +104,14 @@ public class ScanConfigDTO {
         return subnetMask;
     }
 
+    public PortRange getPortRange() {
+        return portRange.get();
+    }
+
+    public ObjectProperty<PortRange> portRangeProperty() {
+        return portRange;
+    }
+
     public void setHost(String host){
         this.host.set(host);
     }
@@ -117,4 +128,7 @@ public class ScanConfigDTO {
 
     public void setIncludeSubnetMask(boolean includeSubnetMask){this.includeSubnetMask.set(includeSubnetMask);}
     public void setSubnetMask(int subnetMask){this.subnetMask.set(subnetMask);}
+
+    public void setPortRange(PortRange portRange){ this.portRange.set(portRange);}
+    public void setPortRange(int start, int end){ this.portRange.set(new PortRange(start, end));}
 }

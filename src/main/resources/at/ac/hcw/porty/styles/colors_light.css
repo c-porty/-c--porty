@@ -18,6 +18,7 @@
     -porty-switch-container: #F7F7F7;
     -porty-switch-active: #FFFFFF;
     -porty-switch-icon: #000000;
+    -porty-on-container-inactive: #D2D2D2;
     -porty-grid-odd: #D9D9D9;
     -porty-grid-even: #F7F7F7;
 }

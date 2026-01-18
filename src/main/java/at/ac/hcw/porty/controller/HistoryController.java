@@ -2,9 +2,11 @@ package at.ac.hcw.porty.controller;
 
 import at.ac.hcw.porty.dto.ScanHistoryDTO;
 import at.ac.hcw.porty.repositories.ScanResultRepositoryFactory;
+import at.ac.hcw.porty.types.enums.PortStatus;
 import at.ac.hcw.porty.types.enums.ScanResultRepositoryOption;
 import at.ac.hcw.porty.types.interfaces.IScanResultRepository;
 import at.ac.hcw.porty.types.records.Host;
+import at.ac.hcw.porty.types.records.PortScanResult;
 import at.ac.hcw.porty.types.records.ScanSummary;
 import at.ac.hcw.porty.utils.HistoryHandler;
 import at.ac.hcw.porty.utils.I18n;
@@ -123,8 +125,14 @@ public class HistoryController {
         for(ScanSummary scanFile : scanFiles){
             String address = scanFile.host().address();
             Instant timestamp = scanFile.startedAt();
+            int openPorts =0;
+            for(PortScanResult port: scanFile.results()) {
+                if(port.status()== PortStatus.OPEN){
+                    openPorts++;
+                }
+            }
             String filename = address+"-"+timestamp.getEpochSecond();
-            ScanHistoryDTO entry = new ScanHistoryDTO(timestamp, address, scanFile.results().size(), filename, scanFile.severity());
+            ScanHistoryDTO entry = new ScanHistoryDTO(timestamp, address, openPorts, filename, scanFile.severity());
             tableEntries.add(entry);
         }
 
