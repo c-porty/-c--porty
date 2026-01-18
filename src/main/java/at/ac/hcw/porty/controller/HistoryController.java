@@ -5,7 +5,6 @@ import at.ac.hcw.porty.repositories.ScanResultRepositoryFactory;
 import at.ac.hcw.porty.types.enums.PortStatus;
 import at.ac.hcw.porty.types.enums.ScanResultRepositoryOption;
 import at.ac.hcw.porty.types.interfaces.IScanResultRepository;
-import at.ac.hcw.porty.types.records.Host;
 import at.ac.hcw.porty.types.records.PortScanResult;
 import at.ac.hcw.porty.types.records.ScanSummary;
 import at.ac.hcw.porty.utils.AlertManager;
@@ -23,6 +22,9 @@ import javafx.scene.control.*;
 import javafx.util.Duration;
 import org.kordamp.ikonli.javafx.FontIcon;
 
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -79,7 +81,7 @@ public class HistoryController {
         infoCol.setCellValueFactory(cell ->
                 cell.getValue().fileProperty());
 
-        infoCol.setCellFactory(col -> new TableCell<ScanHistoryDTO, String>() {
+        infoCol.setCellFactory(col -> new TableCell<>() {
             private final Button btn = new Button();
 
             {
@@ -160,11 +162,22 @@ public class HistoryController {
 
     @FXML
     public void onDropButtonClick(){
-        Alert alert = AlertManager.createDangerAlert("Delete selected history file?", "Delete");
-        Optional<ButtonType> result = alert.showAndWait();
+        ScanHistoryDTO selected = historyTable.getSelectionModel().getSelectedItem();
+        if(selected!=null) {
+            Alert alert = AlertManager.createDangerAlert("Delete selected history file?", "Delete");
+            Optional<ButtonType> result = alert.showAndWait();
 
-        if (result.isPresent() && result.get().getButtonData()== ButtonBar.ButtonData.OK_DONE) {
-            System.out.println("DELETE");
+            if (result.isPresent() && result.get().getButtonData() == ButtonBar.ButtonData.OK_DONE) {
+                Path path = Paths.get("src", "main", "saves", selected.getFile()+".json");
+                File save = path.toFile();
+                if (save.delete()) {
+                    System.out.println("Deleted the file: " + save.getName());
+                    historyTable.getItems().remove(selected);
+
+                } else {
+                    System.out.println("Failed to delete the file.");
+                }
+            }
         }
     }
 
@@ -174,7 +187,7 @@ public class HistoryController {
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         series.setName(host);
 
-        ArrayList<Instant> scanDates = new ArrayList<Instant>();
+        ArrayList<Instant> scanDates = new ArrayList<>();
         double portMax = 0;
         double portMin = 0;
 
