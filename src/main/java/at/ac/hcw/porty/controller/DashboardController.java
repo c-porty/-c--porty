@@ -22,6 +22,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.collections.ListChangeListener;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 public class DashboardController {
@@ -46,6 +47,7 @@ public class DashboardController {
     @FXML private TextField portRangeStartTextField;
     @FXML private TextField portRangeEndTextField;
     @FXML private Label portRangeConnector;
+    @FXML private Label scanProgressPercentage;
     @FXML private Tooltip resultSaveTooltip;
 
     private MainController mainController;
@@ -71,6 +73,17 @@ public class DashboardController {
                 }
             }
         });
+
+        scanProgressIndicator.setProgress(0.0);
+
+        scanProgressIndicator.progressProperty().addListener((ov, oldValue, progress) -> {
+            if (progress.doubleValue() >= 1.0) {
+                scanProgressPercentage.setText("Done");
+            } else {
+                scanProgressPercentage.setText((int) (progress.doubleValue() * 100) + "%");
+            }
+        });
+
 
         TextFormatter<Long> longFormatter = new TextFormatter<>(change -> {
             String newText = change.getControlNewText();
@@ -169,7 +182,6 @@ public class DashboardController {
         portRangeEndTextField.setTextFormatter(portRangeEndFormatter);
 
         setSimpleMode();
-        setProgress(0.0);
     }
 
     public void setMainController(MainController mainController) {
@@ -289,6 +301,13 @@ public class DashboardController {
             scanConfigDTO.setSubnetMask(!ipMaskTextField.getText().isEmpty()? Integer.parseInt(ipMaskTextField.getText()): null );
         } else{
             scanConfigDTO.setIncludeSubnetMask(false);
+        }
+
+        if(portRangeCheckbox.isSelected()){
+            scanConfigDTO.setPortRange(!portRangeStartTextField.getText().isEmpty()?Integer.parseInt(portRangeStartTextField.getText()): -1,
+                    !portRangeEndTextField.getText().isEmpty()?Integer.parseInt(portRangeEndTextField.getText()): -1);
+        } else{
+            scanConfigDTO.setPortRange(new PortRange(-1,-1));
         }
     }
 

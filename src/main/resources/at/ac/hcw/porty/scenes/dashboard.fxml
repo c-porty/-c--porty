@@ -49,6 +49,7 @@
             <StackPane>
                 <ProgressIndicator fx:id="scanProgressIndicator" styleClass="porty-dashboard-progress-indicator" />
                 <Circle radius="75.0" styleClass="porty-dashboard-progress-indicator-hole"/>
+                <Label fx:id="scanProgressPercentage" text="Scan" styleClass="porty-dashboard-progress-indicator-percentage"/>
             </StackPane>
             <TitledPane fx:id="scanProgressConsoleTitledPane" animated="false" styleClass="porty-titled-pane" text="%dashboard.console">
                 <ListView fx:id="scanProgressConsole" layoutX="1.0" prefHeight="400.0" prefWidth="500.0" styleClass="porty-console" />
