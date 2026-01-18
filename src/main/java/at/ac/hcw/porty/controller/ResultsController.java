@@ -128,9 +128,9 @@ public class ResultsController {
     private void addBlock(ArrayList<ScanResultDTO> entries){
         for(int i=0;i<entries.size();i++){
             if(entries.get(i).getAdditionalInfo()) {
-                addPortRow(entries.get(i).getProperty(), entries.get(i).getEntry(), entries.get(i).getTechnicalReference(),i == 0, i == entries.size() - 1, i % 2 == 0);
+                addPortRow(entries.get(i).getProperty(), entries.get(i).getEntry(), entries.get(i).getTechnicalReference(),i == 0, i == entries.size() - 1, (i+1) % 2 == 0);
             } else{
-                addRow(entries.get(i).getProperty(), entries.get(i).getEntry(), i == 0, i == entries.size() - 1, i % 2 == 0);
+                addRow(entries.get(i).getProperty(), entries.get(i).getEntry(), i == 0, i == entries.size() - 1, (i+1) % 2 == 0);
             }
         }
     }

@@ -21,21 +21,21 @@
 }
 
 .porty-results-row-even {
-    -fx-background-color: #625B71;
-    -fx-text-fill: #FFFFFF;
+    -fx-background-color: -porty-grid-even;
+    -fx-text-fill: -porty-on-container;
     -fx-max-width: infinity;
     -fx-padding: 5 0 5 10;
 }
 
 .porty-results-row-odd {
-    -fx-background-color: #332D41;
-    -fx-text-fill: #FFFFFF;
+    -fx-background-color: -porty-grid-odd;
+    -fx-text-fill: -porty-on-container;
     -fx-max-width: infinity;
     -fx-padding: 5 0 5 10;
 }
 
 .porty-result-border {
-    -fx-border-color: transparent transparent transparent #FFFFFF;
+    -fx-border-color: transparent transparent transparent -porty-secondary-border;
     -fx-border-width: 0 0 0 1;
 }
 
@@ -47,7 +47,7 @@
 
 .porty-port-info-button {
     -fx-background-color: transparent;
-    -fx-text-fill: white;
+    -fx-text-fill: -porty-on-container;
     -fx-font-size: 16px;
     -fx-cursor: hand;
     -fx-padding: 0 6 0 6;

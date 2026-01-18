@@ -2,7 +2,6 @@ package at.ac.hcw.porty.controller;
 
 import at.ac.hcw.porty.types.records.ScanSummary;
 import at.ac.hcw.porty.utils.NetUtils;
-import at.ac.hcw.porty.types.interfaces.ModeAwareController;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
