@@ -33,4 +33,5 @@ module at.ac.hcw.porty {
     exports at.ac.hcw.porty;
     exports at.ac.hcw.porty.controller;
     opens at.ac.hcw.porty.controller to javafx.fxml;
+    opens at.ac.hcw.porty.utils to com.fasterxml.jackson.databind, com.fasterxml.jackson.dataformat.xml;
 }

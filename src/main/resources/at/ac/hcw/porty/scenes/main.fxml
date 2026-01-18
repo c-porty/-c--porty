@@ -11,17 +11,17 @@
         <VBox prefHeight="960.0" prefWidth="256.0" styleClass="porty-nav-bar">
                 <Label prefHeight="17.0" prefWidth="109.0" styleClass="porty-nav-title" text="Porty" />
             <VBox styleClass="porty-nav-buttons">
-                <Button mnemonicParsing="false" onAction="#navigateToDashboard" styleClass="porty-nav-button" text="Home" >
+                <Button fx:id="navHome" mnemonicParsing="false" onAction="#navigateToDashboard" styleClass="porty-nav-button" text="%home" >
                     <graphic>
                         <FontIcon iconLiteral="mdi2h-home" styleClass="porty-menu-icon"/>
                     </graphic>
                 </Button>
-                <Button mnemonicParsing="false" onAction="#navigateToHistory" styleClass="porty-nav-button" text="History">
+                <Button fx:id="navHistory" mnemonicParsing="false" onAction="#navigateToHistory" styleClass="porty-nav-button" text="%history">
                     <graphic>
                         <FontIcon iconLiteral="mdi2h-history" styleClass="porty-menu-icon"/>
                     </graphic>
                 </Button>
-                <Button mnemonicParsing="false" onAction="#navigateToCredits" styleClass="porty-nav-button" text="About us">
+                <Button fx:id="navAboutUs" mnemonicParsing="false" onAction="#navigateToCredits" styleClass="porty-nav-button" text="%about-us">
                     <graphic>
                         <FontIcon iconLiteral="mdi2a-account" styleClass="porty-menu-icon"/>
                     </graphic>
@@ -29,7 +29,7 @@
             </VBox>
          <Region styleClass="porty-nav-spacer" VBox.vgrow="ALWAYS" />
             <VBox styleClass="porty-own-ip-field">
-                <Label styleClass="porty-label" text="Your IP Address:" />
+                <Label fx:id="yourIpAddress" styleClass="porty-label" text="%your-ip-address" />
                 <Label fx:id="systemIPAddress" styleClass="porty-label" text="192.168.0.3" />
             </VBox>
         </VBox>
@@ -41,13 +41,13 @@
                     <ToggleButton fx:id="simplicityModeSwitch" mnemonicParsing="false" styleClass="porty-switch-text">
                         <graphic>
                             <HBox styleClass="porty-switch-text-box">
-                                <Label text="Simple">
+                                <Label fx:id="simpleOption" text="%simple">
                                     <styleClass>
                                     <String fx:value="porty-switch-label" />
                                     <String fx:value="left" />
                                     </styleClass>
                                 </Label>
-                                <Label text="Advanced">
+                                <Label fx:id="advancedOption" text="%advanced">
                                     <styleClass>
                                         <String fx:value="porty-switch-label" />
                                         <String fx:value="right" />
@@ -57,8 +57,13 @@
                         </graphic>
                     </ToggleButton>
                     <Region styleClass="porty-top-bar-spacer" HBox.hgrow="ALWAYS" />
-                    <ToggleSwitch fx:id="lightModeSwitch" mnemonicParsing="false" styleClass="porty-switch-icon" />
-                    <Button fx:id="languageButton" mnemonicParsing="false" styleClass="porty-top-bar-button" text="EN" />
+                    <ToggleSwitch fx:id="lightModeSwitch" styleClass="porty-switch-icon" />
+                    <MenuButton fx:id="languageMenu" styleClass="porty-top-bar-button">
+                        <items>
+                            <RadioMenuItem fx:id="langDeItem" text="%german"/>
+                            <RadioMenuItem fx:id="langEnItem" text="%english"/>
+                        </items>
+                    </MenuButton>
                 </HBox>
             </top>
             <center>

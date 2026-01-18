@@ -1,24 +1,27 @@
 package at.ac.hcw.porty;
 
 import at.ac.hcw.porty.controller.MainController;
+import at.ac.hcw.porty.utils.I18n;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.Objects;
+import java.util.ResourceBundle;
 
 public class PortScanApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(PortScanApplication.class.getResource("scenes/main.fxml"));
+        ResourceBundle rb = I18n.getBundle();
+
+        FXMLLoader fxmlLoader = new FXMLLoader(PortScanApplication.class.getResource("scenes/main.fxml"), rb);
         Scene scene = new Scene(fxmlLoader.load(), 1440, 960);
         stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/at/ac/hcw/porty/images/logo_32x32.png"))));
-        stage.setTitle("Porty - Portscanner");
+        stage.titleProperty().bind(I18n.bind("app.title"));
 
         MainController controller = fxmlLoader.getController();
         controller.setScene(scene);

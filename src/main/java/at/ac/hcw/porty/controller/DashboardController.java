@@ -5,6 +5,7 @@ import at.ac.hcw.porty.listeners.PortScanCLIListener;
 import at.ac.hcw.porty.listeners.PortScanUIListener;
 import at.ac.hcw.porty.scanner.Scanner;
 import at.ac.hcw.porty.scanner.ScannerFactory;
+import at.ac.hcw.porty.utils.I18n;
 import at.ac.hcw.porty.types.records.Host;
 import at.ac.hcw.porty.types.records.NmapOptions;
 import at.ac.hcw.porty.types.records.PortRange;
@@ -21,39 +22,25 @@ import javafx.collections.ListChangeListener;
 import javafx.scene.layout.VBox;
 
 public class DashboardController {
-    @FXML
-    private Button startScanButton;
-    @FXML
-    private ListView<String> scanProgressConsole;
-    @FXML
-    private TextField ipTextField;
-    @FXML
-    private VBox advancedOptionControl;
-    @FXML
-    private Label descriptorLabel;
-    @FXML
-    private CheckBox serviceDetectionCheckbox;
-    @FXML
-    private CheckBox osDetectionCheckbox;
-    @FXML
-    private CheckBox tcpConnectScanCheckbox;
-    @FXML
-    private CheckBox synScanCheckbox;
-    @FXML
-    private TextField timeoutTextField;
-    @FXML
-    private TextField statsEveryTextField;
-    @FXML
-    private CheckBox saveScanCheckbox;
-    @FXML
-    private CheckBox ipMaskCheckbox;
-    @FXML
-    private TextField ipMaskTextField;
-    @FXML
-    private ProgressIndicator scanProgressIndicator;
+    @FXML private Button startScanButton;
+    @FXML private ListView<String> scanProgressConsole;
+    @FXML private TextField ipTextField;
+    @FXML private VBox advancedOptionControl;
+    @FXML private Label descriptorLabel;
+    @FXML private CheckBox serviceDetectionCheckbox;
+    @FXML private CheckBox osDetectionCheckbox;
+    @FXML private CheckBox tcpConnectScanCheckbox;
+    @FXML private CheckBox synScanCheckbox;
+    @FXML private TextField timeoutTextField;
+    @FXML private TextField statsEveryTextField;
+    @FXML private CheckBox saveScanCheckbox;
+    @FXML private CheckBox ipMaskCheckbox;
+    @FXML private TextField ipMaskTextField;
+    @FXML private ProgressIndicator scanProgressIndicator;
+    @FXML private Label dashboardTitle;
+    @FXML private Label scanLabel;
 
     private MainController mainController;
-
     ObservableList<String> consoleLines = FXCollections.observableArrayList();
 
     private boolean onScan = false;
@@ -66,6 +53,8 @@ public class DashboardController {
     public void initialize() {
         scanConfigDTO = new ScanConfigDTO();
         scanProgressConsole.setItems(consoleLines);
+
+        setupLanguageTexts();
 
         consoleLines.addListener((ListChangeListener<String>) change -> {
             while (change.next()) {
@@ -157,28 +146,28 @@ public class DashboardController {
     public void setSimpleMode(){
         advancedOptionControl.setVisible(false);
         advancedOptionControl.setManaged(false);
-        descriptorLabel.setText("Quick Device Scan");
+        descriptorLabel.textProperty().bind(I18n.bind("dashboard.quickScan"));
         advancedOptions = false;
     }
 
     public void setAdvancedMode(){
         advancedOptionControl.setVisible(true);
         advancedOptionControl.setManaged(true);
-        descriptorLabel.setText("Scan with preferences");
+        descriptorLabel.textProperty().bind(I18n.bind("dashboard.advancedScan"));
         advancedOptions = true;
     }
 
     protected void scan(NmapOptions options){
         if(!scanConfigDTO.getHost().isEmpty() && scanConfigDTO.getHost()!=null) {
             startScanButton.setStyle("-fx-background-color: red;");
-            startScanButton.setText("Stop");
+            startScanButton.textProperty().bind(I18n.bind("dashboard.stopScan"));
             onScan = true;
             new Thread(() -> {
                 handle = scanHandleGenerator(new Host(scanConfigDTO.getHost(), scanConfigDTO.isIncludeSubnetMask()? scanConfigDTO.getSubnetMask(): null), new PortRange(-1, -1), options);
                 handle.summary().join();
                 Platform.runLater(() -> {
                     startScanButton.setStyle("-fx-background-color: -porty-secondary;");
-                    startScanButton.setText("Start Scan");
+                    startScanButton.textProperty().bind(I18n.bind("dashboard.startScan"));
                     onScan = false;
                 });
             }).start();
@@ -245,5 +234,25 @@ public class DashboardController {
         else{
             scanConfigDTO.setIncludeSubnetMask(false);
         }
+    }
+
+    private void setupLanguageTexts() {
+        ipTextField.promptTextProperty().bind(I18n.bind("enter-ip-address"));
+        dashboardTitle.textProperty().bind(I18n.bind("dashboard.title"));
+        scanLabel.textProperty().bind(I18n.bind("dashboard.scanLabel"));
+
+        ipTextField.promptTextProperty().bind(I18n.bind("dashboard.enter-ip-address"));
+        timeoutTextField.promptTextProperty().bind(I18n.bind("dashboard.timeout"));
+        statsEveryTextField.promptTextProperty().bind(I18n.bind("dashboard.statsEvery"));
+        ipMaskTextField.promptTextProperty().bind(I18n.bind("dashboard.cidrSubnetMask"));
+
+        saveScanCheckbox.textProperty().bind(I18n.bind("dashboard.saveResult"));
+        serviceDetectionCheckbox.textProperty().bind(I18n.bind("dashboard.scanServices"));
+        osDetectionCheckbox.textProperty().bind(I18n.bind("dashboard.scanOs"));
+        tcpConnectScanCheckbox.textProperty().bind(I18n.bind("dashboard.enableTcpConnectScan"));
+        synScanCheckbox.textProperty().bind(I18n.bind("dashboard.enableSynScan"));
+        ipMaskCheckbox.textProperty().bind(I18n.bind("dashboard.includeSubnetMask"));
+
+        startScanButton.textProperty().bind(I18n.bind("dashboard.startScan"));
     }
 }
