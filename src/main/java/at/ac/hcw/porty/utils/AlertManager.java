@@ -12,7 +12,9 @@ public class AlertManager {
             Alert.AlertType type,
             String title,
             String header,
-            List<String> labels
+            List<String> labels,
+            int prefWidth,
+            int prefHeight
     ) {
         if (labels.size() % 2 != 0) {
            throw new IllegalArgumentException("labels size must be even");
@@ -40,7 +42,7 @@ public class AlertManager {
         }
 
         alert.getDialogPane().setContent(grid);
-        alert.getDialogPane().setPrefSize(500, 250);
+        alert.getDialogPane().setPrefSize(prefWidth, prefHeight);
         alert.getDialogPane().getStylesheets()
                 .add(AlertManager.class.getResource("/at/ac/hcw/porty/styles/styles_dark.css").toExternalForm());
 

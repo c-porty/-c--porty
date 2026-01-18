@@ -4,11 +4,13 @@ import at.ac.hcw.porty.dto.ScanResultDTO;
 import at.ac.hcw.porty.types.records.PortScanResult;
 import at.ac.hcw.porty.types.records.ScanSummary;
 import at.ac.hcw.porty.types.records.TechnicalReference;
+import at.ac.hcw.porty.utils.AlertManager;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.*;
@@ -22,9 +24,18 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import javafx.scene.control.Button;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ResultsController {
+    private static final Logger logger =
+            LoggerFactory.getLogger(ResultsController.class);
+    private static final ExecutorService BROWSER_THREAD = Executors.newCachedThreadPool();
+
     @FXML
     private Label dateTimeLabel;
     @FXML
@@ -222,13 +233,26 @@ public class ResultsController {
 
     private void openTechnicalReference(TechnicalReference ref) {
         if (ref == null || ref.uri() == null) return;
-
-        try {
-            if (Desktop.isDesktopSupported()) {
-                Desktop.getDesktop().browse(ref.uri());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (!Desktop.isDesktopSupported()) {
+            logger.warn("Desktop browsing not supported on this platform");
+            Alert warning = AlertManager.createAlert(
+                Alert.AlertType.WARNING,
+                    "Failed to open!",
+                    "Desktop browsing not supported on this platform",
+                new ArrayList<>(0),
+                    400,
+                    100
+            );
+            warning.show();
+            return;
         }
+
+        BROWSER_THREAD.submit(() -> {
+            try {
+                Desktop.getDesktop().browse(ref.uri());
+            } catch (Exception e) {
+                logger.error("Failed to open technical reference: {}", ref.uri(), e);
+            }
+        });
     }
 }
