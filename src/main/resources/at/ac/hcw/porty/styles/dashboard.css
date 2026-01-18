@@ -138,6 +138,11 @@
     -fx-background-color: -porty-scan-progress;
 }
 
+.porty-dashboard-progress-indicator * {
+    -fx-background-color: transparent;
+    -fx-fill: -porty-on-background;
+}
+
 .porty-dashboard-scan-view{
     -fx-spacing: 40px;
 }
@@ -147,6 +152,7 @@
     -fx-padding: 16 0 0 0;
 }
 
-.porty-console .corner {
-    -fx-background-color: transparent;
+.porty-dashboard-progress-indicator-hole{
+    -fx-fill: -porty-background;
+    -fx-translate-y: -8.5;
 }

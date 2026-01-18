@@ -146,6 +146,10 @@
     -fx-background-color: -porty-container;
 }
 
+.porty-console .corner {
+    -fx-background-color: transparent;
+}
+
 .porty-menu-icon{
     -fx-icon-color: -porty-on-background;
     -fx-icon-size: 16px;
