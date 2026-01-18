@@ -6,8 +6,8 @@
 
 <VBox styleClass="porty-credits" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.hcw.porty.controller.CreditsController">
         <VBox>
-            <Label styleClass="porty-title-large" text="About Us" />
-            <Label styleClass="porty-credits-subtitle" text="We can't C#" />
+            <Label fx:id="aboutUsLabel" styleClass="porty-title-large" text="%about-us" />
+            <Label fx:id="cSharpLabel" styleClass="porty-credits-subtitle" text="We can't C#" />
         </VBox>
         <Region prefHeight="8" prefWidth="1024" styleClass="porty-credits-bar" />
         <HBox styleClass="porty-credits-text">

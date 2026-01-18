@@ -66,7 +66,7 @@
     -fx-font-size: 16px;
     -fx-background-color: -porty-primary;
     -fx-text-fill: -porty-on-primary;
-    -fx-padding: 8 16;
+    -fx-padding: 4 19;
     -fx-min-width: 54;
 }
 
@@ -177,6 +177,41 @@
 
 .porty-switch-icon .thumb-area{
     -fx-background-color: #D0BCFE;
+}
+
+/* MenuButton itself: white text */
+.menu-button.porty-top-bar-button {
+    -fx-text-fill: white;
+    -fx-text-base-color: white;
+}
+.menu-button.porty-top-bar-button .label {
+    -fx-text-fill: white;
+}
+.menu-button.porty-top-bar-button .arrow {
+    -fx-background-color: white;
+}
+
+/* Popup items: black text */
+.context-menu .menu-item .label {
+    -fx-text-fill: black;
+}
+.context-menu .menu-item:focused .label {
+    -fx-text-fill: black; /* keep black when focused/hovered */
+}
+
+/* Radio/Check menu items: ensure marks are black as well */
+.context-menu .radio-menu-item .label {
+    -fx-text-fill: black;
+}
+.context-menu .radio-menu-item .radio {
+    -fx-mark-color: black;
+}
+
+.context-menu .check-menu-item .label {
+    -fx-text-fill: black;
+}
+.context-menu .check-menu-item .check {
+    -fx-mark-color: black;
 }
 
 .porty-switch-icon:selected .thumb {

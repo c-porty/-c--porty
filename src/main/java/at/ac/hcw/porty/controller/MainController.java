@@ -1,15 +1,16 @@
 package at.ac.hcw.porty.controller;
 
+import at.ac.hcw.porty.utils.I18n;
+import at.ac.hcw.porty.types.enums.Language;
 import at.ac.hcw.porty.types.records.ScanSummary;
 import at.ac.hcw.porty.utils.NetUtils;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.ToggleButton;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import org.controlsfx.control.ToggleSwitch;
@@ -19,18 +20,26 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ResourceBundle;
 
 public class MainController {
     private static final Logger logger =
             LoggerFactory.getLogger(MainController.class);
-    @FXML
-    private BorderPane contentBorderPane;
-    @FXML
-    private ToggleButton simplicityModeSwitch;
-    @FXML
-    private Label systemIPAddress;
-    @FXML
-    private ToggleSwitch lightModeSwitch;
+
+    @FXML private BorderPane contentBorderPane;
+    @FXML private ToggleButton simplicityModeSwitch;
+    @FXML private Label systemIPAddress;
+    @FXML private ToggleSwitch lightModeSwitch;
+    @FXML private MenuButton languageMenu;
+    @FXML private RadioMenuItem langDeItem;
+    @FXML private RadioMenuItem langEnItem;
+
+    @FXML private Button navHome;
+    @FXML private Button navHistory;
+    @FXML private Button navAboutUs;
+    @FXML private Label yourIpAddress;
+    @FXML private Label simpleOption;
+    @FXML private Label advancedOption;
 
     private FontIcon switchIcon;
 
@@ -45,9 +54,10 @@ public class MainController {
 
     @FXML
     public void initialize() {
-
         lightCss = getClass().getResource("/at/ac/hcw/porty/styles/styles_light.css").toExternalForm();
         darkCss  = getClass().getResource("/at/ac/hcw/porty/styles/styles_dark.css").toExternalForm();
+
+        setUpLanguageMenu();
 
         lightModeSwitch.selectedProperty().addListener((obs, oldVal, light) -> {
             if (scene != null) {
@@ -100,6 +110,38 @@ public class MainController {
         scene.getStylesheets().add(darkCss);
     }
 
+    private void setUpLanguageMenu() {
+        ToggleGroup tg = new ToggleGroup();
+        langDeItem.setToggleGroup(tg);
+        langEnItem.setToggleGroup(tg);
+        if (I18n.getLanguage() == Language.DE) {
+            langDeItem.setSelected(true);
+        } else {
+            langEnItem.setSelected(true);
+        }
+        langDeItem.setOnAction(e -> I18n.setLanguage(Language.DE));
+        langEnItem.setOnAction(e -> I18n.setLanguage(Language.EN));
+        languageMenu.textProperty().bind(Bindings.createStringBinding(
+                () -> I18n.getLanguage() == Language.DE ? "DE" : "EN",
+                I18n.languageProperty()
+        ));
+
+        bindLanguageTexts();
+    }
+
+    private void bindLanguageTexts() {
+        navHome.textProperty().bind(I18n.bind("home"));
+        navHistory.textProperty().bind(I18n.bind("history"));
+        navAboutUs.textProperty().bind(I18n.bind("about-us"));
+
+        simpleOption.textProperty().bind(I18n.bind("simple"));
+        advancedOption.textProperty().bind(I18n.bind("advanced"));
+        yourIpAddress.textProperty().bind(I18n.bind("your-ip-address"));
+
+        langDeItem.textProperty().bind(I18n.bind("german"));
+        langEnItem.textProperty().bind(I18n.bind("english"));
+    }
+
     @FXML
     private void navigateToDashboard(ActionEvent event) {
         handleNavigation("/at/ac/hcw/porty/scenes/dashboard.fxml", null);
@@ -127,9 +169,10 @@ public class MainController {
     private void handleNavigation(String route, ScanSummary scanSummary) {
         URL url = getClass().getResource(route);
         tracebackRoute = currentRoute;
+        ResourceBundle rb = I18n.getBundle();
 
         try {
-            FXMLLoader loader = new FXMLLoader(url);
+            FXMLLoader loader = new FXMLLoader(url, rb);
             contentBorderPane.setCenter(loader.load());
 
             Object controller = loader.getController();

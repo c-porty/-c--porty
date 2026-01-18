@@ -1,0 +1,9 @@
+We are a team of three students at Campus Wien University of Applied Sciences who worked together on a project during the first semester of the 2025/26 academic year.
+
+Our goal was to create a port scanner that identifies open network ports and provides basic insights into how network security works. Our focus was not only on the technical implementation, but also on a clear structure and comprehensible presentation of the results.
+
+Joint development by:
+Kilian Halwachs, Felix Schöller, Moritz Bauer – Vienna University of Applied Sciences 2025/26
+
+In loving memory:
+Erik Daurer 01.09.2025 - 14.11.2025
