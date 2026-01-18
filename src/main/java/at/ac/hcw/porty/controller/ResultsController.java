@@ -3,15 +3,17 @@ package at.ac.hcw.porty.controller;
 import at.ac.hcw.porty.dto.ScanResultDTO;
 import at.ac.hcw.porty.types.records.PortScanResult;
 import at.ac.hcw.porty.types.records.ScanSummary;
+import at.ac.hcw.porty.types.records.TechnicalReference;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.RowConstraints;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.Tooltip;
+import javafx.scene.layout.*;
 
+import java.awt.*;
 import java.lang.ref.Reference;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -20,6 +22,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import javafx.scene.control.Button;
 
 public class ResultsController {
     @FXML
@@ -51,7 +54,6 @@ public class ResultsController {
 
         displayScanSummary();
 
-        // Risiko-Balken aktualisieren, nachdem Layout fertig ist
         Platform.runLater(() -> updateRiskBar(scanSummary.severity()));
     }
 
@@ -72,9 +74,10 @@ public class ResultsController {
         if(scanSummary.host().subnet()==null) {
             int i = 1;
             for (PortScanResult port : scanSummary.results()) {
-                scanOverview.add(new ScanResultDTO(
-                        "Port #" + i,
-                        port.port() + (!port.service().isEmpty() ? " " + "(" + port.service() + ")" : "")));
+                scanOverview.add(new ScanResultDTO( "Port #" + i,
+                        port.port() + (!port.service().isEmpty() ? " (" + port.service() + ")" : ""),
+                        true,
+                        port.technicalReference()));
                 i++;
             }
         }
@@ -124,19 +127,68 @@ public class ResultsController {
 
     private void addBlock(ArrayList<ScanResultDTO> entries){
         for(int i=0;i<entries.size();i++){
-            addRow(entries.get(i).getProperty(), entries.get(i).getEntry(),i==0, i==entries.size()-1, i%2==0);
+            if(entries.get(i).getAdditionalInfo()) {
+                addPortRow(entries.get(i).getProperty(), entries.get(i).getEntry(), entries.get(i).getTechnicalReference(),i == 0, i == entries.size() - 1, i % 2 == 0);
+            } else{
+                addRow(entries.get(i).getProperty(), entries.get(i).getEntry(), i == 0, i == entries.size() - 1, i % 2 == 0);
+            }
         }
     }
 
-    private void addRow(String leftText, String rightText,boolean firstRow, boolean lastRow, boolean even) {
+    private void addRow(String leftText, String rightText, boolean firstRow, boolean lastRow, boolean even
+    ) {
         Label left = new Label(leftText);
         Label right = new Label(rightText);
 
-        String rowStyle = (even) ? "porty-results-row-even" : "porty-results-row-odd";
-        left.getStyleClass().add(rowStyle);
-        right.getStyleClass().add(rowStyle);
-        right.getStyleClass().add("porty-result-border");
+        String rowStyle = even ? "porty-results-row-even" : "porty-results-row-odd";
 
+        left.getStyleClass().add(rowStyle);
+        right.getStyleClass().addAll(rowStyle, "porty-result-border");
+
+        addRow(left, right, firstRow, lastRow);
+    }
+
+    private void addPortRow(String leftText, String rightText, TechnicalReference technicalReference, boolean firstRow, boolean lastRow, boolean even) {
+        String rowStyle = even ? "porty-results-row-even" : "porty-results-row-odd";
+
+        Label left = new Label(leftText);
+        left.setMaxWidth(Double.MAX_VALUE);
+        left.getStyleClass().add(rowStyle);
+
+        Label portLabel = new Label(rightText);
+        portLabel.getStyleClass().add(rowStyle);
+
+        Button infoButton = new Button("ℹ");
+        infoButton.getStyleClass().add("porty-port-info-button");
+
+        if (technicalReference != null) {
+            infoButton.setOnAction(e -> openTechnicalReference(technicalReference));
+            infoButton.setTooltip(new Tooltip(technicalReference.title()));
+        } else {
+            infoButton.setDisable(true);
+        }
+
+        HBox right = new HBox(6);
+        right.setAlignment(Pos.CENTER_LEFT);
+        right.setMaxWidth(Double.MAX_VALUE);
+        right.getStyleClass().addAll(rowStyle, "porty-result-border");
+        right.setStyle("-fx-padding: 0;");
+
+        right.setMinHeight(24);
+        right.setPrefHeight(24);
+        right.setMaxHeight(Double.MAX_VALUE);
+        VBox.setVgrow(right, Priority.ALWAYS);
+        GridPane.setVgrow(right, Priority.ALWAYS);
+        portLabel.setAlignment(Pos.CENTER_LEFT);
+        infoButton.setAlignment(Pos.CENTER_LEFT);
+
+
+        right.getChildren().addAll(portLabel, infoButton);
+
+        addRow(left, right, firstRow, lastRow);
+    }
+
+    public void addRow(Node left, Node right, boolean firstRow, boolean lastRow){
         if (firstRow) {
             left.setStyle("-fx-background-radius: 5 0 0 0; -fx-border-radius: 5 0 0 0;");
             right.setStyle("-fx-background-radius: 0 5 0 0; -fx-border-radius: 0 5 0 0;");
@@ -166,5 +218,17 @@ public class ResultsController {
         if (newWidth > maxWidth) newWidth = maxWidth;
 
         greenBar.setPrefWidth(newWidth);
+    }
+
+    private void openTechnicalReference(TechnicalReference ref) {
+        if (ref == null || ref.uri() == null) return;
+
+        try {
+            if (Desktop.isDesktopSupported()) {
+                Desktop.getDesktop().browse(ref.uri());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

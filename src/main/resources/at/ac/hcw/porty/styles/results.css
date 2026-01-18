@@ -45,6 +45,18 @@
     -fx-border-width: 0;
 }
 
+.porty-port-info-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-cursor: hand;
+    -fx-padding: 0 6 0 6;
+}
+
+.porty-port-info-button:hover {
+    -fx-text-fill: #00c2ff;
+}
+
 .alert-title {
     -fx-font-size: 15px;
     -fx-font-weight: bold;
