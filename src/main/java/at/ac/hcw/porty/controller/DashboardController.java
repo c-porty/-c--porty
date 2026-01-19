@@ -439,6 +439,7 @@ public class DashboardController implements MainAwareController {
         osDetectionCheckbox.selectedProperty().set(config.options().osDetection());
         tcpConnectScanCheckbox.selectedProperty().set(config.options().tcpConnectScan());
         synScanCheckbox.selectedProperty().set(config.options().synScan());
+        udpScanCheckbox.selectedProperty().set(config.options().udpScan());
         timeoutTextField.textProperty().set(config.options().hostTimeout()+"");
         statsEveryTextField.textProperty().set(config.options().statsEvery()+"");
         ipMaskCheckbox.selectedProperty().set(config.host().subnet()!=null);
