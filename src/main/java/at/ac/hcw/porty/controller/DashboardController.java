@@ -261,16 +261,23 @@ public class DashboardController implements MainAwareController {
 
     @FXML
     protected void onScanStartButtonClick() {
-        scanProgressPercentage.textProperty().unbind();
-        setProgress(0.0);
         if(!onScan) {
-            scanProgressPercentage.setText("0%");
-            if (advancedOptions) {
-                advancedScan();
-            } else {
-                simpleScan();
+            if(!ipTextField.textProperty().get().isEmpty()) {
+                scanProgressPercentage.textProperty().unbind();
+                setProgress(0.0);
+                scanProgressPercentage.setText("0%");
+                if (advancedOptions) {
+                    advancedScan();
+                } else {
+                    simpleScan();
+                }
+            }else{
+                Alert alert = AlertManager.createErrorAlert(I18n.bind("dashboard.ipField.error").get());
+                alert.showAndWait();
             }
         } else{
+            scanProgressPercentage.textProperty().unbind();
+            setProgress(0.0);
             if(handle != null) {
                 handle.cancel();
             }
