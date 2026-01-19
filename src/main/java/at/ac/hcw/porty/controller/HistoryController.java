@@ -1,11 +1,16 @@
 package at.ac.hcw.porty.controller;
 
+import at.ac.hcw.porty.app.MockScannerCLITest;
 import at.ac.hcw.porty.dto.ScanHistoryDTO;
 import at.ac.hcw.porty.repositories.ScanResultRepositoryFactory;
+import at.ac.hcw.porty.types.enums.PortStatus;
 import at.ac.hcw.porty.types.enums.ScanResultRepositoryOption;
 import at.ac.hcw.porty.types.interfaces.IScanResultRepository;
+import at.ac.hcw.porty.types.interfaces.MainAwareController;
 import at.ac.hcw.porty.types.records.Host;
+import at.ac.hcw.porty.types.records.PortScanResult;
 import at.ac.hcw.porty.types.records.ScanSummary;
+import at.ac.hcw.porty.utils.AlertManager;
 import at.ac.hcw.porty.utils.HistoryHandler;
 import at.ac.hcw.porty.utils.I18n;
 import javafx.collections.FXCollections;
@@ -19,13 +24,18 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.util.Duration;
 import org.kordamp.ikonli.javafx.FontIcon;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-public class HistoryController {
+public class HistoryController implements MainAwareController {
     @FXML private TableView<ScanHistoryDTO> historyTable;
     @FXML private TableColumn<ScanHistoryDTO, Instant> dateCol;
     @FXML private TableColumn<ScanHistoryDTO, String> addressCol;
@@ -34,6 +44,10 @@ public class HistoryController {
     @FXML private BarChart<String, Number> historyChart;
     @FXML private Label historyTitle;
     @FXML private Button deleteEntryButton;
+
+    private MainController mainController;
+    private static final Logger logger =
+            LoggerFactory.getLogger(HistoryController.class);
 
     ObservableList<ScanHistoryDTO> tableEntries = FXCollections.observableArrayList();
 
@@ -76,7 +90,7 @@ public class HistoryController {
         infoCol.setCellValueFactory(cell ->
                 cell.getValue().fileProperty());
 
-        infoCol.setCellFactory(col -> new TableCell<ScanHistoryDTO, String>() {
+        infoCol.setCellFactory(col -> new TableCell<>() {
             private final Button btn = new Button();
 
             {
@@ -123,8 +137,9 @@ public class HistoryController {
         for(ScanSummary scanFile : scanFiles){
             String address = scanFile.host().address();
             Instant timestamp = scanFile.startedAt();
+            int openPorts = scanFile.results().size();
             String filename = address+"-"+timestamp.getEpochSecond();
-            ScanHistoryDTO entry = new ScanHistoryDTO(timestamp, address, scanFile.results().size(), filename, scanFile.severity());
+            ScanHistoryDTO entry = new ScanHistoryDTO(timestamp, address, openPorts, filename, scanFile.severity());
             tableEntries.add(entry);
         }
 
@@ -145,8 +160,40 @@ public class HistoryController {
         historyChart.setLegendVisible(false);
     }
 
-    public void openResultPage(String file){
+    @Override
+    public void setMainController(MainController mainController){this.mainController = mainController;}
 
+    public void openResultPage(String file){
+        String[] data = file.split("-");
+        Host host = new Host(data[0]);
+        Instant startedAt = Instant.ofEpochSecond(Long.parseLong(data[1]));
+        Optional<ScanSummary> summary = historyHandler.load(host,startedAt);
+        if(summary.isPresent()) {
+            mainController.navigateToResults(summary.get());
+        } else {
+            logger.error("Could not find summary: {}", host.address()+"-"+startedAt.getEpochSecond());
+        }
+    }
+
+    @FXML
+    public void onDropButtonClick(){
+        ScanHistoryDTO selected = historyTable.getSelectionModel().getSelectedItem();
+        if(selected!=null) {
+            Alert alert = AlertManager.createDangerAlert(I18n.bind("history.confirm-delete-text").get(), I18n.bind("history.confirm-delete-button").get());
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if (result.isPresent() && result.get().getButtonData() == ButtonBar.ButtonData.OK_DONE) {
+                Path path = Paths.get("src", "main", "saves", selected.getFile()+".json");
+                File save = path.toFile();
+                if (save.delete()) {
+                    logger.info("Deleted the file: {}", save.getName());
+                    historyTable.getItems().remove(selected);
+
+                } else {
+                    logger.error("Failed to delete the file.");
+                }
+            }
+        }
     }
 
     public void setChartData(String host) {
@@ -155,7 +202,7 @@ public class HistoryController {
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         series.setName(host);
 
-        ArrayList<Instant> scanDates = new ArrayList<Instant>();
+        ArrayList<Instant> scanDates = new ArrayList<>();
         double portMax = 0;
         double portMin = 0;
 

@@ -140,7 +140,6 @@
 
 .porty-dashboard-progress-indicator * {
     -fx-background-color: transparent;
-    -fx-fill: -porty-on-background;
 }
 
 .porty-dashboard-scan-view{
@@ -155,4 +154,20 @@
 .porty-dashboard-progress-indicator-hole{
     -fx-fill: -porty-background;
     -fx-translate-y: -8.5;
+}
+
+.porty-dashboard-progress-indicator .percentage {
+    -fx-opacity: 0;
+}
+
+.porty-dashboard-progress-indicator-percentage {
+    -fx-text-fill: -porty-on-background;
+    -fx-translate-y: -11;
+    -fx-font-family: "Inter";
+    -fx-font-size: 36px;
+    -fx-font-weight: bold;
+}
+
+.porty-dashboard-advanced-controls{
+    -fx-spacing: 26px;
 }

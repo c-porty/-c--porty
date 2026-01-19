@@ -6,7 +6,7 @@
 
 <VBox styleClass="porty-history" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.hcw.porty.controller.HistoryController">
     <Label fx:id="historyTitle" styleClass="porty-title" text="%history" />
-    <TableView fx:id="historyTable" prefHeight="450.0" prefWidth="200.0" styleClass="porty-history-table">
+    <TableView fx:id="historyTable" prefHeight="540.0" prefWidth="200.0" styleClass="porty-history-table">
         <columns>
             <TableColumn fx:id="dateCol" prefWidth="319.0" text="%history.date"/>
             <TableColumn fx:id="addressCol" prefWidth="305.0" text="%history.scanned-address"/>
@@ -17,7 +17,7 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
     </TableView>
-    <Button fx:id="deleteEntryButton" mnemonicParsing="false" text="%history.delete-entry" styleClass="porty-history-table-drop-button"/>
+    <Button fx:id="deleteEntryButton" onAction="#onDropButtonClick" mnemonicParsing="false" text="%history.delete-entry" styleClass="porty-history-table-drop-button"/>
     <BarChart fx:id="historyChart" styleClass="porty-history-chart">
         <xAxis>
             <CategoryAxis side="BOTTOM" />

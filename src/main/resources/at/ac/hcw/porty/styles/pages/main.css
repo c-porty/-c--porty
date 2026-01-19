@@ -75,13 +75,22 @@
 }
 
 .porty-file-field{
-    -fx-background-color: -porty-secondary-background;
+    -fx-background-color: -porty-file-container;
+    -fx-effect: innershadow(gaussian, -porty-file-container-shadow, 10, 0.4, 0, 2);
     -fx-background-radius: 10;
 }
 
 .porty-file-field Label{
-    -fx-text-fill: -porty-on-background;
+    -fx-text-fill: -porty-file-container-content;
     -fx-font-size: 16px;
+    -fx-translate-y: 30;
+}
+
+.porty-file-field FontIcon{
+    -fx-icon-size: 64px;
+    -fx-icon-color: -porty-file-container-content;
+    -fx-padding: 0;
+    -fx-translate-y: -30;
 }
 
 .porty-titled-pane > .title{
@@ -220,4 +229,15 @@
 
 .porty-switch-icon:selected .thumb-area {
     -fx-background-color: #4F378B;
+}
+
+.porty-connector-label{
+        -fx-font-size: 16px;
+        -fx-font-weight: bold;
+        -fx-text-fill: -porty-on-container;
+        -fx-font-family: "Inter";
+}
+
+.porty-connector-label:inactive{
+        -fx-text-fill: -porty-on-container-inactive;
 }

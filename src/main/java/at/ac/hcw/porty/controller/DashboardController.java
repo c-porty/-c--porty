@@ -5,6 +5,7 @@ import at.ac.hcw.porty.listeners.PortScanCLIListener;
 import at.ac.hcw.porty.listeners.PortScanUIListener;
 import at.ac.hcw.porty.scanner.Scanner;
 import at.ac.hcw.porty.scanner.ScannerFactory;
+import at.ac.hcw.porty.types.interfaces.MainAwareController;
 import at.ac.hcw.porty.utils.I18n;
 import at.ac.hcw.porty.types.records.Host;
 import at.ac.hcw.porty.types.records.NmapOptions;
@@ -13,16 +14,30 @@ import at.ac.hcw.porty.types.records.ScanConfig;
 import at.ac.hcw.porty.types.enums.ScanStrategy;
 import at.ac.hcw.porty.types.interfaces.PortScanListener;
 import at.ac.hcw.porty.types.interfaces.ScanHandle;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.collections.ListChangeListener;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.IOException;
+import java.time.Instant;
+import java.util.List;
 import javafx.util.Duration;
 
-public class DashboardController {
+public class DashboardController implements MainAwareController {
     @FXML private Button startScanButton;
     @FXML private ListView<String> scanProgressConsole;
     @FXML private TextField ipTextField;
@@ -40,9 +55,22 @@ public class DashboardController {
     @FXML private ProgressIndicator scanProgressIndicator;
     @FXML private Label dashboardTitle;
     @FXML private Label scanLabel;
+    @FXML private CheckBox portRangeCheckbox;
+    @FXML private TextField portRangeStartTextField;
+    @FXML private TextField portRangeEndTextField;
+    @FXML private Label portRangeConnector;
+    @FXML private Label scanProgressPercentage;
+    @FXML private CheckBox saveConfigCheckbox;
+    @FXML private StackPane configFileField;
+    @FXML private TitledPane advancedOptionTitledPane;
+    @FXML private Label configFileFieldLabel;
     @FXML private Tooltip resultSaveTooltip;
 
     private MainController mainController;
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(HistoryController.class);
+
     ObservableList<String> consoleLines = FXCollections.observableArrayList();
 
     private boolean onScan = false;
@@ -64,6 +92,57 @@ public class DashboardController {
                     scanProgressConsole.scrollTo(consoleLines.size() - 1);
                 }
             }
+        });
+
+        tcpConnectScanCheckbox.selectedProperty().addListener((ov, oldValue, newValue) -> {
+            if(newValue && synScanCheckbox.isSelected()){
+                synScanCheckbox.selectedProperty().set(false);
+            }
+        });
+
+        synScanCheckbox.selectedProperty().addListener((ov, oldValue, newValue) -> {
+            if(newValue && tcpConnectScanCheckbox.isSelected()){
+                tcpConnectScanCheckbox.selectedProperty().set(false);
+            }
+        });
+
+        scanProgressIndicator.setProgress(0.0);
+
+        scanProgressIndicator.progressProperty().addListener((ov, oldValue, progress) -> {
+            if (progress.doubleValue() >= 1.0) {
+                scanProgressPercentage.textProperty().bind(I18n.bind("dashboard.scan.done"));
+            } else {
+                scanProgressPercentage.setText((int) (progress.doubleValue() * 100) + "%");
+            }
+        });
+
+        configFileField.visibleProperty()
+                .bind(advancedOptionTitledPane.expandedProperty().not());
+        configFileField.managedProperty()
+                .bind(configFileField.visibleProperty());
+
+        configFileField.setOnDragOver(event -> {
+            if (event.getGestureSource() != configFileField &&
+                    event.getDragboard().hasFiles()) {
+                event.acceptTransferModes(TransferMode.COPY);
+            }
+            event.consume();
+        });
+
+        configFileField.setOnDragDropped(event -> {
+            Dragboard db = event.getDragboard();
+            boolean success = false;
+            if (db.hasFiles()) {
+                success = true;
+                List<File> files = db.getFiles();
+                for (File file : files) {
+                    if (file.getName().endsWith(".json")) {
+                        loadConfig(file);
+                    }
+                }
+            }
+            event.setDropCompleted(success);
+            event.consume();
         });
 
         TextFormatter<Long> longFormatter = new TextFormatter<>(change -> {
@@ -111,14 +190,58 @@ public class DashboardController {
             }
         });
 
+        TextFormatter<Integer> portRangeStartFormatter = new TextFormatter<>(change -> {
+            String newText = change.getControlNewText();
+
+            if (newText.isEmpty()) {
+                return change;
+            }
+
+            try {
+                Integer.parseInt(newText);
+                return change;
+            } catch (NumberFormatException e) {
+                return null;
+            }
+        });
+
+        TextFormatter<Integer> portRangeEndFormatter = new TextFormatter<>(change -> {
+            String newText = change.getControlNewText();
+
+            if (newText.isEmpty()) {
+                return change;
+            }
+
+            try {
+                Integer.parseInt(newText);
+                return change;
+            } catch (NumberFormatException e) {
+                return null;
+            }
+        });
+
+
         ipMaskTextField.disableProperty().bind(ipMaskCheckbox.selectedProperty().not());
+
+        portRangeStartTextField.disableProperty().bind(portRangeCheckbox.selectedProperty().not());
+        portRangeEndTextField.disableProperty().bind(portRangeCheckbox.selectedProperty().not());
+
+        PseudoClass INACTIVE = PseudoClass.getPseudoClass("inactive");
+        portRangeConnector.pseudoClassStateChanged(INACTIVE, true);
+        portRangeCheckbox.selectedProperty().addListener((obs, oldVal, selected) -> {
+            portRangeConnector.pseudoClassStateChanged(
+                    INACTIVE,
+                    !selected
+            );
+        });
 
         timeoutTextField.setTextFormatter(longFormatter);
         statsEveryTextField.setTextFormatter(doubleFormatter);
         ipMaskTextField.setTextFormatter(intFormatter);
+        portRangeStartTextField.setTextFormatter(portRangeStartFormatter);
+        portRangeEndTextField.setTextFormatter(portRangeEndFormatter);
 
         setSimpleMode();
-        setProgress(0.0);
     }
 
     public void setMainController(MainController mainController) {
@@ -126,10 +249,11 @@ public class DashboardController {
     }
 
     @FXML
-    protected void onScanStartButtonClick() throws InterruptedException {
+    protected void onScanStartButtonClick() {
+        scanProgressPercentage.textProperty().unbind();
         setProgress(0.0);
         if(!onScan) {
-
+            scanProgressPercentage.setText("0%");
             if (advancedOptions) {
                 advancedScan();
             } else {
@@ -156,19 +280,20 @@ public class DashboardController {
     public void setAdvancedMode(){
         advancedOptionControl.setVisible(true);
         advancedOptionControl.setManaged(true);
+        advancedOptionTitledPane.expandedProperty().set(false);
         descriptorLabel.textProperty().unbind();
         descriptorLabel.textProperty().bind(I18n.bind("dashboard.advancedScan"));
         advancedOptions = true;
     }
 
-    protected void scan(NmapOptions options){
+    protected void scan(NmapOptions options, PortRange range){
         if(!scanConfigDTO.getHost().isEmpty() && scanConfigDTO.getHost()!=null) {
             startScanButton.setStyle("-fx-background-color: red;");
             startScanButton.textProperty().unbind();
             startScanButton.textProperty().bind(I18n.bind("dashboard.stopScan"));
             onScan = true;
             new Thread(() -> {
-                handle = scanHandleGenerator(new Host(scanConfigDTO.getHost(), scanConfigDTO.isIncludeSubnetMask()? scanConfigDTO.getSubnetMask(): null), new PortRange(-1, -1), options);
+                handle = scanHandleGenerator(new Host(scanConfigDTO.getHost(), scanConfigDTO.isIncludeSubnetMask()? scanConfigDTO.getSubnetMask(): null), range, options);
                 handle.summary().join();
                 Platform.runLater(() -> {
                     startScanButton.setStyle("-fx-background-color: -porty-secondary;");
@@ -192,10 +317,10 @@ public class DashboardController {
     protected void simpleScan(){
         scanConfigDTO.setHost(ipTextField.getText());
         NmapOptions options = new NmapOptions(saveScanCheckbox.isSelected());
-        scan(options);
+        scan(options, new PortRange(-1,-1));
     }
 
-    protected void advancedScan(){
+    protected void advancedScan() {
         setDTO();
         NmapOptions options = new NmapOptions(
                 scanConfigDTO.isServiceDetection(),
@@ -207,14 +332,19 @@ public class DashboardController {
                 saveScanCheckbox.isSelected(),
                 scanConfigDTO.isIncludeSubnetMask()
         );
-        scan(options);
+
+        if(saveConfigCheckbox.isSelected()){
+            saveConfig(options);
+        }
+
+        scan(options, scanConfigDTO.getPortRange());
     }
 
     public void setProgress(double percent){
         scanProgressIndicator.setProgress(percent/100);
     }
 
-    protected void setDTO(){
+    protected void setDTO() {
         scanConfigDTO.setHost(ipTextField.getText());
         scanConfigDTO.setServiceDetection(serviceDetectionCheckbox.isSelected());
         scanConfigDTO.setOsDetection(osDetectionCheckbox.isSelected());
@@ -224,7 +354,7 @@ public class DashboardController {
         if(!statsEveryTextField.getText().isEmpty() && Double.parseDouble(statsEveryTextField.getText())>0) {
             scanConfigDTO.setStatsEvery(Double.parseDouble(statsEveryTextField.getText()));
         } else{
-            scanConfigDTO.setStatsEvery(-1);
+            scanConfigDTO.setStatsEvery(2);
         }
 
         if(!timeoutTextField.getText().isEmpty() && Double.parseDouble(timeoutTextField.getText())>0) {
@@ -236,10 +366,72 @@ public class DashboardController {
         if(ipMaskCheckbox.isSelected()){
             scanConfigDTO.setIncludeSubnetMask(true);
             scanConfigDTO.setSubnetMask(!ipMaskTextField.getText().isEmpty()? Integer.parseInt(ipMaskTextField.getText()): null );
-        }
-        else{
+        } else{
             scanConfigDTO.setIncludeSubnetMask(false);
         }
+
+        if(portRangeCheckbox.isSelected()){
+            scanConfigDTO.setPortRange(!portRangeStartTextField.getText().isEmpty()?Integer.parseInt(portRangeStartTextField.getText()): -1,
+                    !portRangeEndTextField.getText().isEmpty()?Integer.parseInt(portRangeEndTextField.getText()): -1);
+        } else{
+            scanConfigDTO.setPortRange(new PortRange(-1,-1));
+        }
+    }
+
+    public void saveConfig(NmapOptions options) {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.enable(SerializationFeature.INDENT_OUTPUT);
+        try {
+            Host host=new Host(ipTextField.getText(), scanConfigDTO.getSubnetMask());
+            PortRange portRange= scanConfigDTO.getPortRange();
+
+            ScanConfig config = new ScanConfig(host, portRange, options);
+
+            String dirPath = "src/main/saves/configs";
+            File dir = new File(dirPath);
+
+            if (!dir.exists()) {
+                boolean created = dir.mkdirs();
+                if (!created) {
+                    logger.error("Folder could not be created!");
+                }
+            }
+
+            mapper.writeValue(new File(dir, host.address()+"-"+Instant.now().getEpochSecond() +"-scanConfig.json"), config);
+            logger.info("Config File saved");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadConfig(File file) {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        try {
+            ScanConfig scanConfig = mapper.readValue(file, ScanConfig.class);
+            logger.info("Config loaded: "+scanConfig);
+            setOptionsFromConfig(scanConfig);
+        } catch (com.fasterxml.jackson.databind.exc.MismatchedInputException e) {
+            logger.error("Wrong file provided!");
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+        }
+    }
+
+    private void setOptionsFromConfig(ScanConfig config){
+        ipTextField.textProperty().set(config.host().address());
+        serviceDetectionCheckbox.selectedProperty().set(config.options().serviceDetection());
+        osDetectionCheckbox.selectedProperty().set(config.options().osDetection());
+        tcpConnectScanCheckbox.selectedProperty().set(config.options().tcpConnectScan());
+        synScanCheckbox.selectedProperty().set(config.options().synScan());
+        timeoutTextField.textProperty().set(config.options().hostTimeout()+"");
+        statsEveryTextField.textProperty().set(config.options().statsEvery()+"");
+        ipMaskCheckbox.selectedProperty().set(config.host().subnet()!=null);
+        ipMaskTextField.textProperty().set(config.host().subnet()+"");
+        portRangeCheckbox.selectedProperty().set((config.range().start()!=-1)||(config.range().end()!=-1));
+        portRangeStartTextField.textProperty().set(config.range().start()+"");
+        portRangeEndTextField.textProperty().set(config.range().end()+"");
     }
 
     private void setupLanguageTexts() {
@@ -251,6 +443,8 @@ public class DashboardController {
         timeoutTextField.promptTextProperty().bind(I18n.bind("dashboard.timeout"));
         statsEveryTextField.promptTextProperty().bind(I18n.bind("dashboard.statsEvery"));
         ipMaskTextField.promptTextProperty().bind(I18n.bind("dashboard.cidrSubnetMask"));
+        portRangeStartTextField.promptTextProperty().bind(I18n.bind("dashboard.portRange-start"));
+        portRangeEndTextField.promptTextProperty().bind(I18n.bind("dashboard.portRange-end"));
 
         saveScanCheckbox.textProperty().bind(I18n.bind("dashboard.saveResult"));
         serviceDetectionCheckbox.textProperty().bind(I18n.bind("dashboard.scanServices"));
@@ -258,6 +452,10 @@ public class DashboardController {
         tcpConnectScanCheckbox.textProperty().bind(I18n.bind("dashboard.enableTcpConnectScan"));
         synScanCheckbox.textProperty().bind(I18n.bind("dashboard.enableSynScan"));
         ipMaskCheckbox.textProperty().bind(I18n.bind("dashboard.includeSubnetMask"));
+        portRangeCheckbox.textProperty().bind(I18n.bind("dashboard.setPortRange"));
+        saveConfigCheckbox.textProperty().bind(I18n.bind("dashboard.saveConfig"));
+
+        configFileFieldLabel.textProperty().bind(I18n.bind("dashboard.configFile"));
 
         startScanButton.textProperty().bind(I18n.bind("dashboard.startScan"));
 

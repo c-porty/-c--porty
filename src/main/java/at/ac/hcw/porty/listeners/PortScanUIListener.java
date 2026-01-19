@@ -2,6 +2,7 @@ package at.ac.hcw.porty.listeners;
 
 import at.ac.hcw.porty.controller.DashboardController;
 import at.ac.hcw.porty.controller.MainController;
+import at.ac.hcw.porty.types.enums.PortStatus;
 import at.ac.hcw.porty.types.records.PortScanResult;
 import at.ac.hcw.porty.types.records.ScanConfig;
 import at.ac.hcw.porty.types.records.ScanSummary;
@@ -50,10 +51,9 @@ public class PortScanUIListener implements PortScanListener {
         Platform.runLater(() -> {
             outputTextList.add(I18n.bind("listener.completed").get() + " " + summary.results().size() + " Ports");
             outputTextList.add(String.format("%s %s: ", I18n.bind("listener.detailed-information").get(), summary.host().address()));
-            for (PortScanResult result : summary.results()) {
-                outputTextList.add(result.toString());
-            }
-            Alert alert = AlertManager.createAlert(
+
+
+            Alert alert = AlertManager.createGridAlert(
                     Alert.AlertType.CONFIRMATION,
                     I18n.bind("listener.scan-successful").get(),
                     I18n.bind("listener.short-summary").get(),

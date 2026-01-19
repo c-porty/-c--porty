@@ -1,6 +1,6 @@
-@import "colors_dark.css";
-@import "dashboard.css";
-@import "credits.css";
-@import "results.css";
-@import "history.css";
-@import "main.css";
+@import "colors/colors_dark.css";
+@import "pages/dashboard.css";
+@import "pages/credits.css";
+@import "pages/results.css";
+@import "pages/history.css";
+@import "pages/main.css";

@@ -4,6 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?>
 
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 <VBox styleClass="porty-dashboard" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.hcw.porty.controller.DashboardController">
     <Label fx:id="dashboardTitle" styleClass="porty-title" text="%dashboard.title" />
     <HBox prefHeight="700.0" prefWidth="1184.0" styleClass="porty-dashboard-content">
@@ -19,10 +20,10 @@
                 <tooltip> <Tooltip fx:id="resultSaveTooltip" text="%tooltip.result-save" /> </tooltip>
             </CheckBox>
 
-            <VBox fx:id="advancedOptionControl" prefHeight="1000.0" prefWidth="100.0">
-                <TitledPane animated="false" styleClass="porty-titled-pane" text="%dashboard.advancedOptions">
+            <VBox fx:id="advancedOptionControl" styleClass="porty-dashboard-advanced-controls" prefHeight="1000.0" prefWidth="100.0">
+                <TitledPane fx:id="advancedOptionTitledPane" animated="false" styleClass="porty-titled-pane" text="%dashboard.advancedOptions">
                     <VBox styleClass="porty-dashboard-advanced-menu">
-                        <CheckBox fx:id="serviceDetectionCheckbox" mnemonicParsing="false" styleClass="porty-dashboard-menu-checkbox" text="%dashboard.scanServices" />
+                        <CheckBox fx:id="serviceDetectionCheckbox" selected="true" mnemonicParsing="false" styleClass="porty-dashboard-menu-checkbox" text="%dashboard.scanServices" />
                         <CheckBox fx:id="osDetectionCheckbox" mnemonicParsing="false" styleClass="porty-dashboard-menu-checkbox" text="%dashboard.scanOs" />
                         <CheckBox fx:id="tcpConnectScanCheckbox" mnemonicParsing="false" styleClass="porty-dashboard-menu-checkbox" text="%dashboard.enableTcpConnectScan" />
                         <CheckBox fx:id="synScanCheckbox" mnemonicParsing="false" styleClass="porty-dashboard-menu-checkbox" text="%dashboard.enableSynScan" />
@@ -30,20 +31,28 @@
                         <TextField fx:id="statsEveryTextField" promptText="%dashboard.statsEvery" />
                         <CheckBox fx:id="ipMaskCheckbox" mnemonicParsing="false" styleClass="porty-dashboard-menu-checkbox" text="%dashboard.includeSubnetMask" />
                         <TextField fx:id="ipMaskTextField" promptText="%dashboard.cidrSubnetMask" />
+                        <CheckBox fx:id="portRangeCheckbox" mnemonicParsing="false" styleClass="porty-dashboard-menu-checkbox" text="%dashboard.setPortRange" />
+                        <HBox>
+                            <TextField fx:id="portRangeStartTextField" promptText="%dashboard.portRange-start" />
+                            <Label fx:id="portRangeConnector" alignment="CENTER"  prefWidth="50" text="–"  styleClass="porty-connector-label" />
+                            <TextField fx:id="portRangeEndTextField" promptText="%dashboard.portRange-end" />
+                        </HBox>
+                        <CheckBox fx:id="saveConfigCheckbox" mnemonicParsing="false" styleClass="porty-dashboard-menu-checkbox" text="%dashboard.saveConfig" />
                     </VBox>
                 </TitledPane>
 
-                <StackPane prefHeight="327.0" styleClass="porty-file-field" visible="false">
-                    <Label text="%dashboard.configFile" />
+                <StackPane fx:id="configFileField" prefHeight="327.0" minHeight="327.0" styleClass="porty-file-field">
+                    <FontIcon iconLiteral="mdi2f-file-cog-outline"/>
+                    <Label fx:id="configFileFieldLabel" text="%dashboard.configFile"/>
                 </StackPane>
             </VBox>
         </VBox>
-
         <VBox prefHeight="200.0" prefWidth="500.0" styleClass="porty-dashboard-scan-view">
             <Label styleClass="porty-dashboard-header" text="%dashboard.scanStatus" />
             <StackPane>
                 <ProgressIndicator fx:id="scanProgressIndicator" styleClass="porty-dashboard-progress-indicator" />
                 <Circle radius="75.0" styleClass="porty-dashboard-progress-indicator-hole"/>
+                <Label fx:id="scanProgressPercentage" text="–" styleClass="porty-dashboard-progress-indicator-percentage"/>
             </StackPane>
             <TitledPane fx:id="scanProgressConsoleTitledPane" animated="false" styleClass="porty-titled-pane" text="%dashboard.console">
                 <ListView fx:id="scanProgressConsole" layoutX="1.0" prefHeight="400.0" prefWidth="500.0" styleClass="porty-console" />

@@ -2,13 +2,15 @@ package at.ac.hcw.porty.utils;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AlertManager {
-    public static Alert createAlert(
+    public static Alert createGridAlert(
             Alert.AlertType type,
             String title,
             String header,
@@ -44,8 +46,23 @@ public class AlertManager {
         alert.getDialogPane().setContent(grid);
         alert.getDialogPane().setPrefSize(prefWidth, prefHeight);
         alert.getDialogPane().getStylesheets()
-                .add(AlertManager.class.getResource("/at/ac/hcw/porty/styles/styles_dark.css").toExternalForm());
+                .add(AlertManager.class.getResource("/at/ac/hcw/porty/styles/alerts/result.css").toExternalForm());
 
+        return alert;
+    }
+
+    public static Alert createDangerAlert(String text, String confirmButtonText){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+
+        alert.setTitle(I18n.bind("history.confirm-delete-title").get());
+        alert.setHeaderText(text);
+
+        ButtonType deleteButton = new ButtonType(confirmButtonText, ButtonBar.ButtonData.OK_DONE);
+        ButtonType cancelButton = new ButtonType(I18n.bind("history.confirm-delete-cancel").get(), ButtonBar.ButtonData.CANCEL_CLOSE);
+
+        alert.getButtonTypes().setAll(deleteButton, cancelButton);
+        alert.getDialogPane().getStylesheets()
+                .add(AlertManager.class.getResource("/at/ac/hcw/porty/styles/alerts/delete.css").toExternalForm());
         return alert;
     }
 }

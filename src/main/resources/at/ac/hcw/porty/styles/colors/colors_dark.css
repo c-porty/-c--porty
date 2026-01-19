@@ -18,6 +18,10 @@
     -porty-switch-container: #332D41;
     -porty-switch-active: #4A4459;
     -porty-switch-icon: #FFFFFF;
+    -porty-on-container-inactive: #9A9A9A;
     -porty-grid-odd: #625B71;
     -porty-grid-even: #332D41;
+    -porty-file-container: #625B71;
+    -porty-file-container-shadow: #514B5D;
+        -porty-file-container-content: #FFFFFF;
 }
