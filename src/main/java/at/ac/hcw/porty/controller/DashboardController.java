@@ -7,6 +7,7 @@ import at.ac.hcw.porty.scanner.Scanner;
 import at.ac.hcw.porty.scanner.ScannerFactory;
 import at.ac.hcw.porty.types.interfaces.MainAwareController;
 import at.ac.hcw.porty.utils.AlertManager;
+import at.ac.hcw.porty.utils.Confetti;
 import at.ac.hcw.porty.utils.I18n;
 import at.ac.hcw.porty.types.records.Host;
 import at.ac.hcw.porty.types.records.NmapOptions;
@@ -28,8 +29,10 @@ import javafx.collections.ListChangeListener;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
@@ -39,7 +42,6 @@ import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.List;
-import java.util.Optional;
 
 import javafx.util.Duration;
 
@@ -73,6 +75,7 @@ public class DashboardController implements MainAwareController {
     @FXML private Tooltip resultSaveTooltip;
     @FXML private CheckBox udpScanCheckbox;
     @FXML private TitledPane scanProgressConsoleTitledPane;
+    @FXML private Pane confettiPane;
 
     private MainController mainController;
 
@@ -546,5 +549,26 @@ public class DashboardController implements MainAwareController {
 
         advancedOptionTitledPane.textProperty().bind(I18n.bind("dashboard.advancedOptions"));
         scanProgressConsoleTitledPane.textProperty().bind(I18n.bind("dashboard.console"));
+    }
+
+    public void celebrateSuccess() {
+        if (confettiPane == null) return;
+
+        double width = confettiPane.getWidth();
+        double height = confettiPane.getHeight();
+
+        int numberOfConfetti = 300;
+        for (int i = 0; i < numberOfConfetti; i++) {
+            Color color = Color.color(Math.random(), Math.random(), Math.random());
+            Confetti confetti = new Confetti(color, width, height);
+            confettiPane.getChildren().add(confetti);
+            confetti.animate();
+
+            confetti.opacityProperty().addListener((obs, oldVal, newVal) -> {
+                if (newVal.doubleValue() <= 0.0) {
+                    confettiPane.getChildren().remove(confetti);
+                }
+            });
+        }
     }
 }

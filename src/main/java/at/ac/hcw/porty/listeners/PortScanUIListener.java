@@ -73,6 +73,9 @@ public class PortScanUIListener implements PortScanListener {
             ButtonType closeButton = new ButtonType(I18n.bind("button.close").get(), ButtonBar.ButtonData.CANCEL_CLOSE);
 
             alert.getButtonTypes().setAll(moreButton, closeButton);
+
+            dashboardController.celebrateSuccess();
+
             Optional<ButtonType> result = alert.showAndWait();
 
             if (result.isPresent() && result.get() == moreButton) {
