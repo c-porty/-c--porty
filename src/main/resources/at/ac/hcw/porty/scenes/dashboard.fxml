@@ -64,7 +64,28 @@
                 <TitledPane fx:id="scanProgressConsoleTitledPane" animated="false" styleClass="porty-titled-pane" text="%dashboard.console">
                     <ListView fx:id="scanProgressConsole" layoutX="1.0" prefHeight="400.0" prefWidth="500.0" styleClass="porty-console" />
                 </TitledPane>
-                <TextArea fx:id="scanProgressInfo" editable="false" prefHeight="400.0" prefWidth="500.0" styleClass="porty-dashboard-textarea" />
+                <VBox fx:id="scanProgressArea" prefHeight="400.0" prefWidth="500.0" styleClass="porty-progress-area" >
+                    <HBox>
+                        <Label prefWidth="180" text="%dashboard.scanProgress.first"/>
+                        <ProgressBar fx:id="stepOneBar" HBox.hgrow="ALWAYS"/>
+                        <FontIcon fx:id="stepOneIcon"  iconLiteral="mdi2p-progress-alert"/>
+                    </HBox>
+                    <HBox>
+                        <Label prefWidth="180" text="%dashboard.scanProgress.second"/>
+                        <ProgressBar fx:id="stepTwoBar" HBox.hgrow="ALWAYS"/>
+                        <FontIcon fx:id="stepTwoIcon" iconLiteral="mdi2p-progress-alert"/>
+                    </HBox>
+                    <HBox>
+                        <Label prefWidth="180" text="%dashboard.scanProgress.third"/>
+                        <ProgressBar fx:id="stepThreeBar" HBox.hgrow="ALWAYS"/>
+                        <FontIcon fx:id="stepThreeIcon" iconLiteral="mdi2p-progress-alert"/>
+                    </HBox>
+                    <HBox>
+                        <Label prefWidth="180" text="%dashboard.scanProgress.fourth"/>
+                        <ProgressBar fx:id="stepFourBar" HBox.hgrow="ALWAYS"/>
+                        <FontIcon fx:id="stepFourIcon" iconLiteral="mdi2p-progress-alert"/>
+                    </HBox>
+                </VBox>
             </VBox>
         </HBox>
     </VBox>

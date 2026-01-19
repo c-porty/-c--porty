@@ -187,7 +187,7 @@ public class HistoryController implements MainAwareController {
             Optional<ButtonType> result = alert.showAndWait();
 
             if (result.isPresent() && result.get().getButtonData() == ButtonBar.ButtonData.OK_DONE) {
-                Path path = Paths.get("src", "main", "saves", selected.getFile()+".json");
+                Path path = Paths.get(IScanResultRepository.savePath, selected.getFile()+".json");
                 File save = path.toFile();
                 if (save.delete()) {
                     logger.info("Deleted the file: {}", save.getName());

@@ -28,6 +28,8 @@ public class PortScanUIListener implements PortScanListener {
     private final MainController mainController;
     private final DashboardController dashboardController;
 
+    private int currentStep = 1;
+
     public PortScanUIListener(ObservableList<String> list, MainController mainController, DashboardController dashboardController) {
         this.outputTextList = list;
         this.mainController = mainController;
@@ -36,6 +38,7 @@ public class PortScanUIListener implements PortScanListener {
 
     @Override public void onStarted(ScanConfig config) {
         Platform.runLater(() -> {
+            setProgressStep(2);
             outputTextList.clear();
             outputTextList.add(I18n.bind("listener.started").get() + " " + config.host().address());
         });
@@ -43,12 +46,14 @@ public class PortScanUIListener implements PortScanListener {
 
     @Override public void onResult(PortScanResult result) {
         Platform.runLater(() -> {
+            setProgressStep(4);
             outputTextList.add(I18n.bind("listener.result").get() + result.host().address() + ":" + result.port() + " -> " + result.status());
         });
     }
 
     @Override public void onComplete(ScanSummary summary) {
         Platform.runLater(() -> {
+            setProgressStep(5);
             outputTextList.add(I18n.bind("listener.completed").get() + " " + summary.results().size() + " Ports");
             outputTextList.add(String.format("%s %s: ", I18n.bind("listener.detailed-information").get(), summary.host().address()));
 
@@ -86,12 +91,14 @@ public class PortScanUIListener implements PortScanListener {
 
     @Override public void onError(Throwable t) {
         Platform.runLater(() -> {
+            setProgressStep(0);
             outputTextList.add(I18n.bind("listener.error").get() + " " + t);
         });
     }
 
     @Override public void onProgress(String msg) {
         Platform.runLater(() -> {
+            setProgressStep(3);
             outputTextList.add(I18n.bind("listener.progress").get() + " " + msg);
 
             Pattern pattern = Pattern.compile("(\\d+(?:\\.\\d+)?)%");
@@ -110,7 +117,16 @@ public class PortScanUIListener implements PortScanListener {
 
     @Override public void onCancel() {
         Platform.runLater(() -> {
+            setProgressStep(0);
             outputTextList.add(I18n.bind("listener.cancelled").get());
         });
+    }
+
+    private void setProgressStep(int step){
+        if(step != currentStep){
+            System.out.println("Trying to set step: " + step + " current step: " + currentStep);
+            dashboardController.setProgressStep(step);
+            currentStep = step;
+        }
     }
 }

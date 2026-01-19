@@ -33,8 +33,11 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.kordamp.ikonli.javafx.FontIcon;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -75,6 +78,15 @@ public class DashboardController implements MainAwareController {
     @FXML private Tooltip resultSaveTooltip;
     @FXML private CheckBox udpScanCheckbox;
     @FXML private TitledPane scanProgressConsoleTitledPane;
+    @FXML private ProgressBar stepOneBar;
+    @FXML private ProgressBar stepTwoBar;
+    @FXML private ProgressBar stepThreeBar;
+    @FXML private ProgressBar stepFourBar;
+    @FXML private FontIcon stepOneIcon;
+    @FXML private FontIcon stepTwoIcon;
+    @FXML private FontIcon stepThreeIcon;
+    @FXML private FontIcon stepFourIcon;
+    @FXML private VBox scanProgressArea;
     @FXML private Pane confettiPane;
 
     private MainController mainController;
@@ -126,6 +138,11 @@ public class DashboardController implements MainAwareController {
                 scanProgressPercentage.setText((int) (progress.doubleValue() * 100) + "%");
             }
         });
+
+        scanProgressArea.visibleProperty()
+                .bind(scanProgressConsoleTitledPane.expandedProperty().not());
+        scanProgressArea.managedProperty()
+                .bind(scanProgressArea.visibleProperty());
 
         configFileField.visibleProperty()
                 .bind(advancedOptionTitledPane.expandedProperty().not());
@@ -255,6 +272,10 @@ public class DashboardController implements MainAwareController {
         portRangeStartTextField.setTextFormatter(portRangeStartFormatter);
         portRangeEndTextField.setTextFormatter(portRangeEndFormatter);
 
+        scanProgressConsoleTitledPane.expandedProperty().set(false);
+
+        setProgressStep(0);
+
         setSimpleMode();
     }
 
@@ -266,6 +287,7 @@ public class DashboardController implements MainAwareController {
     protected void onScanStartButtonClick() {
         if(!onScan) {
             if(!ipTextField.textProperty().get().isEmpty()) {
+                setProgressStep(1);
                 scanProgressPercentage.textProperty().unbind();
                 setProgress(0.0);
                 scanProgressPercentage.setText("0%");
@@ -279,13 +301,15 @@ public class DashboardController implements MainAwareController {
                 alert.showAndWait();
             }
         } else{
+            setProgressStep(0);
             scanProgressPercentage.textProperty().unbind();
             setProgress(0.0);
             if(handle != null) {
                 handle.cancel();
             }
             startScanButton.setStyle("-fx-background-color: -porty-secondary;");
-            startScanButton.setText("Start Scan");
+            startScanButton.textProperty().unbind();
+            startScanButton.textProperty().bind(I18n.bind("dashboard.startScan"));
             onScan=false;
         }
     }
@@ -364,6 +388,72 @@ public class DashboardController implements MainAwareController {
 
     public void setProgress(double percent){
         scanProgressIndicator.setProgress(percent/100);
+    }
+
+    public void setProgressStep(int step){
+        switch(step) {
+            case 0:
+                upcomingStep(stepOneBar,stepOneIcon);
+                upcomingStep(stepTwoBar,stepTwoIcon);
+                upcomingStep(stepThreeBar,stepThreeIcon);
+                upcomingStep(stepFourBar,stepFourIcon);
+                break;
+            case 1:
+                activeStep(stepOneBar, stepOneIcon);
+                upcomingStep(stepTwoBar,stepTwoIcon);
+                upcomingStep(stepThreeBar,stepThreeIcon);
+                upcomingStep(stepFourBar,stepFourIcon);
+                break;
+            case 2:
+                doneStep(stepOneBar, stepOneIcon);
+                activeStep(stepTwoBar,stepTwoIcon);
+                upcomingStep(stepThreeBar,stepThreeIcon);
+                upcomingStep(stepFourBar,stepFourIcon);
+                break;
+            case 3:
+                doneStep(stepOneBar, stepOneIcon);
+                doneStep(stepTwoBar,stepTwoIcon);
+                activeStep(stepThreeBar,stepThreeIcon);
+                upcomingStep(stepFourBar,stepFourIcon);
+                break;
+            case 4:
+                doneStep(stepOneBar, stepOneIcon);
+                doneStep(stepTwoBar,stepTwoIcon);
+                doneStep(stepThreeBar,stepThreeIcon);
+                activeStep(stepFourBar,stepFourIcon);
+                break;
+            case 5:
+                doneStep(stepOneBar, stepOneIcon);
+                doneStep(stepTwoBar,stepTwoIcon);
+                doneStep(stepThreeBar,stepThreeIcon);
+                doneStep(stepFourBar,stepFourIcon);
+                break;
+            default:
+                logger.warn("Option not found: {}", step);
+        }
+    }
+
+    private void activeStep(ProgressBar progressBar, FontIcon icon){
+        progressBar.setVisible(true);
+        progressBar.setManaged(true);
+        icon.setVisible(false);
+        icon.getStyleClass().remove("porty-done");
+    }
+
+    private void doneStep(ProgressBar progressBar, FontIcon icon){
+        progressBar.setVisible(false);
+        progressBar.setManaged(false);
+        icon.setVisible(true);
+        icon.setIconLiteral("mdi2p-progress-check");
+        icon.getStyleClass().add("porty-done");
+    }
+
+    private void upcomingStep(ProgressBar progressBar, FontIcon icon){
+        progressBar.setVisible(false);
+        progressBar.setManaged(false);
+        icon.setVisible(true);
+        icon.setIconLiteral("mdi2p-progress-alert");
+        icon.getStyleClass().remove("porty-done");
     }
 
     protected void setDTO() {
