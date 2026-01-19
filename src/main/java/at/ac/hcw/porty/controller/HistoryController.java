@@ -1,10 +1,13 @@
 package at.ac.hcw.porty.controller;
 
+import at.ac.hcw.porty.app.MockScannerCLITest;
 import at.ac.hcw.porty.dto.ScanHistoryDTO;
 import at.ac.hcw.porty.repositories.ScanResultRepositoryFactory;
 import at.ac.hcw.porty.types.enums.PortStatus;
 import at.ac.hcw.porty.types.enums.ScanResultRepositoryOption;
 import at.ac.hcw.porty.types.interfaces.IScanResultRepository;
+import at.ac.hcw.porty.types.interfaces.MainAwareController;
+import at.ac.hcw.porty.types.records.Host;
 import at.ac.hcw.porty.types.records.PortScanResult;
 import at.ac.hcw.porty.types.records.ScanSummary;
 import at.ac.hcw.porty.utils.AlertManager;
@@ -21,6 +24,8 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.util.Duration;
 import org.kordamp.ikonli.javafx.FontIcon;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -30,7 +35,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-public class HistoryController {
+public class HistoryController implements MainAwareController {
     @FXML private TableView<ScanHistoryDTO> historyTable;
     @FXML private TableColumn<ScanHistoryDTO, Instant> dateCol;
     @FXML private TableColumn<ScanHistoryDTO, String> addressCol;
@@ -39,6 +44,10 @@ public class HistoryController {
     @FXML private BarChart<String, Number> historyChart;
     @FXML private Label historyTitle;
     @FXML private Button deleteEntryButton;
+
+    private MainController mainController;
+    private static final Logger logger =
+            LoggerFactory.getLogger(HistoryController.class);
 
     ObservableList<ScanHistoryDTO> tableEntries = FXCollections.observableArrayList();
 
@@ -151,8 +160,19 @@ public class HistoryController {
         historyChart.setLegendVisible(false);
     }
 
-    public void openResultPage(String file){
+    @Override
+    public void setMainController(MainController mainController){this.mainController = mainController;}
 
+    public void openResultPage(String file){
+        String[] data = file.split("-");
+        Host host = new Host(data[0]);
+        Instant startedAt = Instant.ofEpochSecond(Long.parseLong(data[1]));
+        Optional<ScanSummary> summary = historyHandler.load(host,startedAt);
+        if(summary.isPresent()) {
+            mainController.navigateToResults(summary.get());
+        } else {
+            logger.error("Could not find summary: {}", host.address()+"-"+startedAt.getEpochSecond());
+        }
     }
 
     @FXML
@@ -166,11 +186,11 @@ public class HistoryController {
                 Path path = Paths.get("src", "main", "saves", selected.getFile()+".json");
                 File save = path.toFile();
                 if (save.delete()) {
-                    System.out.println("Deleted the file: " + save.getName());
+                    logger.info("Deleted the file: {}", save.getName());
                     historyTable.getItems().remove(selected);
 
                 } else {
-                    System.out.println("Failed to delete the file.");
+                    logger.error("Failed to delete the file.");
                 }
             }
         }

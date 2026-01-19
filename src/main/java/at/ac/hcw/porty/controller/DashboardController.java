@@ -5,6 +5,7 @@ import at.ac.hcw.porty.listeners.PortScanCLIListener;
 import at.ac.hcw.porty.listeners.PortScanUIListener;
 import at.ac.hcw.porty.scanner.Scanner;
 import at.ac.hcw.porty.scanner.ScannerFactory;
+import at.ac.hcw.porty.types.interfaces.MainAwareController;
 import at.ac.hcw.porty.utils.I18n;
 import at.ac.hcw.porty.types.records.Host;
 import at.ac.hcw.porty.types.records.NmapOptions;
@@ -25,7 +26,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
-public class DashboardController {
+public class DashboardController implements MainAwareController {
     @FXML private Button startScanButton;
     @FXML private ListView<String> scanProgressConsole;
     @FXML private TextField ipTextField;

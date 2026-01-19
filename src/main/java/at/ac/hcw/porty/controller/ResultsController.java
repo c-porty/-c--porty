@@ -1,6 +1,7 @@
 package at.ac.hcw.porty.controller;
 
 import at.ac.hcw.porty.dto.ScanResultDTO;
+import at.ac.hcw.porty.types.interfaces.MainAwareController;
 import at.ac.hcw.porty.types.records.PortScanResult;
 import at.ac.hcw.porty.types.records.ScanSummary;
 import at.ac.hcw.porty.types.records.TechnicalReference;
@@ -42,7 +43,7 @@ import org.kordamp.ikonli.javafx.FontIcon;
 
 import static at.ac.hcw.porty.utils.FileExportToPDF.exportToPdf;
 
-public class ResultsController {
+public class ResultsController implements MainAwareController {
     private static final Logger logger =
             LoggerFactory.getLogger(ResultsController.class);
     private static final ExecutorService BROWSER_THREAD = Executors.newCachedThreadPool();
@@ -64,6 +65,7 @@ public class ResultsController {
 
     int row = 0;
 
+    @Override
     public void setMainController(MainController mainController) {
         this.mainController = mainController;
     }
@@ -110,7 +112,7 @@ public class ResultsController {
 
             Alert alert = null;
             if (success) {
-                alert = AlertManager.createAlert(
+                alert = AlertManager.createGridAlert(
                     Alert.AlertType.INFORMATION,
                     I18n.bind("export.success").get(),
                     I18n.bind("export.success.body").get(),
@@ -119,7 +121,7 @@ public class ResultsController {
                     100
                 );
             } else {
-                alert = AlertManager.createAlert(
+                alert = AlertManager.createGridAlert(
                     Alert.AlertType.ERROR,
                     I18n.bind("export.failed").get(),
                     I18n.bind("export.failed.body").get(),

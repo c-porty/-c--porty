@@ -1,5 +1,6 @@
 package at.ac.hcw.porty.controller;
 
+import at.ac.hcw.porty.types.interfaces.MainAwareController;
 import at.ac.hcw.porty.utils.I18n;
 import at.ac.hcw.porty.types.enums.Language;
 import at.ac.hcw.porty.types.records.ScanSummary;
@@ -191,8 +192,12 @@ public class MainController {
             contentBorderPane.setCenter(loader.load());
 
             Object controller = loader.getController();
+
+            if(controller instanceof MainAwareController mainAwareController){
+                mainAwareController.setMainController(this);
+            }
+
             if (controller instanceof ResultsController resultsController) {
-                resultsController.setMainController(this);
                 if (scanSummary != null) {
                     resultsController.setScanSummary(scanSummary);
                 }
@@ -200,7 +205,6 @@ public class MainController {
 
             if (controller instanceof DashboardController dashboardController) {
                 dashBoardController = dashboardController;
-                dashboardController.setMainController(this);
 
                 simplicityModeSwitch.setVisible(true);
                 simplicityModeSwitch.setManaged(true);
