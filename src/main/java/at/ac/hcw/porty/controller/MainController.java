@@ -13,11 +13,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
+import javafx.util.Duration;
 import org.controlsfx.control.ToggleSwitch;
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -40,6 +42,10 @@ public class MainController {
     @FXML private Label yourIpAddress;
     @FXML private Label simpleOption;
     @FXML private Label advancedOption;
+
+    @FXML private Tooltip changeModeTooltip;
+    @FXML private Tooltip changeThemeTooltip;
+    @FXML private Tooltip languageTooltip;
 
     private FontIcon switchIcon;
 
@@ -140,6 +146,15 @@ public class MainController {
 
         langDeItem.textProperty().bind(I18n.bind("german"));
         langEnItem.textProperty().bind(I18n.bind("english"));
+
+        changeModeTooltip.textProperty().bind(I18n.bind("tooltip.change-mode"));
+        changeModeTooltip.setShowDelay(Duration.millis(100));
+
+        changeThemeTooltip.textProperty().bind(I18n.bind("tooltip.change-theme"));
+        changeThemeTooltip.setShowDelay(Duration.millis(100));
+
+        languageTooltip.textProperty().bind(I18n.bind("tooltip.language"));
+        languageTooltip.setShowDelay(Duration.millis(100));
     }
 
     @FXML

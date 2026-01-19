@@ -19,6 +19,7 @@
         <Region HBox.hgrow="ALWAYS" />
         <HBox alignment="CENTER_LEFT">
             <Button fx:id="closeButton" styleClass="porty-results-button" mnemonicParsing="false" onAction="#navigateBack">
+                <tooltip> <Tooltip fx:id="resultCloseTooltip" text="%button.close" /> </tooltip>
                 <graphic>
                     <FontIcon iconLiteral="mdi2c-close" styleClass="porty-results-button-icon"/>
                 </graphic>

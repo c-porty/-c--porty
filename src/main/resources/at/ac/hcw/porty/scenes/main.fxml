@@ -39,6 +39,7 @@
             <top>
                 <HBox prefHeight="50.0" prefWidth="1184.0" styleClass="porty-top-bar">
                     <ToggleButton fx:id="simplicityModeSwitch" mnemonicParsing="false" styleClass="porty-switch-text">
+                        <tooltip> <Tooltip fx:id="changeModeTooltip" text="%tooltip.change-mode" /> </tooltip>
                         <graphic>
                             <HBox styleClass="porty-switch-text-box">
                                 <Label fx:id="simpleOption" text="%simple">
@@ -57,8 +58,11 @@
                         </graphic>
                     </ToggleButton>
                     <Region styleClass="porty-top-bar-spacer" HBox.hgrow="ALWAYS" />
-                    <ToggleSwitch fx:id="lightModeSwitch" styleClass="porty-switch-icon" />
+                    <ToggleSwitch fx:id="lightModeSwitch" styleClass="porty-switch-icon">
+                        <tooltip> <Tooltip fx:id="changeThemeTooltip" text="%tooltip.change-theme" /> </tooltip>
+                    </ToggleSwitch>
                     <MenuButton fx:id="languageMenu" styleClass="porty-top-bar-button">
+                        <tooltip> <Tooltip fx:id="languageTooltip" text="%tooltip.language" /> </tooltip>
                         <items>
                             <RadioMenuItem fx:id="langDeItem" text="%german"/>
                             <RadioMenuItem fx:id="langEnItem" text="%english"/>
