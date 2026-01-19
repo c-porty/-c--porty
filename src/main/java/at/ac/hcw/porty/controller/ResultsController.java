@@ -352,7 +352,7 @@ public class ResultsController {
     private String getFileNameForPDF() {
         Instant start = scanSummary.startedAt();
         ZonedDateTime zdt = start.atZone(ZoneId.systemDefault());
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy-HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy-HH_mm");
         String formattedDate = zdt.format(formatter);
 
         String safeHost = scanSummary.host().address()
