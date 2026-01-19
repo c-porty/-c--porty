@@ -14,7 +14,7 @@
     <VBox styleClass="porty-dashboard" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
         <Label fx:id="dashboardTitle" styleClass="porty-title" text="%dashboard.title" />
         <HBox prefHeight="700.0" prefWidth="1184.0" styleClass="porty-dashboard-content">
-            <VBox prefHeight="200.0" prefWidth="500.0" styleClass="porty-dashboard-simple-control">
+            <VBox prefHeight="200.0" prefWidth="500.0" styleClass="porty-dashboard-simple-control" HBox.hgrow="ALWAYS">
                 <VBox>
                     <Label fx:id="scanLabel" styleClass="porty-dashboard-header" text="%dashboard.scanLabel" />
                     <Label fx:id="descriptorLabel" styleClass="porty-dashboard-label" text="%dashboard.quickScan" />
@@ -54,7 +54,7 @@
                     </StackPane>
                 </VBox>
             </VBox>
-            <VBox prefHeight="200.0" prefWidth="500.0" styleClass="porty-dashboard-scan-view">
+            <VBox prefHeight="200.0" prefWidth="500.0" styleClass="porty-dashboard-scan-view" HBox.hgrow="ALWAYS">
                 <Label styleClass="porty-dashboard-header" text="%dashboard.scanStatus" />
                 <StackPane>
                     <ProgressIndicator fx:id="scanProgressIndicator" styleClass="porty-dashboard-progress-indicator" />
