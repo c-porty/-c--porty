@@ -319,7 +319,7 @@ public class ResultsController {
         if (ref == null || ref.uri() == null) return;
         if (!Desktop.isDesktopSupported()) {
             logger.warn("Desktop browsing not supported on this platform");
-            Alert warning = AlertManager.createAlert(
+            Alert warning = AlertManager.createGridAlert(
                 Alert.AlertType.WARNING,
                     I18n.bind("result.open-failed.title").get(),
                     I18n.bind("result.open-failed.body").get(),

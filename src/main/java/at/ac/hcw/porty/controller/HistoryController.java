@@ -128,12 +128,7 @@ public class HistoryController {
         for(ScanSummary scanFile : scanFiles){
             String address = scanFile.host().address();
             Instant timestamp = scanFile.startedAt();
-            int openPorts =0;
-            for(PortScanResult port: scanFile.results()) {
-                if(port.status()== PortStatus.OPEN){
-                    openPorts++;
-                }
-            }
+            int openPorts = scanFile.results().size();
             String filename = address+"-"+timestamp.getEpochSecond();
             ScanHistoryDTO entry = new ScanHistoryDTO(timestamp, address, openPorts, filename, scanFile.severity());
             tableEntries.add(entry);

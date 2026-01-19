@@ -51,12 +51,6 @@ public class PortScanUIListener implements PortScanListener {
         Platform.runLater(() -> {
             outputTextList.add(I18n.bind("listener.completed").get() + " " + summary.results().size() + " Ports");
             outputTextList.add(String.format("%s %s: ", I18n.bind("listener.detailed-information").get(), summary.host().address()));
-            for (PortScanResult result : summary.results()) {
-                outputTextList.add(result.toString());
-                if(result.status()== PortStatus.OPEN){
-                    openPorts++;
-                }
-            }
 
 
             Alert alert = AlertManager.createGridAlert(

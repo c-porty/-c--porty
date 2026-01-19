@@ -224,14 +224,14 @@ public class DashboardController {
         advancedOptions = true;
     }
 
-    protected void scan(NmapOptions options){
+    protected void scan(NmapOptions options, PortRange range){
         if(!scanConfigDTO.getHost().isEmpty() && scanConfigDTO.getHost()!=null) {
             startScanButton.setStyle("-fx-background-color: red;");
             startScanButton.textProperty().unbind();
             startScanButton.textProperty().bind(I18n.bind("dashboard.stopScan"));
             onScan = true;
             new Thread(() -> {
-                handle = scanHandleGenerator(new Host(scanConfigDTO.getHost(), scanConfigDTO.isIncludeSubnetMask()? scanConfigDTO.getSubnetMask(): null), new PortRange(-1, -1), options);
+                handle = scanHandleGenerator(new Host(scanConfigDTO.getHost(), scanConfigDTO.isIncludeSubnetMask()? scanConfigDTO.getSubnetMask(): null), range, options);
                 handle.summary().join();
                 Platform.runLater(() -> {
                     startScanButton.setStyle("-fx-background-color: -porty-secondary;");

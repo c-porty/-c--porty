@@ -17,7 +17,7 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
     </TableView>
-    <Button fx:id="deleteEntryButton" mnemonicParsing="false" text="%history.delete-entry" styleClass="porty-history-table-drop-button"/>
+    <Button fx:id="deleteEntryButton" onAction="#onDropButtonClick" mnemonicParsing="false" text="%history.delete-entry" styleClass="porty-history-table-drop-button"/>
     <BarChart fx:id="historyChart" styleClass="porty-history-chart">
         <xAxis>
             <CategoryAxis side="BOTTOM" />
