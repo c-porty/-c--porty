@@ -205,4 +205,8 @@ public class MainController {
             logger.error(e.getMessage(), e);
         }
     }
+
+    public boolean darkModeIsActive() {
+        return !lightModeSwitch.isSelected();
+    }
 }

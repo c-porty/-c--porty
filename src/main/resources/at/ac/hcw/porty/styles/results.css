@@ -39,11 +39,11 @@
     -fx-border-width: 0 0 0 1;
 }
 
-.porty-results-button-close {
+.porty-results-button {
     -fx-background-color: transparent;
 }
 
-.porty-results-button-close-icon {
+.porty-results-button-icon {
     -fx-icon-color: -porty-on-background;
     -fx-icon-size: 40px;
 }

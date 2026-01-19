@@ -15,6 +15,8 @@ module at.ac.hcw.porty {
     requires com.fasterxml.jackson.databind;
     requires com.fasterxml.jackson.datatype.jsr310;
     requires com.google.common;
+    requires javafx.swing;
+    requires org.apache.pdfbox;
 
     opens at.ac.hcw.porty.types.enums
             to com.fasterxml.jackson.databind,

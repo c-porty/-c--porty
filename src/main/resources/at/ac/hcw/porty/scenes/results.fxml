@@ -3,14 +3,14 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-
 <?import org.kordamp.ikonli.javafx.FontIcon?>
-<VBox xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
-      fx:controller="at.ac.hcw.porty.controller.ResultsController"
-      prefHeight="960.0" prefWidth="1184.0">
+<VBox
+    fx:id="root"
+    xmlns="http://javafx.com/javafx"
+    xmlns:fx="http://javafx.com/fxml"
+    fx:controller="at.ac.hcw.porty.controller.ResultsController"
+    prefHeight="960.0" prefWidth="1184.0"
+>
     <HBox>
         <VBox spacing="-8">
             <Label fx:id="resultTitle" styleClass="porty-title-large" text="%result.title" />
@@ -18,11 +18,24 @@
         </VBox>
         <Region HBox.hgrow="ALWAYS" />
         <HBox alignment="CENTER_LEFT">
-            <Button styleClass="porty-results-button-close" mnemonicParsing="false" onAction="#navigateBack">
+            <Button fx:id="closeButton" styleClass="porty-results-button" mnemonicParsing="false" onAction="#navigateBack">
                 <graphic>
-                    <FontIcon iconLiteral="mdi2c-close" styleClass="porty-results-button-close-icon"/>
+                    <FontIcon iconLiteral="mdi2c-close" styleClass="porty-results-button-icon"/>
                 </graphic>
             </Button>
+            <Button fx:id="exportButton"
+                    styleClass="porty-results-button"
+                    mnemonicParsing="false"
+                    onAction="#exportPdf">
+                <graphic>
+                    <FontIcon iconLiteral="mdi2d-download"
+                              styleClass="porty-results-button-icon"/>
+                </graphic>
+                <tooltip>
+                    <Tooltip fx:id="exportToPDFTooltip" text="%tooltip.export-to-pdf" />
+                </tooltip>
+            </Button>
+
         </HBox>
     </HBox>
 
