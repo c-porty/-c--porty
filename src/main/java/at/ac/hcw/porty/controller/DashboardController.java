@@ -69,6 +69,7 @@ public class DashboardController implements MainAwareController {
     @FXML private Label configFileFieldLabel;
     @FXML private Tooltip resultSaveTooltip;
     @FXML private CheckBox udpScanCheckbox;
+    @FXML private TitledPane scanProgressConsoleTitledPane;
 
     private MainController mainController;
 
@@ -476,6 +477,7 @@ public class DashboardController implements MainAwareController {
         resultSaveTooltip.textProperty().bind(I18n.bind("tooltip.result-save"));
         resultSaveTooltip.setShowDelay(Duration.millis(100));
 
-
+        advancedOptionTitledPane.textProperty().bind(I18n.bind("dashboard.advancedOptions"));
+        scanProgressConsoleTitledPane.textProperty().bind(I18n.bind("dashboard.console"));
     }
 }
