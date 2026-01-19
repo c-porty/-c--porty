@@ -44,3 +44,6 @@ bin/
 
 ### Save Files
 src/main/saves/*
+
+### exported pdfs
+*/*.pdf

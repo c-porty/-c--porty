@@ -7,17 +7,20 @@ import at.ac.hcw.porty.types.records.TechnicalReference;
 import at.ac.hcw.porty.utils.AlertManager;
 import at.ac.hcw.porty.utils.I18n;
 import javafx.application.Platform;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.*;
 
 import java.awt.*;
-import java.lang.ref.Reference;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -29,20 +32,31 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import javafx.scene.control.Button;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.stage.FileChooser;
+import javafx.util.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.kordamp.ikonli.javafx.FontIcon;
+
+import static at.ac.hcw.porty.utils.FileExportToPDF.exportToPdf;
 
 public class ResultsController {
     private static final Logger logger =
             LoggerFactory.getLogger(ResultsController.class);
     private static final ExecutorService BROWSER_THREAD = Executors.newCachedThreadPool();
+    private static final double SNAPSHOT_SCALE = 2.0;
 
     @FXML private Label dateTimeLabel;
     @FXML private GridPane resultGrid;
     @FXML private Region redBar;
     @FXML private Region greenBar;
     @FXML private Label resultTitle;
+    @FXML private VBox root;
+    @FXML private Button exportButton;
+    @FXML private Button closeButton;
+    @FXML private Tooltip exportToPDFTooltip;
 
     private MainController mainController;
     private ScanSummary scanSummary;
@@ -61,7 +75,7 @@ public class ResultsController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm");
 
         dateTimeLabel.setText(zdt.format(formatter));
-
+        exportToPDFTooltip.setShowDelay(Duration.millis(100));
         displayScanSummary();
 
         Platform.runLater(() -> updateRiskBar(scanSummary.severity()));
@@ -70,6 +84,54 @@ public class ResultsController {
     @FXML
     private void navigateBack() {
         mainController.traceBackNavigation();
+    }
+
+    @FXML
+    private void exportPdf() {
+        boolean darkMode = isDarkModeActive();
+        closeButton.setVisible(false);
+        exportButton.setVisible(false);
+
+        root.applyCss();
+        root.layout();
+
+        FileChooser chooser = new FileChooser();
+        chooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("PDF Files", "*.pdf")
+        );
+        chooser.setInitialFileName(getFileNameForPDF());
+        File file = chooser.showSaveDialog(root.getScene().getWindow());
+
+        BufferedImage image = snapshotView(darkMode);
+        if (file != null) {
+            boolean success = exportToPdf(file, darkMode, image);
+
+            Alert alert = null;
+            if (success) {
+                alert = AlertManager.createAlert(
+                    Alert.AlertType.INFORMATION,
+                    I18n.bind("export.success").get(),
+                    I18n.bind("export.success.body").get(),
+                    new ArrayList<>(0),
+                    400,
+                    100
+                );
+            } else {
+                alert = AlertManager.createAlert(
+                    Alert.AlertType.ERROR,
+                    I18n.bind("export.failed").get(),
+                    I18n.bind("export.failed.body").get(),
+                    new ArrayList<>(0),
+                    400,
+                    100
+                );
+            }
+
+            alert.show();
+        }
+
+        closeButton.setVisible(true);
+        exportButton.setVisible(true);
     }
 
     public void displayScanSummary() {
@@ -167,6 +229,7 @@ public class ResultsController {
 
     private void setupLanguageTexts() {
         resultTitle.textProperty().bind(I18n.bind("result.title"));
+        exportToPDFTooltip.textProperty().bind(I18n.bind("tooltip.export-to-pdf"));
     }
 
     private void addPortRow(String leftText, String rightText, TechnicalReference technicalReference, boolean firstRow, boolean lastRow, boolean even) {
@@ -268,5 +331,35 @@ public class ResultsController {
                 logger.error("Failed to open technical reference: {}", ref.uri(), e);
             }
         });
+    }
+
+    private boolean isDarkModeActive() {
+        if (mainController != null) {
+            return mainController.darkModeIsActive();
+        }
+        return true;
+    }
+
+    private BufferedImage snapshotView(boolean darkMode) {
+        SnapshotParameters params = new SnapshotParameters();
+        params.setFill(darkMode ? Paint.valueOf("#141218") : Color.WHITE);
+        params.setTransform(javafx.scene.transform.Transform.scale(SNAPSHOT_SCALE, SNAPSHOT_SCALE));
+        WritableImage fxImage = root.snapshot(params, null);
+
+        return SwingFXUtils.fromFXImage(fxImage, null);
+    }
+
+    private String getFileNameForPDF() {
+        Instant start = scanSummary.startedAt();
+        ZonedDateTime zdt = start.atZone(ZoneId.systemDefault());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy-HH_mm");
+        String formattedDate = zdt.format(formatter);
+
+        String safeHost = scanSummary.host().address()
+                .replace(":", "-")   // replace colons (IPv6) with dash
+                .replace("/", "-")   // replace slashes if any
+                .replace("\\", "-"); // replace backslashes if any
+
+        return String.format("Scan-%s-%s.pdf", safeHost, formattedDate);
     }
 }
