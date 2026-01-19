@@ -22,6 +22,7 @@ import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.collections.ListChangeListener;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
@@ -49,6 +50,10 @@ public class DashboardController implements MainAwareController {
     @FXML private TextField portRangeEndTextField;
     @FXML private Label portRangeConnector;
     @FXML private Label scanProgressPercentage;
+    @FXML private CheckBox saveConfigCheckbox;
+    @FXML private StackPane configFileField;
+    @FXML private TitledPane advancedOptionTitledPane;
+    @FXML private Label configFileFieldLabel;
     @FXML private Tooltip resultSaveTooltip;
 
     private MainController mainController;
@@ -79,23 +84,16 @@ public class DashboardController implements MainAwareController {
 
         scanProgressIndicator.progressProperty().addListener((ov, oldValue, progress) -> {
             if (progress.doubleValue() >= 1.0) {
-                scanProgressPercentage.setText(I18n.bind("dashboard.scan-done").get());
+                scanProgressPercentage.textProperty().bind(I18n.bind("dashboard.scan.done"));
             } else {
                 scanProgressPercentage.setText((int) (progress.doubleValue() * 100) + "%");
             }
         });
 
-        descriptorLabel.textProperty().addListener((obs, oldText, newText) -> {
-            if (scanProgressIndicator.getProgress() >= 1.0) {
-                scanProgressPercentage.setText(I18n.bind("dashboard.scan-done").get());
-            }
-        });
-
-        I18n.bind("dashboard.scan-done").addListener((obs, oldValue, newValue) -> {
-                if (scanProgressIndicator.getProgress() >= 1.0) {
-                    scanProgressPercentage.setText(I18n.bind("dashboard.scan-done").get());
-                }
-        });
+        configFileField.visibleProperty()
+                .bind(advancedOptionTitledPane.expandedProperty().not());
+        configFileField.managedProperty()
+                .bind(configFileField.visibleProperty());
 
         TextFormatter<Long> longFormatter = new TextFormatter<>(change -> {
             String newText = change.getControlNewText();
@@ -202,6 +200,7 @@ public class DashboardController implements MainAwareController {
 
     @FXML
     protected void onScanStartButtonClick() throws InterruptedException {
+        scanProgressPercentage.textProperty().unbind();
         setProgress(0.0);
         if(!onScan) {
             scanProgressPercentage.setText("0%");
@@ -231,6 +230,7 @@ public class DashboardController implements MainAwareController {
     public void setAdvancedMode(){
         advancedOptionControl.setVisible(true);
         advancedOptionControl.setManaged(true);
+        advancedOptionTitledPane.expandedProperty().set(false);
         descriptorLabel.textProperty().unbind();
         descriptorLabel.textProperty().bind(I18n.bind("dashboard.advancedScan"));
         advancedOptions = true;
@@ -339,6 +339,12 @@ public class DashboardController implements MainAwareController {
         tcpConnectScanCheckbox.textProperty().bind(I18n.bind("dashboard.enableTcpConnectScan"));
         synScanCheckbox.textProperty().bind(I18n.bind("dashboard.enableSynScan"));
         ipMaskCheckbox.textProperty().bind(I18n.bind("dashboard.includeSubnetMask"));
+        portRangeCheckbox.textProperty().bind(I18n.bind("dashboard.setPortRange"));
+        portRangeStartTextField.textProperty().bind(I18n.bind("dashboard.portRange-start"));
+        portRangeEndTextField.textProperty().bind(I18n.bind("dashboard.portRange-end"));
+        saveConfigCheckbox.textProperty().bind(I18n.bind("dashboard.saveConfig"));
+
+        configFileFieldLabel.textProperty().bind(I18n.bind("dashboard.configFile"));
 
         startScanButton.textProperty().bind(I18n.bind("dashboard.startScan"));
 

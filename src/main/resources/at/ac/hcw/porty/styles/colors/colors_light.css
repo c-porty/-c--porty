@@ -21,4 +21,7 @@
     -porty-on-container-inactive: #D2D2D2;
     -porty-grid-odd: #D9D9D9;
     -porty-grid-even: #F7F7F7;
+    -porty-file-container: #F3EDF7;
+    -porty-file-container-shadow: #C9C4CD;
+    -porty-file-container-content: #49454F;
 }

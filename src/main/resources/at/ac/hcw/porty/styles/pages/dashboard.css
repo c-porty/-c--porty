@@ -167,3 +167,7 @@
     -fx-font-size: 36px;
     -fx-font-weight: bold;
 }
+
+.porty-dashboard-advanced-controls{
+    -fx-spacing: 26px;
+}
