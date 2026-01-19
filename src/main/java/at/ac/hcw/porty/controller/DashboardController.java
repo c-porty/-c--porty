@@ -6,6 +6,7 @@ import at.ac.hcw.porty.listeners.PortScanUIListener;
 import at.ac.hcw.porty.scanner.Scanner;
 import at.ac.hcw.porty.scanner.ScannerFactory;
 import at.ac.hcw.porty.types.interfaces.MainAwareController;
+import at.ac.hcw.porty.utils.AlertManager;
 import at.ac.hcw.porty.utils.I18n;
 import at.ac.hcw.porty.types.records.Host;
 import at.ac.hcw.porty.types.records.NmapOptions;
@@ -35,6 +36,8 @@ import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
+
 import javafx.util.Duration;
 
 public class DashboardController implements MainAwareController {
@@ -138,6 +141,9 @@ public class DashboardController implements MainAwareController {
                 for (File file : files) {
                     if (file.getName().endsWith(".json")) {
                         loadConfig(file);
+                    }else{
+                        Alert alert = AlertManager.createErrorAlert(I18n.bind("dashboard.configFile.load.error").get());
+                        alert.showAndWait();
                     }
                 }
             }
@@ -412,7 +418,11 @@ public class DashboardController implements MainAwareController {
             ScanConfig scanConfig = mapper.readValue(file, ScanConfig.class);
             logger.info("Config loaded: "+scanConfig);
             setOptionsFromConfig(scanConfig);
+            Alert alert = AlertManager.createInfoAlert(I18n.bind("dashboard.configFile.load.success").get());
+            alert.showAndWait();
         } catch (com.fasterxml.jackson.databind.exc.MismatchedInputException e) {
+            Alert alert = AlertManager.createErrorAlert(I18n.bind("dashboard.configFile.load.error").get());
+            alert.showAndWait();
             logger.error("Wrong file provided!");
         } catch (IOException e) {
             logger.error(e.getMessage(), e);

@@ -54,15 +54,39 @@ public class AlertManager {
     public static Alert createDangerAlert(String text, String confirmButtonText){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 
-        alert.setTitle(I18n.bind("history.confirm-delete-title").get());
+        alert.setTitle(I18n.bind("alert.confirm-title").get());
         alert.setHeaderText(text);
 
         ButtonType deleteButton = new ButtonType(confirmButtonText, ButtonBar.ButtonData.OK_DONE);
-        ButtonType cancelButton = new ButtonType(I18n.bind("history.confirm-delete-cancel").get(), ButtonBar.ButtonData.CANCEL_CLOSE);
+        ButtonType cancelButton = new ButtonType(I18n.bind("alert.cancel").get(), ButtonBar.ButtonData.CANCEL_CLOSE);
 
         alert.getButtonTypes().setAll(deleteButton, cancelButton);
         alert.getDialogPane().getStylesheets()
                 .add(AlertManager.class.getResource("/at/ac/hcw/porty/styles/alerts/delete.css").toExternalForm());
+        return alert;
+    }
+
+    public static Alert createInfoAlert(String text){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+
+        alert.setTitle(I18n.bind("alert.info").get());
+        alert.setHeaderText(text);
+
+        alert.getDialogPane().getStylesheets()
+                .add(AlertManager.class.getResource("/at/ac/hcw/porty/styles/alerts/info.css").toExternalForm());
+
+        return alert;
+    }
+
+    public static Alert createErrorAlert(String text){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+
+        alert.setTitle(I18n.bind("alert.error").get());
+        alert.setHeaderText(text);
+
+        alert.getDialogPane().getStylesheets()
+                .add(AlertManager.class.getResource("/at/ac/hcw/porty/styles/alerts/error.css").toExternalForm());
+
         return alert;
     }
 }
