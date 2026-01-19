@@ -27,6 +27,7 @@
                         <CheckBox fx:id="osDetectionCheckbox" mnemonicParsing="false" styleClass="porty-dashboard-menu-checkbox" text="%dashboard.scanOs" />
                         <CheckBox fx:id="tcpConnectScanCheckbox" mnemonicParsing="false" styleClass="porty-dashboard-menu-checkbox" text="%dashboard.enableTcpConnectScan" />
                         <CheckBox fx:id="synScanCheckbox" mnemonicParsing="false" styleClass="porty-dashboard-menu-checkbox" text="%dashboard.enableSynScan" />
+                        <CheckBox fx:id="udpScanCheckbox" mnemonicParsing="false" styleClass="porty-dashboard-menu-checkbox" text="%dashboard.enableUdpScan" />
                         <TextField fx:id="timeoutTextField" promptText="%dashboard.timeout" />
                         <TextField fx:id="statsEveryTextField" promptText="%dashboard.statsEvery" />
                         <CheckBox fx:id="ipMaskCheckbox" mnemonicParsing="false" styleClass="porty-dashboard-menu-checkbox" text="%dashboard.includeSubnetMask" />

@@ -17,17 +17,44 @@ public class NmapCommandBuilder {
         int startPort = config.range().start();
         int endPort = config.range().end();
 
-        boolean needsPrivilegedRights = options.synScan() || options.osDetection();
-        String os = System.getProperty("os.name").toLowerCase();
+        boolean needsPrivilegedRights = options.synScan() || options.osDetection() || options.udpScan();
+        boolean serviceOrOS = options.serviceDetection() || options.osDetection();
+        boolean portRangeSpecified = startPort != -1 && endPort != -1;
 
+        String os = System.getProperty("os.name").toLowerCase();
         List<String> nmapArgs = new ArrayList<>();
         nmapArgs.add(path);
         nmapArgs.add("-n");
 
-        if (options.serviceDetection()) nmapArgs.add("-sV");
-        if (options.tcpConnectScan()) nmapArgs.add("-sT");
-        if (options.synScan()) nmapArgs.add("-sS");
-        if (options.osDetection()) nmapArgs.add("-O");
+        if (options.serviceDetection()) {
+            nmapArgs.add("-sV");
+            nmapArgs.add("--open");
+            nmapArgs.add("--version-light");    // much faster but still mostly accurate
+        }
+        if (options.synScan()) {
+            nmapArgs.add("-sS");
+        } else if (options.tcpConnectScan()) {
+            nmapArgs.add("-sT");
+        }
+        if (options.osDetection()) {
+            nmapArgs.add("-O");
+            nmapArgs.add("--osscan-limit");
+        }
+        if (serviceOrOS && !options.includeSubnet() && !options.udpScan()) nmapArgs.add("-T4");
+        if (options.udpScan()) {
+            nmapArgs.add("-sU");
+        }
+        if (options.udpScan()) {
+            nmapArgs.add("--max-retries");
+            nmapArgs.add("1");
+            if (!portRangeSpecified) {
+                nmapArgs.add("--top-ports");
+                nmapArgs.add("100");
+            }
+        } else if (options.osDetection()) {
+            nmapArgs.add("--max-retries");
+            nmapArgs.add("2");
+        }
 
         if (options.hostTimeout().getSeconds() != -1) {
             nmapArgs.add("--host-timeout");
@@ -40,7 +67,7 @@ public class NmapCommandBuilder {
             nmapArgs.add(options.statsEvery() + "s");
         }
 
-        if (startPort != -1 && endPort != -1) {
+        if (portRangeSpecified) {
             nmapArgs.add("-p");
             nmapArgs.add(startPort + "-" + endPort);
         }
@@ -72,7 +99,7 @@ public class NmapCommandBuilder {
 
         // Linux
         if (needsPrivilegedRights && os.contains("linux")) {
-            nmapArgs.add(0, "pkexec");
+            nmapArgs.addFirst("pkexec");
         }
 
         return new ProcessBuilder(nmapArgs);

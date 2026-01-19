@@ -68,6 +68,7 @@ public class DashboardController implements MainAwareController {
     @FXML private TitledPane advancedOptionTitledPane;
     @FXML private Label configFileFieldLabel;
     @FXML private Tooltip resultSaveTooltip;
+    @FXML private CheckBox udpScanCheckbox;
 
     private MainController mainController;
 
@@ -336,7 +337,8 @@ public class DashboardController implements MainAwareController {
                 scanConfigDTO.getHostTimeout(),
                 scanConfigDTO.getStatsEvery(),
                 saveScanCheckbox.isSelected(),
-                scanConfigDTO.isIncludeSubnetMask()
+                scanConfigDTO.isIncludeSubnetMask(),
+                scanConfigDTO.isUdpScan()
         );
 
         if(saveConfigCheckbox.isSelected()){
@@ -356,6 +358,7 @@ public class DashboardController implements MainAwareController {
         scanConfigDTO.setOsDetection(osDetectionCheckbox.isSelected());
         scanConfigDTO.setTcpConnectScan(tcpConnectScanCheckbox.isSelected());
         scanConfigDTO.setSynScan(synScanCheckbox.isSelected());
+        scanConfigDTO.setUdpScan(udpScanCheckbox.isSelected());
 
         if(!statsEveryTextField.getText().isEmpty() && Double.parseDouble(statsEveryTextField.getText())>0) {
             scanConfigDTO.setStatsEvery(Double.parseDouble(statsEveryTextField.getText()));
@@ -461,6 +464,7 @@ public class DashboardController implements MainAwareController {
         osDetectionCheckbox.textProperty().bind(I18n.bind("dashboard.scanOs"));
         tcpConnectScanCheckbox.textProperty().bind(I18n.bind("dashboard.enableTcpConnectScan"));
         synScanCheckbox.textProperty().bind(I18n.bind("dashboard.enableSynScan"));
+        udpScanCheckbox.textProperty().bind(I18n.bind("dashboard.enableUdpScan"));
         ipMaskCheckbox.textProperty().bind(I18n.bind("dashboard.includeSubnetMask"));
         portRangeCheckbox.textProperty().bind(I18n.bind("dashboard.setPortRange"));
         saveConfigCheckbox.textProperty().bind(I18n.bind("dashboard.saveConfig"));
