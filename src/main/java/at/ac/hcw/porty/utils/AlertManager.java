@@ -54,11 +54,11 @@ public class AlertManager {
     public static Alert createDangerAlert(String text, String confirmButtonText){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 
-        alert.setTitle("Confirmation");
+        alert.setTitle(I18n.bind("history.confirm-delete-title").get());
         alert.setHeaderText(text);
 
         ButtonType deleteButton = new ButtonType(confirmButtonText, ButtonBar.ButtonData.OK_DONE);
-        ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+        ButtonType cancelButton = new ButtonType(I18n.bind("history.confirm-delete-cancel").get(), ButtonBar.ButtonData.CANCEL_CLOSE);
 
         alert.getButtonTypes().setAll(deleteButton, cancelButton);
         alert.getDialogPane().getStylesheets()

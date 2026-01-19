@@ -179,7 +179,7 @@ public class HistoryController implements MainAwareController {
     public void onDropButtonClick(){
         ScanHistoryDTO selected = historyTable.getSelectionModel().getSelectedItem();
         if(selected!=null) {
-            Alert alert = AlertManager.createDangerAlert("Delete selected history file?", "Delete");
+            Alert alert = AlertManager.createDangerAlert(I18n.bind("history.confirm-delete-text").get(), I18n.bind("history.confirm-delete-button").get());
             Optional<ButtonType> result = alert.showAndWait();
 
             if (result.isPresent() && result.get().getButtonData() == ButtonBar.ButtonData.OK_DONE) {

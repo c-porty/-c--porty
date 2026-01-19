@@ -79,12 +79,23 @@ public class DashboardController implements MainAwareController {
 
         scanProgressIndicator.progressProperty().addListener((ov, oldValue, progress) -> {
             if (progress.doubleValue() >= 1.0) {
-                scanProgressPercentage.setText("Done");
+                scanProgressPercentage.setText(I18n.bind("dashboard.scan-done").get());
             } else {
                 scanProgressPercentage.setText((int) (progress.doubleValue() * 100) + "%");
             }
         });
 
+        descriptorLabel.textProperty().addListener((obs, oldText, newText) -> {
+            if (scanProgressIndicator.getProgress() >= 1.0) {
+                scanProgressPercentage.setText(I18n.bind("dashboard.scan-done").get());
+            }
+        });
+
+        I18n.bind("dashboard.scan-done").addListener((obs, oldValue, newValue) -> {
+                if (scanProgressIndicator.getProgress() >= 1.0) {
+                    scanProgressPercentage.setText(I18n.bind("dashboard.scan-done").get());
+                }
+        });
 
         TextFormatter<Long> longFormatter = new TextFormatter<>(change -> {
             String newText = change.getControlNewText();
@@ -193,7 +204,7 @@ public class DashboardController implements MainAwareController {
     protected void onScanStartButtonClick() throws InterruptedException {
         setProgress(0.0);
         if(!onScan) {
-
+            scanProgressPercentage.setText("0%");
             if (advancedOptions) {
                 advancedScan();
             } else {
