@@ -139,6 +139,7 @@ public class MainController {
                 () -> I18n.getLanguage() == Language.DE ? "DE" : "EN",
                 I18n.languageProperty()
         ));
+        languageMenu.setPrefWidth(107);
 
         bindLanguageTexts();
     }
