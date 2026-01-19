@@ -15,7 +15,9 @@
 
             <TextField fx:id="ipTextField" promptText="%dashboard.enter-ip-address" />
             <Button fx:id="startScanButton" mnemonicParsing="false" onAction="#onScanStartButtonClick" styleClass="porty-dashboard-button" text="%dashboard.startScan" />
-            <CheckBox fx:id="saveScanCheckbox" mnemonicParsing="false" styleClass="porty-dashboard-checkbox" text="%dashboard.saveResult" />
+            <CheckBox fx:id="saveScanCheckbox" mnemonicParsing="false" styleClass="porty-dashboard-checkbox" text="%dashboard.saveResult">
+                <tooltip> <Tooltip fx:id="resultSaveTooltip" text="%tooltip.result-save" /> </tooltip>
+            </CheckBox>
 
             <VBox fx:id="advancedOptionControl" prefHeight="1000.0" prefWidth="100.0">
                 <TitledPane animated="false" styleClass="porty-titled-pane" text="%dashboard.advancedOptions">

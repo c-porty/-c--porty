@@ -17,6 +17,7 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
+import javafx.util.Duration;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.time.Instant;
@@ -81,6 +82,10 @@ public class HistoryController {
             {
                 FontIcon icon = new FontIcon("mdi2i-information-outline");
                 icon.getStyleClass().add("porty-history-table-info-icon");
+                Tooltip tooltip = new Tooltip();
+                tooltip.setShowDelay(Duration.millis(100));
+                tooltip.textProperty().bind(I18n.bind("tooltip.history.information"));
+                btn.setTooltip(tooltip);
 
                 btn.setGraphic(icon);
                 btn.getStyleClass().add("porty-history-table-info-button");
@@ -222,5 +227,6 @@ public class HistoryController {
         portsCol.textProperty().bind(I18n.bind("history.open-ports"));
         infoCol.textProperty().bind(I18n.bind("history.info"));
         deleteEntryButton.textProperty().bind(I18n.bind("history.delete-entry"));
+
     }
 }

@@ -20,6 +20,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.collections.ListChangeListener;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 
 public class DashboardController {
     @FXML private Button startScanButton;
@@ -39,6 +40,7 @@ public class DashboardController {
     @FXML private ProgressIndicator scanProgressIndicator;
     @FXML private Label dashboardTitle;
     @FXML private Label scanLabel;
+    @FXML private Tooltip resultSaveTooltip;
 
     private MainController mainController;
     ObservableList<String> consoleLines = FXCollections.observableArrayList();
@@ -258,5 +260,10 @@ public class DashboardController {
         ipMaskCheckbox.textProperty().bind(I18n.bind("dashboard.includeSubnetMask"));
 
         startScanButton.textProperty().bind(I18n.bind("dashboard.startScan"));
+
+        resultSaveTooltip.textProperty().bind(I18n.bind("tooltip.result-save"));
+        resultSaveTooltip.setShowDelay(Duration.millis(100));
+
+
     }
 }
