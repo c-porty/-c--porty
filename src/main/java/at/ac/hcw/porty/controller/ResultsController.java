@@ -307,14 +307,10 @@ public class ResultsController implements MainAwareController {
     }
 
     private void updateRiskBar(float severity) {
-           double maxWidth = redBar.getWidth();
-           double greenWidth = (1 - severity) * maxWidth;
+        severity = Math.max(0, Math.min(1, severity));
 
-           if (greenWidth < 0) greenWidth = 0;
-           if (greenWidth > maxWidth) greenWidth = maxWidth;
-
-           greenBar.setPrefWidth(greenWidth);
-           redBar.setPrefWidth(maxWidth-greenWidth);
+        redBar.prefWidthProperty().bind(root.widthProperty().multiply(severity));
+        greenBar.prefWidthProperty().bind(root.widthProperty().multiply(1 - severity));
     }
 
     private void openTechnicalReference(TechnicalReference ref) {
