@@ -14,6 +14,9 @@ import at.ac.hcw.porty.types.records.ScanConfig;
 import at.ac.hcw.porty.types.enums.ScanStrategy;
 import at.ac.hcw.porty.types.interfaces.PortScanListener;
 import at.ac.hcw.porty.types.interfaces.ScanHandle;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
@@ -25,6 +28,12 @@ import javafx.collections.ListChangeListener;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.IOException;
+import java.time.Instant;
 import javafx.util.Duration;
 
 public class DashboardController implements MainAwareController {
@@ -57,6 +66,10 @@ public class DashboardController implements MainAwareController {
     @FXML private Tooltip resultSaveTooltip;
 
     private MainController mainController;
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(HistoryController.class);
+
     ObservableList<String> consoleLines = FXCollections.observableArrayList();
 
     private boolean onScan = false;
@@ -199,7 +212,7 @@ public class DashboardController implements MainAwareController {
     }
 
     @FXML
-    protected void onScanStartButtonClick() throws InterruptedException {
+    protected void onScanStartButtonClick() throws InterruptedException, IOException {
         scanProgressPercentage.textProperty().unbind();
         setProgress(0.0);
         if(!onScan) {
@@ -270,7 +283,7 @@ public class DashboardController implements MainAwareController {
         scan(options, new PortRange(-1,-1));
     }
 
-    protected void advancedScan(){
+    protected void advancedScan() throws IOException {
         setDTO();
         NmapOptions options = new NmapOptions(
                 scanConfigDTO.isServiceDetection(),
@@ -282,6 +295,11 @@ public class DashboardController implements MainAwareController {
                 saveScanCheckbox.isSelected(),
                 scanConfigDTO.isIncludeSubnetMask()
         );
+
+        if(saveConfigCheckbox.isSelected()){
+            saveConfig(options);
+        }
+
         scan(options, scanConfigDTO.getPortRange());
     }
 
@@ -289,7 +307,7 @@ public class DashboardController implements MainAwareController {
         scanProgressIndicator.setProgress(percent/100);
     }
 
-    protected void setDTO(){
+    protected void setDTO() {
         scanConfigDTO.setHost(ipTextField.getText());
         scanConfigDTO.setServiceDetection(serviceDetectionCheckbox.isSelected());
         scanConfigDTO.setOsDetection(osDetectionCheckbox.isSelected());
@@ -321,6 +339,30 @@ public class DashboardController implements MainAwareController {
         } else{
             scanConfigDTO.setPortRange(new PortRange(-1,-1));
         }
+    }
+
+    public void saveConfig(NmapOptions options) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.enable(SerializationFeature.INDENT_OUTPUT);
+
+        Host host=new Host(ipTextField.getText(), scanConfigDTO.getSubnetMask());
+        PortRange portRange= scanConfigDTO.getPortRange();
+
+        ScanConfig config = new ScanConfig(host, portRange, options);
+
+        String dirPath = "src/main/saves/configs";
+        File dir = new File(dirPath);
+
+        if (!dir.exists()) {
+            boolean created = dir.mkdirs();
+            if (!created) {
+                logger.error("Folder could not be created!");
+            }
+        }
+
+        mapper.writeValue(new File(dir, host.address()+"-"+Instant.now().getEpochSecond() +"-scanConfig.json"), config);
+        logger.info("Config File saved");
     }
 
     private void setupLanguageTexts() {
