@@ -16,10 +16,23 @@ public class ScanConfigDTO {
     private final BooleanProperty includeSubnetMask = new SimpleBooleanProperty();
     private final IntegerProperty subnetMask = new SimpleIntegerProperty();
     private final ObjectProperty<PortRange> portRange = new SimpleObjectProperty<>();
+    private final BooleanProperty udpScan = new SimpleBooleanProperty();
 
     public ScanConfigDTO() {}
 
-    public ScanConfigDTO(String host, boolean serviceDetection, boolean osDetection, boolean tcpConnectScan, boolean synScan, Duration hostTimeout, double statsEvery, boolean includeSubnetMask, int subnetMask, PortRange portRange) {
+    public ScanConfigDTO(
+            String host,
+            boolean serviceDetection,
+            boolean osDetection,
+            boolean tcpConnectScan,
+            boolean synScan,
+            Duration hostTimeout,
+            double statsEvery,
+            boolean includeSubnetMask,
+            int subnetMask,
+            PortRange portRange,
+            boolean udpScan
+    ) {
         this.host.set(host);
         this.serviceDetection.set(serviceDetection);
         this.osDetection.set(osDetection);
@@ -30,6 +43,15 @@ public class ScanConfigDTO {
         this.includeSubnetMask.set(includeSubnetMask);
         this.subnetMask.set(subnetMask);
         this.portRange.set(portRange);
+        this.udpScan.set(udpScan);
+    }
+
+    public boolean getUdpScan() {
+        return udpScan.get();
+    }
+
+    public BooleanProperty getUdpScanProperty() {
+        return udpScan;
     }
 
     public String getHost() {
@@ -92,6 +114,8 @@ public class ScanConfigDTO {
         return includeSubnetMask.get();
     }
 
+    public boolean isUdpScan() { return udpScan.get(); }
+
     public BooleanProperty includeSubnetMaskProperty() {
         return includeSubnetMask;
     }
@@ -120,6 +144,7 @@ public class ScanConfigDTO {
     public void setOsDetection(boolean state){this.osDetection.set(state);}
     public void setTcpConnectScan(boolean state){this.tcpConnectScan.set(state);}
     public void setSynScan(boolean state){this.synScan.set(state);}
+    public void setUdpScan(boolean udpScan) { this.udpScan.set(udpScan); }
 
     public void setStatsEvery(double stats){this.statsEvery.set(stats);}
 

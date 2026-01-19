@@ -6,11 +6,21 @@
 <?import org.controlsfx.control.*?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <BorderPane fx:id="mainBorderPane" prefHeight="960.0" prefWidth="1440.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.hcw.porty.controller.MainController">
     <left>
         <VBox prefHeight="960.0" prefWidth="256.0" styleClass="porty-nav-bar">
-                <Label prefHeight="17.0" prefWidth="109.0" styleClass="porty-nav-title" text="Porty" />
-            <VBox styleClass="porty-nav-buttons">
+            <HBox alignment="CENTER_LEFT">
+                <ImageView fitHeight="32" fitWidth="32" preserveRatio="true">
+                    <image>
+                        <Image url="@../images/logo_32x32.png"/>
+                    </image>
+                </ImageView>
+
+                <Label text="Porty" styleClass="porty-nav-title"/>
+            </HBox>
+            <VBox>
                 <Button fx:id="navHome" mnemonicParsing="false" onAction="#navigateToDashboard" styleClass="porty-nav-button" text="%home" >
                     <graphic>
                         <FontIcon iconLiteral="mdi2h-home" styleClass="porty-menu-icon"/>

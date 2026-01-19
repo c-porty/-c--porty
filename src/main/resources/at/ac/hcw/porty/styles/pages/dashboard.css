@@ -59,31 +59,6 @@
     -fx-scale-y: 0.6;
 }
 
-.porty-dashboard-textarea {
-    -fx-control-inner-background: -porty-background;
-    -fx-text-fill: -porty-on-background;
-    -fx-font-size: 16px;
-    -fx-font-family: "Inter";
-    -fx-background-color: -porty-background;
-    -fx-border-color: transparent;
-    -fx-border-radius: 0;
-    -fx-border-width: 0;
-    -fx-focus-color: transparent;
-    -fx-faint-focus-color: transparent;
-    -fx-padding: 0;
-    -fx-wrap-text: true;
-}
-
-.porty-dashboard-textarea .content {
-    -fx-background-color: transparent;
-    -fx-padding: 0;
-}
-
-.porty-dashboard-textarea .viewport {
-    -fx-background-color: transparent;
-    -fx-padding: 0;
-}
-
 .porty-dashboard-menu-checkbox{
     -fx-text-fill: -porty-on-container;
     -fx-font-family: "Inter";
@@ -170,4 +145,40 @@
 
 .porty-dashboard-advanced-controls{
     -fx-spacing: 26px;
+}
+
+.porty-progress-area{
+    -fx-spacing: 28px;
+}
+
+.porty-progress-area HBox{
+    -fx-spacing: 12px;
+    -fx-alignment: center-left;
+}
+
+.porty-progress-area Label{
+    -fx-font-size: 20px;
+    -fx-text-fill: -porty-on-background;
+    -fx-font-family: "Inter";
+}
+
+.porty-progress-area FontIcon{
+    -fx-icon-size: 20px;
+    -fx-icon-color: -porty-on-background;
+}
+
+.porty-done{
+    -fx-icon-color: #74E37B;
+}
+
+.porty-progress-area ProgressBar {
+    -fx-max-width: infinity;
+}
+
+.porty-progress-area ProgressBar .track {
+    -fx-background-color: transparent;
+}
+
+.porty-progress-area ProgressBar:indeterminate .bar {
+    -fx-background-color: -porty-secondary;
 }

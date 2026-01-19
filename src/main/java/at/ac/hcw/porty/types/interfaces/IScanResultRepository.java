@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.Set;
 
 public interface IScanResultRepository {
-    String savePath = "./src/main/saves";
+    String savePath = "./src/main/saves/history";
 
     boolean save(ScanSummary summary);
     Optional<ScanSummary> load(Host host, Instant startedAt);

@@ -11,7 +11,8 @@ public record NmapOptions(
         Duration hostTimeout,
         double statsEvery,
         boolean saveScan,
-        boolean includeSubnet
+        boolean includeSubnet,
+        boolean udpScan
 ) implements Serializable {
     public NmapOptions {
         // never allow both options to be true
@@ -21,18 +22,18 @@ public record NmapOptions(
 
     public NmapOptions() {
         // default no timeout
-        this(true, false, true, false, Duration.ofSeconds(-1), 2, false, false);
+        this(true, false, true, false, Duration.ofSeconds(-1), 2, false, false, false);
     }
 
     public NmapOptions(boolean serviceDetection, boolean osDetection, boolean saveScan) {
-        this(serviceDetection, osDetection, true, false, Duration.ofSeconds(-1), 2, saveScan, false);
+        this(serviceDetection, osDetection, true, false, Duration.ofSeconds(-1), 2, saveScan, false, false);
     }
 
     public NmapOptions(boolean serviceDetection, boolean osDetection, boolean tcpConnectScan, boolean synScan) {
-        this(serviceDetection, osDetection, tcpConnectScan, synScan, Duration.ofSeconds(-1), 2, false, false);
+        this(serviceDetection, osDetection, tcpConnectScan, synScan, Duration.ofSeconds(-1), 2, false, false, false);
     }
 
     public NmapOptions(boolean saveScan){
-        this(true, false, true, false, Duration.ofSeconds(-1), 2, saveScan, false);
+        this(true, false, true, false, Duration.ofSeconds(-1), 2, saveScan, false, false);
     }
 }

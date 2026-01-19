@@ -22,6 +22,8 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.util.Duration;
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.slf4j.Logger;
@@ -161,7 +163,9 @@ public class HistoryController implements MainAwareController {
     }
 
     @Override
-    public void setMainController(MainController mainController){this.mainController = mainController;}
+    public void setMainController(MainController mainController){
+        this.mainController = mainController;
+    }
 
     public void openResultPage(String file){
         String[] data = file.split("-");
@@ -183,7 +187,7 @@ public class HistoryController implements MainAwareController {
             Optional<ButtonType> result = alert.showAndWait();
 
             if (result.isPresent() && result.get().getButtonData() == ButtonBar.ButtonData.OK_DONE) {
-                Path path = Paths.get("src", "main", "saves", selected.getFile()+".json");
+                Path path = Paths.get(IScanResultRepository.savePath, selected.getFile()+".json");
                 File save = path.toFile();
                 if (save.delete()) {
                     logger.info("Deleted the file: {}", save.getName());
@@ -199,13 +203,18 @@ public class HistoryController implements MainAwareController {
     public void setChartData(String host) {
         historyChart.getData().clear();
 
+        boolean darkMode = true;
+        if (mainController != null) {
+            darkMode = mainController.darkModeIsActive();
+        }
+        updateChartTextColor(darkMode);
+
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         series.setName(host);
 
         ArrayList<Instant> scanDates = new ArrayList<>();
         double portMax = 0;
         double portMin = 0;
-
 
         for(ScanHistoryDTO scan : tableEntries) {
             if(Objects.equals(scan.getHost(), host)) {
@@ -274,6 +283,15 @@ public class HistoryController implements MainAwareController {
         portsCol.textProperty().bind(I18n.bind("history.open-ports"));
         infoCol.textProperty().bind(I18n.bind("history.info"));
         deleteEntryButton.textProperty().bind(I18n.bind("history.delete-entry"));
+    }
 
+    private void updateChartTextColor(boolean darkMode) {
+        Paint textColor = darkMode ? Color.WHITE : Color.BLACK;
+
+        CategoryAxis xAxis = (CategoryAxis) historyChart.getXAxis();
+        xAxis.setTickLabelFill(textColor);
+
+        NumberAxis yAxis = (NumberAxis) historyChart.getYAxis();
+        yAxis.setTickLabelFill(textColor);
     }
 }

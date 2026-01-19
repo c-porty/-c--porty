@@ -39,6 +39,7 @@ public class NmapScannerCLITest {
             Duration.ofSeconds(15),
             2,
             true,
+            false,
             false
         );
         ScanConfig config = new ScanConfig(new Host("webxio.at", 24), new PortRange(1, 100), options);
