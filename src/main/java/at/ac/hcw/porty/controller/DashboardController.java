@@ -26,9 +26,12 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.collections.ListChangeListener;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -388,6 +391,13 @@ public class DashboardController implements MainAwareController {
         }
     }
 
+    @FXML
+    private void handleFileFieldDoubleClick(MouseEvent event) {
+        if (event.getClickCount() == 2) {
+            searchForConfigFile();
+        }
+    }
+
     public void saveConfig(NmapOptions options) {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
@@ -408,10 +418,17 @@ public class DashboardController implements MainAwareController {
                 }
             }
 
-            mapper.writeValue(new File(dir, host.address()+"-"+Instant.now().getEpochSecond() +"-scanConfig.json"), config);
-            logger.info("Config File saved");
+            File file = pickSaveLocation(host.address()+"-"+Instant.now().getEpochSecond() +"-scanConfig");
+            if(file!=null) {
+                mapper.writeValue(file, config);
+                logger.info("Config File saved");
+            }else{
+                Alert alert = AlertManager.createErrorAlert(I18n.bind("dashboard.configFile.save.error").get());
+                alert.showAndWait();
+                logger.error("No File chosen");
+            }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -430,6 +447,48 @@ public class DashboardController implements MainAwareController {
             logger.error("Wrong file provided!");
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
+        }
+    }
+
+    private File pickSaveLocation(String filename){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle(I18n.bind("dashboard.configFile.save.finder.title").get());
+
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter(I18n.bind("dashboard.configFile.load.finder.prompt").get(), "*.json")
+        );
+
+        File startDir = new File("src/main/saves/configs");
+        if (startDir.exists()) {
+            fileChooser.setInitialDirectory(startDir);
+        }
+
+        fileChooser.setInitialFileName(filename+".json");
+
+        Stage stage = mainController.getStage();
+
+        return fileChooser.showSaveDialog(stage);
+    }
+
+    private void searchForConfigFile(){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle(I18n.bind("dashboard.configFile.load.finder.title").get());
+
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter(I18n.bind("dashboard.configFile.load.finder.prompt").get(), "*.json")
+        );
+
+        File startDir = new File("src/main/saves/configs");
+        if (startDir.exists()) {
+            fileChooser.setInitialDirectory(startDir);
+        }
+
+        Stage stage = mainController.getStage();
+
+        File file = fileChooser.showOpenDialog(stage);
+
+        if (file != null) {
+            loadConfig(file);
         }
     }
 

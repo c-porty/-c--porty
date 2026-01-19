@@ -42,7 +42,7 @@
                     </VBox>
                 </TitledPane>
 
-                <StackPane fx:id="configFileField" prefHeight="327.0" minHeight="327.0" styleClass="porty-file-field">
+                <StackPane fx:id="configFileField" prefHeight="327.0" minHeight="327.0" onMouseClicked="#handleFileFieldDoubleClick" styleClass="porty-file-field">
                     <FontIcon iconLiteral="mdi2f-file-cog-outline"/>
                     <Label fx:id="configFileFieldLabel" text="%dashboard.configFile"/>
                 </StackPane>

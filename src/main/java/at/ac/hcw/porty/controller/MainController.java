@@ -14,6 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.controlsfx.control.ToggleSwitch;
 import org.kordamp.ikonli.javafx.FontIcon;
@@ -47,6 +48,8 @@ public class MainController {
     @FXML private Tooltip changeModeTooltip;
     @FXML private Tooltip changeThemeTooltip;
     @FXML private Tooltip languageTooltip;
+
+    @FXML BorderPane mainBorderPane;
 
     private FontIcon switchIcon;
 
@@ -115,6 +118,10 @@ public class MainController {
         this.scene = scene;
 
         scene.getStylesheets().add(darkCss);
+    }
+
+    public Stage getStage(){
+        return (Stage) mainBorderPane.getScene().getWindow();
     }
 
     private void setUpLanguageMenu() {
