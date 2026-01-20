@@ -90,11 +90,16 @@ public class DashboardController implements MainAwareController {
     @FXML private FontIcon stepTwoIcon;
     @FXML private FontIcon stepThreeIcon;
     @FXML private FontIcon stepFourIcon;
+    @FXML private Label stepOneLabel;
+    @FXML private Label stepTwoLabel;
+    @FXML private Label stepThreeLabel;
+    @FXML private Label stepFourLabel;
     @FXML private VBox scanProgressArea;
     @FXML private Pane confettiPane;
 
     private MainController mainController;
 
+    //Logging Tool
     private static final Logger logger =
             LoggerFactory.getLogger(HistoryController.class);
 
@@ -102,6 +107,8 @@ public class DashboardController implements MainAwareController {
 
     private boolean onScan = false;
     private boolean advancedOptions = false;
+
+    //Interface for handling scans
     private ScanHandle handle;
 
     private ScanConfigDTO scanConfigDTO;
@@ -113,6 +120,7 @@ public class DashboardController implements MainAwareController {
 
         setupLanguageTexts();
 
+        //Console scroll behaviour
         consoleLines.addListener((ListChangeListener<String>) change -> {
             while (change.next()) {
                 if (change.wasAdded()) {
@@ -121,12 +129,12 @@ public class DashboardController implements MainAwareController {
             }
         });
 
+        //Enable only one strategy set
         tcpConnectScanCheckbox.selectedProperty().addListener((ov, oldValue, newValue) -> {
             if(newValue && synScanCheckbox.isSelected()){
                 synScanCheckbox.selectedProperty().set(false);
             }
         });
-
         synScanCheckbox.selectedProperty().addListener((ov, oldValue, newValue) -> {
             if(newValue && tcpConnectScanCheckbox.isSelected()){
                 tcpConnectScanCheckbox.selectedProperty().set(false);
@@ -135,6 +143,7 @@ public class DashboardController implements MainAwareController {
 
         scanProgressIndicator.setProgress(0.0);
 
+        //Scan Progress external Text
         scanProgressIndicator.progressProperty().addListener((ov, oldValue, progress) -> {
             if (progress.doubleValue() >= 1.0) {
                 scanProgressPercentage.textProperty().bind(I18n.bind("dashboard.scan.done"));
@@ -143,6 +152,7 @@ public class DashboardController implements MainAwareController {
             }
         });
 
+        //Hide Elements behind TitledPanes
         scanProgressArea.visibleProperty()
                 .bind(scanProgressConsoleTitledPane.expandedProperty().not());
         scanProgressArea.managedProperty()
@@ -153,6 +163,7 @@ public class DashboardController implements MainAwareController {
         configFileField.managedProperty()
                 .bind(configFileField.visibleProperty());
 
+        //Config File DragNDrop
         configFileField.setOnDragOver(event -> {
             if (event.getGestureSource() != configFileField &&
                     event.getDragboard().hasFiles()) {
@@ -180,6 +191,7 @@ public class DashboardController implements MainAwareController {
             event.consume();
         });
 
+        //Formatters for TextFields
         TextFormatter<Long> longFormatter = new TextFormatter<>(change -> {
             String newText = change.getControlNewText();
 
@@ -261,6 +273,7 @@ public class DashboardController implements MainAwareController {
         portRangeStartTextField.disableProperty().bind(portRangeCheckbox.selectedProperty().not());
         portRangeEndTextField.disableProperty().bind(portRangeCheckbox.selectedProperty().not());
 
+        //Inactive Class for Portrange Connector Label
         PseudoClass INACTIVE = PseudoClass.getPseudoClass("inactive");
         portRangeConnector.pseudoClassStateChanged(INACTIVE, true);
         portRangeCheckbox.selectedProperty().addListener((obs, oldVal, selected) -> {
@@ -283,12 +296,14 @@ public class DashboardController implements MainAwareController {
         setSimpleMode();
     }
 
+    @Override
     public void setMainController(MainController mainController) {
         this.mainController = mainController;
     }
 
     @FXML
     protected void onScanStartButtonClick() {
+        /* Start or stop scan on Button press */
         if(!onScan) {
             if(!ipTextField.textProperty().get().isEmpty()) {
                 setProgressStep(1);
@@ -310,6 +325,7 @@ public class DashboardController implements MainAwareController {
     }
 
     public void setSimpleMode(){
+        /* Simple Mode Menu */
         advancedOptionControl.setVisible(false);
         advancedOptionControl.setManaged(false);
         descriptorLabel.textProperty().unbind();
@@ -318,6 +334,7 @@ public class DashboardController implements MainAwareController {
     }
 
     public void setAdvancedMode(){
+        /* Advanced Mode Menu */
         advancedOptionControl.setVisible(true);
         advancedOptionControl.setManaged(true);
         advancedOptionTitledPane.expandedProperty().set(false);
@@ -327,15 +344,18 @@ public class DashboardController implements MainAwareController {
     }
 
     protected void scan(NmapOptions options, PortRange range){
+        /* Scan */
         if(!scanConfigDTO.getHost().isEmpty() && scanConfigDTO.getHost()!=null) {
             startScanButton.setStyle("-fx-background-color: red;");
             startScanButton.textProperty().unbind();
             startScanButton.textProperty().bind(I18n.bind("dashboard.stopScan"));
             onScan = true;
             new Thread(() -> {
+                //Have scan in new Thread
                 handle = scanHandleGenerator(new Host(scanConfigDTO.getHost(), scanConfigDTO.isIncludeSubnetMask()? scanConfigDTO.getSubnetMask(): null), range, options);
                 handle.summary().join();
                 Platform.runLater(() -> {
+                    //When Scan Thread done do in Main Thread
                     startScanButton.setStyle("-fx-background-color: -porty-secondary;");
                     startScanButton.textProperty().unbind();
                     startScanButton.textProperty().bind(I18n.bind("dashboard.startScan"));
@@ -346,6 +366,7 @@ public class DashboardController implements MainAwareController {
     }
 
     protected ScanHandle scanHandleGenerator(Host host, PortRange range, NmapOptions options){
+        /* Generate a ScanHandle for with a interactable Scanner*/
         ScanConfig config = new ScanConfig(host, range, options);
         Scanner scanner = new Scanner(ScannerFactory.create(ScanStrategy.NMAP));
         // both the CLI listener and the UI listener, UI listener is for actual frontend, CLI only for debugging
@@ -383,6 +404,7 @@ public class DashboardController implements MainAwareController {
     }
 
     public boolean cancelScan(boolean showAlert){
+        /* cancel running scan with or without alert confirmation */
         if(onScan) {
             boolean cancel = !showAlert;
             if (showAlert){
@@ -417,6 +439,7 @@ public class DashboardController implements MainAwareController {
     }
 
     public void setProgressStep(int step){
+        /* Set progress area step */
         switch(step) {
             case 0:
                 upcomingStep(stepOneBar,stepOneIcon);
@@ -517,6 +540,7 @@ public class DashboardController implements MainAwareController {
         }
     }
 
+    //Config File Logic
     @FXML
     private void handleFileFieldDoubleClick(MouseEvent event) {
         if (event.getClickCount() == 2) {
@@ -635,6 +659,7 @@ public class DashboardController implements MainAwareController {
     }
 
     private void setupLanguageTexts() {
+        /* Bind I18n*/
         ipTextField.promptTextProperty().bind(I18n.bind("enter-ip-address"));
         dashboardTitle.textProperty().bind(I18n.bind("dashboard.title"));
         scanLabel.textProperty().bind(I18n.bind("dashboard.scanLabel"));
@@ -665,9 +690,15 @@ public class DashboardController implements MainAwareController {
 
         advancedOptionTitledPane.textProperty().bind(I18n.bind("dashboard.advancedOptions"));
         scanProgressConsoleTitledPane.textProperty().bind(I18n.bind("dashboard.console"));
+
+        stepOneLabel.textProperty().bind(I18n.bind("dashboard.scanProgress.first"));
+        stepTwoLabel.textProperty().bind(I18n.bind("dashboard.scanProgress.second"));
+        stepThreeLabel.textProperty().bind(I18n.bind("dashboard.scanProgress.third"));
+        stepFourLabel.textProperty().bind(I18n.bind("dashboard.scanProgress.fourth"));
     }
 
     public void celebrateSuccess() {
+        /* Confetti on success */
         if (confettiPane == null) return;
 
         double width = confettiPane.getWidth();

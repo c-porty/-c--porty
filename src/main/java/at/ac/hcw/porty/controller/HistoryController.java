@@ -168,6 +168,7 @@ public class HistoryController implements MainAwareController {
     }
 
     public void openResultPage(String file){
+        /* Open result page from file data */
         String[] data = file.split("-");
         Host host = new Host(data[0]);
         Instant startedAt = Instant.ofEpochSecond(Long.parseLong(data[1]));
@@ -216,6 +217,7 @@ public class HistoryController implements MainAwareController {
         double portMax = 0;
         double portMin = 0;
 
+        //Get table entry for each saved history file
         for(ScanHistoryDTO scan : tableEntries) {
             if(Objects.equals(scan.getHost(), host)) {
                 portMax = Math.max(portMax, scan.getPorts());
@@ -248,6 +250,7 @@ public class HistoryController implements MainAwareController {
             scanDatesAxis.add(formatter.format(scanDate));
         }
 
+        //Fix Axis for dynamic load
         scanDatesAxis = new ArrayList<>(new LinkedHashSet<>(scanDatesAxis));
 
         NumberAxis yAxis = (NumberAxis) historyChart.getYAxis();
