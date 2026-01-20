@@ -69,6 +69,7 @@ public class MainController {
 
         setUpLanguageMenu();
 
+        // lightmode switch change stylesheet on switch
         lightModeSwitch.selectedProperty().addListener((obs, oldVal, light) -> {
             if (scene != null) {
                 scene.getStylesheets().clear();
@@ -76,6 +77,7 @@ public class MainController {
             }
         });
 
+        // mode switch functionality
         simplicityModeSwitch.setOnAction(e -> {
             if (dashBoardController == null) return;
 
