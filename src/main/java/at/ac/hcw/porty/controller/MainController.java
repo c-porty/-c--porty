@@ -196,8 +196,8 @@ public class MainController {
         handleNavigation(tracebackRoute, null);
     }
 
+    /* load component into content pane */
     private void handleNavigation(String route, ScanSummary scanSummary) {
-        /* load component into content pane */
         URL url = getClass().getResource(route);
         tracebackRoute = currentRoute;
         ResourceBundle rb = I18n.getBundle();
@@ -208,6 +208,7 @@ public class MainController {
 
             Object controller = loader.getController();
 
+            // Set MainController if Component needs it
             if(controller instanceof MainAwareController mainAwareController){
                 mainAwareController.setMainController(this);
             }

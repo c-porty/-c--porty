@@ -64,6 +64,7 @@ public class HistoryController implements MainAwareController {
     public void initialize() {
         setupLanguageTexts();
 
+        //Format columns
         dateCol.setCellValueFactory(cell ->
                 cell.getValue().timestampProperty());
         DateTimeFormatter formatter =
@@ -113,6 +114,7 @@ public class HistoryController implements MainAwareController {
                 });
             }
 
+            // Do not set Button if file not existent
             @Override
             protected void updateItem(String file, boolean empty) {
                 super.updateItem(file, empty);
@@ -167,8 +169,8 @@ public class HistoryController implements MainAwareController {
         this.mainController = mainController;
     }
 
+    /* Open result page from file data */
     public void openResultPage(String file){
-        /* Open result page from file data */
         String[] data = file.split("-");
         Host host = new Host(data[0]);
         Instant startedAt = Instant.ofEpochSecond(Long.parseLong(data[1]));
@@ -180,6 +182,7 @@ public class HistoryController implements MainAwareController {
         }
     }
 
+    /* Try to delete file linked with selected table entry */
     @FXML
     public void onDropButtonClick(){
         ScanHistoryDTO selected = historyTable.getSelectionModel().getSelectedItem();

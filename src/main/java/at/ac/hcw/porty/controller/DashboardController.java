@@ -301,9 +301,9 @@ public class DashboardController implements MainAwareController {
         this.mainController = mainController;
     }
 
+    /* Start or stop scan on Button press */
     @FXML
     protected void onScanStartButtonClick() {
-        /* Start or stop scan on Button press */
         if(!onScan) {
             if(!ipTextField.textProperty().get().isEmpty()) {
                 setProgressStep(1);
@@ -324,8 +324,8 @@ public class DashboardController implements MainAwareController {
         }
     }
 
+    /* Simple Mode Menu */
     public void setSimpleMode(){
-        /* Simple Mode Menu */
         advancedOptionControl.setVisible(false);
         advancedOptionControl.setManaged(false);
         descriptorLabel.textProperty().unbind();
@@ -333,8 +333,8 @@ public class DashboardController implements MainAwareController {
         advancedOptions = false;
     }
 
+    /* Advanced Mode Menu */
     public void setAdvancedMode(){
-        /* Advanced Mode Menu */
         advancedOptionControl.setVisible(true);
         advancedOptionControl.setManaged(true);
         advancedOptionTitledPane.expandedProperty().set(false);
@@ -343,8 +343,8 @@ public class DashboardController implements MainAwareController {
         advancedOptions = true;
     }
 
+    /* Start a scan with given options and range*/
     protected void scan(NmapOptions options, PortRange range){
-        /* Scan */
         if(!scanConfigDTO.getHost().isEmpty() && scanConfigDTO.getHost()!=null) {
             startScanButton.setStyle("-fx-background-color: red;");
             startScanButton.textProperty().unbind();
@@ -365,8 +365,8 @@ public class DashboardController implements MainAwareController {
         }
     }
 
+    /* Generate a ScanHandle for with a interactable Scanner*/
     protected ScanHandle scanHandleGenerator(Host host, PortRange range, NmapOptions options){
-        /* Generate a ScanHandle for with a interactable Scanner*/
         ScanConfig config = new ScanConfig(host, range, options);
         Scanner scanner = new Scanner(ScannerFactory.create(ScanStrategy.NMAP));
         // both the CLI listener and the UI listener, UI listener is for actual frontend, CLI only for debugging
@@ -403,8 +403,8 @@ public class DashboardController implements MainAwareController {
         scan(options, scanConfigDTO.getPortRange());
     }
 
+    /* Cancel running scan with or without alert confirmation */
     public boolean cancelScan(boolean showAlert){
-        /* cancel running scan with or without alert confirmation */
         if(onScan) {
             boolean cancel = !showAlert;
             if (showAlert){
@@ -438,8 +438,8 @@ public class DashboardController implements MainAwareController {
         scanProgressIndicator.setProgress(percent/100);
     }
 
+    /* Set progress area step */
     public void setProgressStep(int step){
-        /* Set progress area step */
         switch(step) {
             case 0:
                 upcomingStep(stepOneBar,stepOneIcon);
@@ -540,7 +540,6 @@ public class DashboardController implements MainAwareController {
         }
     }
 
-    //Config File Logic
     @FXML
     private void handleFileFieldDoubleClick(MouseEvent event) {
         if (event.getClickCount() == 2) {
@@ -548,6 +547,7 @@ public class DashboardController implements MainAwareController {
         }
     }
 
+    /* Put ScanConfig of Advanced Options into json*/
     public void saveConfig(NmapOptions options) {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
@@ -582,6 +582,7 @@ public class DashboardController implements MainAwareController {
         }
     }
 
+    /* Load Config file into advanced Options */
     private void loadConfig(File file) {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
@@ -600,6 +601,7 @@ public class DashboardController implements MainAwareController {
         }
     }
 
+    /* Open File Dialog for saving Config File */
     private File pickSaveLocation(String filename){
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(I18n.bind("dashboard.configFile.save.finder.title").get());
@@ -620,6 +622,7 @@ public class DashboardController implements MainAwareController {
         return fileChooser.showSaveDialog(stage);
     }
 
+    /* Open File Dialog for loading Config File */
     private void searchForConfigFile(){
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(I18n.bind("dashboard.configFile.load.finder.title").get());
@@ -659,7 +662,6 @@ public class DashboardController implements MainAwareController {
     }
 
     private void setupLanguageTexts() {
-        /* Bind I18n*/
         ipTextField.promptTextProperty().bind(I18n.bind("enter-ip-address"));
         dashboardTitle.textProperty().bind(I18n.bind("dashboard.title"));
         scanLabel.textProperty().bind(I18n.bind("dashboard.scanLabel"));
@@ -697,8 +699,8 @@ public class DashboardController implements MainAwareController {
         stepFourLabel.textProperty().bind(I18n.bind("dashboard.scanProgress.fourth"));
     }
 
+    /* Confetti on success */
     public void celebrateSuccess() {
-        /* Confetti on success */
         if (confettiPane == null) return;
 
         double width = confettiPane.getWidth();

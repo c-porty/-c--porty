@@ -212,8 +212,8 @@ public class ResultsController implements MainAwareController {
         }
     }
 
+    /* Add a block of rows to grid*/
     private void addBlock(ArrayList<ScanResultDTO> entries){
-        /* Add a block of rows to grid*/
         for(int i=0;i<entries.size();i++){
             if(entries.get(i).getAdditionalInfo()) {
                 addPortRow(entries.get(i).getProperty(), entries.get(i).getEntry(), entries.get(i).getTechnicalReference(),i == 0, i == entries.size() - 1, (i+1) % 2 == 0);
@@ -223,9 +223,9 @@ public class ResultsController implements MainAwareController {
         }
     }
 
+    /* Add simple row with two texts*/
     private void addRow(String leftText, String rightText, boolean firstRow, boolean lastRow, boolean even
     ) {
-        /* Add simple row with two texts*/
         Label left = new Label(leftText);
         Label right = new Label(rightText);
 
@@ -237,9 +237,8 @@ public class ResultsController implements MainAwareController {
         addRow(left, right, firstRow, lastRow);
     }
 
-
+    /* Add row with info button in right text*/
     private void addPortRow(String leftText, String rightText, TechnicalReference technicalReference, boolean firstRow, boolean lastRow, boolean even) {
-        /* Add row with info button in right text*/
         String rowStyle = even ? "porty-results-row-even" : "porty-results-row-odd";
 
         Label left = new Label(leftText);
@@ -286,8 +285,8 @@ public class ResultsController implements MainAwareController {
         addRow(left, right, firstRow, lastRow);
     }
 
+    /* put row into grid */
     public void addRow(Node left, Node right, boolean firstRow, boolean lastRow){
-        /* put row into grid */
         if (firstRow) {
             left.setStyle("-fx-background-radius: 5 0 0 0; -fx-border-radius: 5 0 0 0;");
             right.setStyle("-fx-background-radius: 0 5 0 0; -fx-border-radius: 0 5 0 0;");
@@ -316,8 +315,8 @@ public class ResultsController implements MainAwareController {
         greenBar.prefWidthProperty().bind(root.widthProperty().multiply(1 - severity));
     }
 
+    /* load link to technical reference */
     private void openTechnicalReference(TechnicalReference ref) {
-        /* load link to technical reference */
         if (ref == null || ref.uri() == null) return;
         if (!Desktop.isDesktopSupported()) {
             logger.warn("Desktop browsing not supported on this platform");

@@ -71,8 +71,8 @@ public class CreditsController {
         };
     }
 
+    /* try to get and load file */
     private String readResourceText(String path) {
-        /* try to get and load file */
         try (InputStream is = getClass().getResourceAsStream(path)) {
             if (is == null) return null;
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
