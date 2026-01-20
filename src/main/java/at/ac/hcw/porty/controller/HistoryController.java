@@ -154,10 +154,8 @@ public class HistoryController implements MainAwareController {
                 .selectedItemProperty()
                 .addListener((obs, oldItem, newItem) -> {
                     if (newItem != null) {
-                        if(!Objects.equals(chartLoadedHost, newItem.getHost())) {
                             chartLoadedHost = newItem.getHost();
                             setChartData(newItem.getHost());
-                        }
                     }
                 });
 
