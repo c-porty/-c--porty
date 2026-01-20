@@ -698,6 +698,7 @@ public class DashboardController implements MainAwareController {
     }
 
     public void celebrateSuccess() {
+        /* Confetti on success */
         if (confettiPane == null) return;
 
         double width = confettiPane.getWidth();

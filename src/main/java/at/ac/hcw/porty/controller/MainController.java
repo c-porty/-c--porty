@@ -195,6 +195,7 @@ public class MainController {
     }
 
     private void handleNavigation(String route, ScanSummary scanSummary) {
+        /* load component into content pane */
         URL url = getClass().getResource(route);
         tracebackRoute = currentRoute;
         ResourceBundle rb = I18n.getBundle();
