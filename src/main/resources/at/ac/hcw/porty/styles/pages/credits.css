@@ -17,7 +17,6 @@
     -fx-faint-focus-color: transparent;
     -fx-padding: 0;
     -fx-wrap-text: true;
-    -fx-border-color: red;
 }
 
 .porty-credits-textarea .content {
@@ -35,6 +34,10 @@
     -fx-max-width: infinity;
     -fx-background-color: -porty-credits-bar;
     -fx-background-radius: 14;
+    -fx-min-height: 8;
+    -fx-max-height: 8;
+    -fx-pref-height: 8;
+    -fx-pref-width: 1024;
 }
 
 .porty-credits {

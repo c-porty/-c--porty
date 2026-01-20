@@ -9,7 +9,7 @@
             <Label fx:id="aboutUsLabel" styleClass="porty-title-large" text="%about-us" />
             <Label fx:id="cSharpLabel" styleClass="porty-credits-subtitle" text="We can't C#" />
         </VBox>
-        <Region prefHeight="8" prefWidth="1024" styleClass="porty-credits-bar" />
+        <Region styleClass="porty-credits-bar" />
         <HBox styleClass="porty-credits-text">
             <TextArea fx:id="creditsTextArea" editable="false" HBox.hgrow="ALWAYS" minWidth="300.0" prefHeight="674.0" styleClass="porty-credits-textarea" />
             <AnchorPane HBox.hgrow="ALWAYS">
