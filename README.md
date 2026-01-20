@@ -18,3 +18,5 @@ Porty ist eine Java/JavaFX‑Anwendung, die Nmap nutzerfreundlich kapselt. Fokus
 Gemeinsame Entwicklung von: Kilian Halwachs, Felix Schöller, Moritz Bauer – Hochschule Campus Wien WS2025/26
 
 Hinweis: Bitte nur Netzwerke und Hosts scannen, für die ihr berechtigt seid.
+
+*Das Tool benötigt "nmap" als externes Programm um zu funktionieren.*
