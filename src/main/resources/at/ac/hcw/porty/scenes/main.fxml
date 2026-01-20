@@ -12,10 +12,11 @@
     <left>
         <VBox prefHeight="960.0" prefWidth="256.0" styleClass="porty-nav-bar">
             <HBox alignment="CENTER_LEFT">
-                <ImageView fitHeight="32" fitWidth="32" preserveRatio="true">
-                    <image>
-                        <Image url="@../images/logo_32x32.png"/>
-                    </image>
+                <ImageView fitHeight="40" fitWidth="40" preserveRatio="true">
+                    <Image url="@../images/original_logo_500x500.png"
+                           requestedWidth="40"
+                           requestedHeight="40"
+                           smooth="true"/>
                 </ImageView>
 
                 <Label text="Porty" styleClass="porty-nav-title"/>
