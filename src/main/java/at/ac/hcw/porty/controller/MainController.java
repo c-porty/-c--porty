@@ -173,12 +173,16 @@ public class MainController {
 
     @FXML
     private void navigateToHistory(ActionEvent event) {
-        handleNavigation("/at/ac/hcw/porty/scenes/history.fxml", null);
+        if(dashBoardController.cancelScan(true)) {
+            handleNavigation("/at/ac/hcw/porty/scenes/history.fxml", null);
+        }
     }
 
     @FXML
     private void navigateToCredits(ActionEvent event) {
-        handleNavigation("/at/ac/hcw/porty/scenes/credits.fxml", null);
+        if(dashBoardController.cancelScan(true)) {
+            handleNavigation("/at/ac/hcw/porty/scenes/credits.fxml", null);
+        }
     }
 
     @FXML

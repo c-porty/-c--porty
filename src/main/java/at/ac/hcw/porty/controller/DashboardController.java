@@ -5,6 +5,7 @@ import at.ac.hcw.porty.listeners.PortScanCLIListener;
 import at.ac.hcw.porty.listeners.PortScanUIListener;
 import at.ac.hcw.porty.scanner.Scanner;
 import at.ac.hcw.porty.scanner.ScannerFactory;
+import at.ac.hcw.porty.types.interfaces.IScanResultRepository;
 import at.ac.hcw.porty.types.interfaces.MainAwareController;
 import at.ac.hcw.porty.utils.AlertManager;
 import at.ac.hcw.porty.utils.Confetti;
@@ -43,8 +44,11 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 import javafx.util.Duration;
 
@@ -301,16 +305,7 @@ public class DashboardController implements MainAwareController {
                 alert.showAndWait();
             }
         } else{
-            setProgressStep(0);
-            scanProgressPercentage.textProperty().unbind();
-            setProgress(0.0);
-            if(handle != null) {
-                handle.cancel();
-            }
-            startScanButton.setStyle("-fx-background-color: -porty-secondary;");
-            startScanButton.textProperty().unbind();
-            startScanButton.textProperty().bind(I18n.bind("dashboard.startScan"));
-            onScan=false;
+            cancelScan(false);
         }
     }
 
@@ -365,6 +360,7 @@ public class DashboardController implements MainAwareController {
         scan(options, new PortRange(-1,-1));
     }
 
+
     protected void advancedScan() {
         setDTO();
         NmapOptions options = new NmapOptions(
@@ -384,6 +380,36 @@ public class DashboardController implements MainAwareController {
         }
 
         scan(options, scanConfigDTO.getPortRange());
+    }
+
+    public boolean cancelScan(boolean showAlert){
+        if(onScan) {
+            boolean cancel = !showAlert;
+            if (showAlert){
+                Alert alert = AlertManager.createDangerAlert(I18n.bind("dashboard.confirm-cancel-text").get(), I18n.bind("dashboard.confirm-cancel-button").get());
+                Optional<ButtonType> result = alert.showAndWait();
+
+                if (result.isPresent() && result.get().getButtonData() == ButtonBar.ButtonData.OK_DONE) {
+                    cancel = true;
+                }
+            }
+
+            if(cancel) {
+                setProgressStep(0);
+                scanProgressPercentage.textProperty().unbind();
+                setProgress(0.0);
+                if (handle != null) {
+                    handle.cancel();
+                }
+                startScanButton.setStyle("-fx-background-color: -porty-secondary;");
+                startScanButton.textProperty().unbind();
+                startScanButton.textProperty().bind(I18n.bind("dashboard.startScan"));
+                onScan = false;
+                return true;
+            }
+            return false;
+        }
+        return true;
     }
 
     public void setProgress(double percent){
