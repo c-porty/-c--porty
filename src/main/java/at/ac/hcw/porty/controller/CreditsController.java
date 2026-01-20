@@ -33,6 +33,7 @@ public class CreditsController {
 
         setupLanguageTexts();
 
+        //Change text on language switch
         loadCreditsTextForCurrentLanguage();
         I18n.languageProperty().addListener(
                 (obs,
@@ -54,6 +55,7 @@ public class CreditsController {
         String path = resolveCreditsTextPath(I18n.getLanguage());
         String text = readResourceText(path);
         if (text == null) {
+            //Path to image
             text = readResourceText("/at/ac/hcw/porty/texts/credits-text-en.txt");
             if (text == null) {
                 text = I18n.bind("credits.text-missing").get();
@@ -70,6 +72,7 @@ public class CreditsController {
     }
 
     private String readResourceText(String path) {
+        /* try to get and load file */
         try (InputStream is = getClass().getResourceAsStream(path)) {
             if (is == null) return null;
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
