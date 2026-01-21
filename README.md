@@ -6,6 +6,7 @@ In loving memory: Erik Daurer (01.09.2025 – 14.11.2025) :(
 
 ## Worum geht's?
 Porty ist eine Java/JavaFX‑Anwendung, die Nmap nutzerfreundlich kapselt. Fokus liegt auf klarer Darstellung, Live‑Fortschritt und einfacher Bedienung sowie einer Historie, vergangener Scans.
+Deutsch und Englisch werden voll unterstützt, ebenso Light-/Darkmode.
 
 ## Was kann Porty?
 - Einzelne Hosts oder ganze Netzwerke scannen (Portbereiche frei wählbar)
@@ -14,9 +15,18 @@ Porty ist eine Java/JavaFX‑Anwendung, die Nmap nutzerfreundlich kapselt. Fokus
 - Live‑Fortschritt während des Scans
 - Detaillierte Ergebnisse mit Status und Services
 - History: Scans speichern und später ansehen
+- Light-/Darkmode
+- English/Deutsch
 
 Gemeinsame Entwicklung von: Kilian Halwachs, Felix Schöller, Moritz Bauer – Hochschule Campus Wien WS2025/26
 
 Hinweis: Bitte nur Netzwerke und Hosts scannen, für die ihr berechtigt seid.
 
 *Das Tool benötigt "nmap" als externes Programm um zu funktionieren.*
+
+## Screenshots
+![img.png](readme_images/screenshot_simple.png)
+![img_1.png](readme_images/screenshot_advanced.png)
+![img.png](readme_images/screenshot_scan.png)
+![img.png](readme_images/result.png)
+![img.png](history.png)
